@@ -61,11 +61,16 @@ en_input = CTkEntry(my_tabs.tab("Input Word"),
                       placeholder_text="انگلیسی: ")   # متنی که تا وقتی ننویسی توش اونجا هست
 en_input.grid(pady=10)
 
-en_input = CTkEntry(my_tabs.tab("Input Word"),                          
+fr_input = CTkEntry(my_tabs.tab("Input Word"),                          
                       placeholder_text="فارسی: ")   # متنی که تا وقتی ننویسی توش اونجا هست
-en_input.grid(pady=10)
+fr_input.grid(pady=10)
 
-add_word_btn = CTkButton(my_tabs.tab("Input Word"),text="add the word",)
+def add_the_word():
+    leitner.append_list_as_row(leitner.basic_csv,[str(leitner.last_id() +1),en_input.get().strip(),fr_input.get().strip(),'1','off'])
+    en_input.delete(0,END)
+    fr_input.delete(0,END)
+
+add_word_btn = CTkButton(my_tabs.tab("Input Word"),text="add the word",command=add_the_word)
 add_word_btn.grid(sticky='nsew',padx=10,pady=10)
 
 
