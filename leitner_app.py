@@ -58,15 +58,21 @@ myframe2.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
 
 
 en_input = CTkEntry(my_tabs.tab("Input Word"),                          
-                      placeholder_text="انگلیسی: ")   # متنی که تا وقتی ننویسی توش اونجا هست
+                      placeholder_text="english: ")
 en_input.grid(pady=10)
 
 fr_input = CTkEntry(my_tabs.tab("Input Word"),                          
-                      placeholder_text="فارسی: ")   # متنی که تا وقتی ننویسی توش اونجا هست
+                      placeholder_text=" :فارسی",
+                      justify="right")
 fr_input.grid(pady=10)
 
 def add_the_word():
-    leitner.append_list_as_row(leitner.basic_csv,[str(leitner.last_id() +1),en_input.get().strip(),fr_input.get().strip(),'1','off'])
+    text_en_input= en_input.get().strip()
+    text_fr_input= fr_input.get().strip()
+    leitner.append_list_as_row(leitner.basic_csv,[str(leitner.last_id() +1),text_en_input,text_fr_input,'1','off'])
+    text = 'You add [%s] => [%s]' % (text_en_input, text_fr_input)
+    lbl = CTkLabel(myframe2,text=text)
+    lbl.grid()
     en_input.delete(0,END)
     fr_input.delete(0,END)
 
