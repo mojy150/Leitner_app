@@ -74,8 +74,12 @@ add_word_btn.grid(sticky='nsew',padx=10,pady=10)
 # show_status_frame.grid(sticky='nsew',padx=10,pady=10)
 
 def Show_status():
-    Show_status_lbl = CTkLabel(my_tabs.tab("Status"),text=leitner.show())
-    Show_status_lbl.grid()
+    show_list = leitner.show()
+    for i in range(len(show_list)):
+            if show_list[i] != 0:
+                text = 'value words [%s] day house is [%i]' % (i,show_list[i])
+                Show_status_lbl = CTkLabel(my_tabs.tab("Status"),text=text,font=CTkFont(size=15))
+                Show_status_lbl.grid(sticky='nw')
 
 
 Show_status_btn = CTkButton(my_tabs.tab("Status"),

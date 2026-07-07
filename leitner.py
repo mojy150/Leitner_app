@@ -138,9 +138,10 @@ def show():
         reader = csv.reader(f)
         for row in reader:
             show_list[int(row[3])] += 1
-        for i in range(len(show_list)):
-            if show_list[i] != 0:
-                return 'value words [%s] day house is [%i]' % (i,show_list[i])
+        return show_list
+        # for i in range(len(show_list)):
+            # if show_list[i] != 0:
+            #     return 'value words [%s] day house is [%i]' % (i,show_list[i])
 
 with open(basic_csv) as f:
     reader = csv.reader(f)
