@@ -73,19 +73,44 @@ add_word_btn.grid(sticky='nsew',padx=10,pady=10)
 # show_status_frame = CTkScrollableFrame(my_tabs.tab("Status"))
 # show_status_frame.grid(sticky='nsew',padx=10,pady=10)
 
+status_labels = []  # بیرون تابع تعریف کن
+
+
 def Show_status():
+    global status_labels
+
+    # حذف لیبل‌های قبلی
+    for lbl in status_labels:
+        lbl.destroy()
+
+    status_labels.clear()
+
     show_list = leitner.show()
+
+    row = 1
     for i in range(len(show_list)):
-            if show_list[i] != 0:
-                text = 'value words [%s] day house is [%i]' % (i,show_list[i])
-                Show_status_lbl = CTkLabel(my_tabs.tab("Status"),text=text,font=CTkFont(size=15))
-                Show_status_lbl.grid(sticky='nw')
+        if show_list[i] != 0:
+            text = 'value words [%s] day house is [%i]' % (i, show_list[i])
+
+            lbl = CTkLabel(
+                my_tabs.tab("Status"),
+                text=text,
+                font=CTkFont(size=15)
+            )
+
+            lbl.grid(row=row, column=0, sticky='nw', padx=10, pady=2)
+
+            status_labels.append(lbl)
+            row += 1
 
 
-Show_status_btn = CTkButton(my_tabs.tab("Status"),
-                text="Show status",
-                command=Show_status)
-Show_status_btn.grid(sticky='nsew',padx=10,pady=10)
+Show_status_btn = CTkButton(
+    my_tabs.tab("Status"),
+    text="Show status",
+    command=Show_status
+)
+
+Show_status_btn.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
 
 
 
