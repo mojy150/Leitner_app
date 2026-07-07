@@ -1,0 +1,218 @@
+1,position,mogheiat,0,off
+2,yourself,khodet,0,off
+3,receive,dariaft kardan / paziroftan,0,off
+4,wave,moj/khiz,0,off
+5,back up,poshtiban giri,0,off
+6,regroup,dobareh goroh bandi konid,0,off
+7,destroyed,nabod,0,off
+8,basic,paieh,0,off
+9,religion,din / mazhab,0,off
+10,move,harekat,0,off
+11,remove,hazf kardan / bardashtan / bordan,0,off
+12,removed,hazf shodeh,0,off
+13,screen,safheh namaiesh,0,off
+14,scroll,tomar,0,off
+15,lock,ghofl / ghofl kardan,0,off
+16,pause,tavaghof / maksse,0,off
+17,break,shekastan,0,off
+18,insert,ezafeh kardan / darj konid,0,off
+19,cap,kolah labeh dar,0,off
+20,them,an ha,0,off
+21,their,an ha,0,off
+22,then,sepas,0,off
+23,complete,kamel / tamam,0,off
+24,feel,ehsas kardan,0,off
+25,so that,be tory ke,0,off
+26,temporary,movaghat / movaghati,0,off
+27,increase,afzaiesh dadan / afzaiesh,0,off
+28,activate,faal kardan,0,off
+29,pressing,feshar dadan / feshar,0,off
+30,hotkey,kelid mianbor,0,off
+31,oger,ghol peykar,0,off
+32,teleport,enteghal,0,off
+33,portal,ghabeleh haml,0,off
+34,town,shahr,0,off
+35,global,jahani,0,off
+36,emotion,ehsasat,0,off
+37,deity,khodaii / khodaie / khoda,0,off
+38,blessing,barekat,0,off
+39,protect,mohafezat,0,off
+40,could,mi tavanest,0,off
+41,bring,avardan,0,off
+42,peace,solh,0,off
+43,took,gereft,0,off
+44,away,dor / dor az,0,off
+45,some,meghdari / barkhi,0,off
+46,kind,nooeh / goneh / jens,0,off
+47,seal,mohr o mom / mohr,0,off
+48,upon,bar / bar roieh,0,off
+49,lost,az dast rafteh / kam shodeh,0,off
+50,so,pas / banabarin,0,off
+51,whilst,dar hali ke,0,off
+52,trap,taleh,0,off
+53,trapped,be dam oftadeh,0,off
+54,battlebeart,jangjo,0,off
+55,salt,namak,0,off
+56,pepper,felfel,0,off
+57,onion,piaz,0,off
+58,tomato,gojeh farangi,0,off
+59,cabbage,kalam,0,off
+60,purchase,kharid,0,off
+61,purchase up,kharid kardan,0,off
+62,ingredient,jozeh tarkibi / jozeh,0,off
+63,cooking,dar hal pokhtan / pokht o paz,0,off
+64,vampire,khon asham,0,off
+65,widow,zan biveh,0,off
+66,thirsty,teshneh,0,off
+67,strong,ghavi,0,off
+68,person,shakhs /ensan,0,off
+69,soldier,sarbaz,0,off
+70,monster,haiola,0,off
+71,dumb,kheng,0,off
+72,criminal,tabah kar / mojrem,0,off
+73,survivor,nejat yafteh,0,off
+74,genius,nabegheh,0,off
+75,beautiful,ziba,0,off
+76,smart,bahosh / hoshmand,0,off
+77,lucky,khosh shans,0,off
+78,interesting,jaleb,0,off
+79,crazy,divaneh,0,off
+80,dangerous,khatarnak,0,off
+81,liar,dorogh go,0,off
+82,fool,ahmagh,0,off
+83,acter,honar pisheh / bazigar,0,off
+84,guy,adam (mozakar),0,off
+85,alone,tanha,0,off
+86,serious,jedi,0,off
+87,weak,zaeef,0,off
+88,sick,mariz,0,off
+89,alive,zendeh,0,off
+90,idiot,ahmagh,0,off
+91,after all,bad hameh in ha,0,off
+92,artist,honarmand,0,off
+93,wonderful,shegef angiz / fogholadeh,0,off
+94,old,pir,0,off
+95,doctor,doktor,0,off
+96,spy,jasos,0,off
+97,symbol,namad / sambol,0,off
+98,together,ba ham,0,off
+99,safe,amn / eemen / salem (sefat) // gavsandogh (esm),0,off
+100,cute,banamak,0,off
+101,too,bish az had (-)(ghabl feel),0,off
+102,real,vagheii,0,off
+103,rare,nader / kamiab,0,off
+104,breed,nezhad,0,off
+105,young,javan,0,off
+106,country,keshvar,0,off
+107,couple,zoj,0,off
+108,savage,vahshi (esm),0,off
+109,frog,ghorbagheh,0,off
+110,warrior,jangjo,0,off
+111,pajamas,pizhameh,0,off
+112,lawyer,vakil,0,off
+113,orange,porteghal / narenji,0,off
+114,umberella,chatr,0,off
+115,university,daneshgah,0,off
+116,ugly,zesht,0,off
+117,should,baiad,0,off
+118,be,bodan,0,off
+119,taste,taam,0,off
+120,delicious,khosh mazeh,0,off
+121,you look beautiful,shoma ziba be nazar miresid,0,off
+122,you seems nice,shoma khob be nazar miresid,0,off
+123,foolish,ahmaghaneh (sefat),0,off
+124,juvenile,javan / nojavan,0,off
+125,infant,nozad,0,off
+126,delinquent,mojrem (esm) / mojerm - khalafkar (sefat) / [hesab] aghab oftadeh - moavagheh,0,off
+127,husband,shohar,0,off
+128,account,hesab,0,off
+129,celver,bahosh (sefat),0,off
+130,climb,bala raftan,0,off
+131,comb,shaneh kardan,0,off
+132,tomb,ghabr / maghbareh,0,off
+133,thumb,angosht shast,0,off
+134,see,didan,0,off
+135,camera,dorbin,0,off
+136,expensive,geran gheimat,0,off
+137,key,kelid,0,off
+138,big,bozorg,0,off
+139,unknown,namaalom,0,off
+140,known,maalom,0,off
+141,divorce,talagh,0,off
+142,child,bacheh,0,off
+143,law,ghanon,0,off
+144,syntax,nahv,0,off
+145,exercise,varzesh / tamrin / mashgh,0,off
+146,missing,gom shodeh / gom / faghed,0,off
+147,internship,karamozi,0,off
+148,below,zir / dar zir,0,off
+149,than,nesbat be / ta,0,off
+150,greater,bozorgtar,0,off
+151,example,nemoneh / mesal,0,off
+152,miss,az dast dadan,0,off
+153,correct,dorost,0,off
+154,indentation,toraftegi,0,off
+155,tutorial,amozesh,0,off
+156,replace,jaigozin kardan,0,off
+157,venom,zahr,0,off
+158,design,dizain,0,off
+159,make,sakhtan,0,off
+160,special,khas,0,off
+161,written,neveshteh shodeh ast,0,off
+162,write,neveshtan,0,off
+163,comment,nazar / ezhar nazar,0,off
+164,multiline,chand khati,0,off
+165,multi,chand,0,off
+166,bell,naghos,0,off
+167,structure,sakhtar / sakhteman,0,off
+168,import,vared kardan,0,off
+169,simple,sadeh,0,off
+170,bike,docharkheh,0,off
+171,yesterday,diroz,0,off
+172,station,iistgah,0,off
+173,hurry up,ajaleh kon,0,off
+174,holiday,tatilat,0,off
+175,would,khahad shod [halat roia],0,off
+176,had,dashteh ast [gozashteh HAVE],0,off
+177,water sport,varzesh abi,0,off
+178,weather,ab o hava,0,off
+179,side,samt,0,off
+180,enough,kafi,0,off
+181,breakfast,sobhaneh,0,off
+182,moment,lahzeh,0,off
+183,worse,bad tar,0,off
+184,teen,nojavan bein 13 ta 19,0,off
+185,indirect,gheir mostaghim,0,off
+186,program,barnameh,0,off
+187,direct,mostaghim,0,off
+188,weighted,vazn dar / sangin,0,off
+189,satan,sheitan (devil),0,off
+190,angel,fereshteh,0,off
+191,spoil,fased kardan / az bein bordan / los kardan (ro dadan),0,off
+192,roof,saghf / bam khaneh,0,off
+193,improve,behbod dadan / behtar kardan,0,off
+194,chance,shans / bakht,0,off
+195,chum,ham otagh / dost / refigh bodan,0,off
+196,upset,vazhgon kardan / moztareb kardan / ashofteh,0,off
+197,craft,"maharat (tarahi,sakht,ejra) / herfeh",0,off
+198,fly,parvaz kardan / be parvaz daravardan,0,off
+199,kite,badbadak,0,off
+200,someone,yek kasi / yek shakhs,0,off
+201,cousin,pesar(dokhtar) amo / pesar(dokhtar) daii / ameh zadeh / khale zadeh,0,off
+202,without,bedoneh / faghed / bironeh,0,off
+203,dear,aziz / mahboob / gerami / kasi ra aziz khatab kardan,0,off
+204,choice,entekhab,0,off
+205,highest,bartarin / balatarin / bistarin / aala,0,off
+206,shall,baiad / baiest,0,off
+207,horny,shahvati,0,off
+208,wild,vahshi / jangali,0,off
+209,local,mahali,0,off
+210,milf,zan miansal jazab,0,off
+211,wireless,by sim / bedon sim,0,off
+212,lie,dorogh goftan / dorogh,0,off
+213,wire,sim / sim keshi kardan,0,off
+214,older,ghadimi tar / pir tar,0,off
+215,client,movakel / moshtari,0,off
+216,student,daneshjo / daneshamoz,0,off
+217,migrate,mohajerat kardan / koch kardan,0,off
+218,meat,gosht (4 paian),0,off
