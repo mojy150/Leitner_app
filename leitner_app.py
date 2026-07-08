@@ -1,35 +1,39 @@
 from customtkinter import *
 import leitner
 
-
+                                                                                # main
 window = CTk()
 width = window.winfo_screenwidth()
 height = window.winfo_screenheight()
 window.geometry(f'{width}x{height}+0+0')
 
-
+                                                                                # wight of row & column for main
 window.grid_columnconfigure([0],weight=3)
 window.grid_columnconfigure([1],weight=1)
 window.grid_rowconfigure([0],weight=1)
-
+                                                                                # create left tab
 my_tabs = CTkTabview(window,)                                   
 my_tabs.add("Leitner")                                 
 my_tabs.add("Input Word")
 my_tabs.add("Status")
 my_tabs.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
+                                                                                # create right frame
+myframe2 = CTkScrollableFrame(window)
+myframe2.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
 
 def click_button():
     lbl = CTkLabel(myframe2,text="hi")
     lbl.grid()
 
-
+                                                                                # tab Leitner
 btn = CTkButton(my_tabs.tab("Leitner"),
                 text="print",
                 command=click_button)
 btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
 
 
-lbl2 = CTkLabel(my_tabs.tab("Leitner"),text="Your guess is True?")
+lbl2 = CTkLabel(my_tabs.tab("Leitner"),
+                text="Your guess is True?")
 lbl2.grid(sticky='nsew',padx=10,pady=10)
 
 
@@ -47,15 +51,15 @@ False_Rbtn = CTkRadioButton(my_tabs.tab("Leitner"),
                             value=0)
 False_Rbtn.grid(sticky='nsew',padx=10,pady=10)
 
-check_btn = CTkButton(my_tabs.tab("Leitner"),text="Apply the guess",)
+check_btn = CTkButton(my_tabs.tab("Leitner"),
+                      text="Apply the guess",)
 check_btn.grid(sticky='nsew',padx=10,pady=10)
 
-Exit_Leitner_btn = CTkButton(my_tabs.tab("Leitner"),text="I'm want to exit Leitner",)
+Exit_Leitner_btn = CTkButton(my_tabs.tab("Leitner")
+                             ,text="I'm want to exit Leitner",)
 Exit_Leitner_btn.grid(sticky='nsew',padx=10,pady=10)
 
-myframe2 = CTkScrollableFrame(window)
-myframe2.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
-
+                                                                                # tab Input Word
 
 en_input = CTkEntry(my_tabs.tab("Input Word"),                          
                       placeholder_text="english: ")
@@ -73,25 +77,26 @@ def add_the_word():
     global new_word
     text_en_input= en_input.get().strip()
     text_fr_input= fr_input.get().strip()
-    leitner.append_list_as_row(leitner.basic_csv,[str(leitner.last_id() +1),text_en_input,text_fr_input,'1','off'])
+    leitner.append_list_as_row(leitner.basic_csv,
+                               [str(leitner.last_id() +1),
+                                text_en_input,text_fr_input,'1','off'])
     new_word +=1
-    text = '[%i]You add [%s] => [%s]' % (new_word,text_en_input, text_fr_input)
-    lbl = CTkLabel(myframe2,text=text,font=CTkFont(family="Vazir"))
+    text = '[%i]You add [%s] => [%s]' % (new_word,text_en_input,
+                                          text_fr_input)
+    lbl = CTkLabel(myframe2,text=text,
+                   font=CTkFont(family="Vazir"))
     lbl.grid()
     en_input.delete(0,END)
     fr_input.delete(0,END)
 
-add_word_btn = CTkButton(my_tabs.tab("Input Word"),text="add the word",command=add_the_word)
+add_word_btn = CTkButton(my_tabs.tab("Input Word"),
+                         text="add the word",
+                         command=add_the_word)
 add_word_btn.grid(sticky='nsew',padx=10,pady=10)
 
 
-
-# show_status_frame = CTkScrollableFrame(my_tabs.tab("Status"))
-# show_status_frame.grid(sticky='nsew',padx=10,pady=10)
-
+                                                                                # Tab Status
 status_labels = []  # بیرون تابع تعریف کن
-
-
 def Show_status():
     global status_labels
 
