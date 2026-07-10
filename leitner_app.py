@@ -1,6 +1,7 @@
 from customtkinter import *
 import leitner
 import ctypes
+from tkinter import messagebox
 
                                                                                 # main
 window = CTk()
@@ -122,6 +123,42 @@ add_word_btn = CTkButton(my_tabs.tab("Input Word"),
                          command=add_the_word)
 add_word_btn.grid(sticky='nsew',padx=10,pady=10)
 
+                                                                                # new word
+new_word_babel = CTkLabel(input_new_word,
+                text="We have some words already prepared.\n how many would you like to add?")
+new_word_babel.grid(sticky='nsew',padx=10,pady=10)
+
+def turn_on_numlock(event=None):
+    VK_NUMLOCK = 0x90
+
+    # وضعیت فعلی Num Lock
+    if not ctypes.windll.user32.GetKeyState(VK_NUMLOCK) & 1:
+        ctypes.windll.user32.keybd_event(VK_NUMLOCK, 0, 0, 0)
+        ctypes.windll.user32.keybd_event(VK_NUMLOCK, 0, 2, 0)
+
+number_new_word_input = CTkEntry(input_new_word,                          
+                      placeholder_text="give me the number: ",)
+number_new_word_input.grid(pady=10)
+number_new_word_input.bind("<FocusIn>", turn_on_numlock)
+
+
+def get_number_new_word():
+    try:
+        number_new_word = number_new_word_input.get().strip()
+        number_new_word = int(number_new_word)
+        
+        number_new_word_lbl = CTkLabel(myframe2,text=f"[{number_new_word}] new word added to your Leitner",)
+        number_new_word_lbl.grid()
+        number_new_word_input.delete(0,END)
+    except:
+        messagebox.showwarning("هشدار","لطفا عدد وارد کنید")
+        number_new_word_input.delete(0,END)
+
+
+number_new_word_btn = CTkButton(input_new_word,
+                         text="add the word",
+                         command=get_number_new_word)
+number_new_word_btn.grid(sticky='nsew',padx=10,pady=10)
 
                                                                                 # Tab Status
 status_labels = []  # بیرون تابع تعریف کن
