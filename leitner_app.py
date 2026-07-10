@@ -27,13 +27,14 @@ myframe2.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
 
 def Start_Leitner():
     Run_Leitner_btn.configure(state="disable",fg_color="grey")
+    Exit_Leitner_btn.configure(state="normal",fg_color=default_color)
 
 
 Run_Leitner_btn = CTkButton(my_tabs.tab("Leitner"),
                 text="Start Leitner",
                 command=Start_Leitner)
 Run_Leitner_btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
-
+default_color = Run_Leitner_btn.cget("fg_color")
 
 lbl2 = CTkLabel(my_tabs.tab("Leitner"),
                 text="Your guess is True?")
@@ -58,8 +59,12 @@ check_btn = CTkButton(my_tabs.tab("Leitner"),
                       text="Apply the guess",)
 check_btn.grid(sticky='nsew',padx=10,pady=10)
 
+def Exit_Leitner():
+    Run_Leitner_btn.configure(state="normal",fg_color=default_color)
+    Exit_Leitner_btn.configure(state="disable",fg_color="grey")
+
 Exit_Leitner_btn = CTkButton(my_tabs.tab("Leitner")
-                             ,text="I'm want to exit Leitner",)
+                             ,text="exit Leitner",state="disable",command=Exit_Leitner)
 Exit_Leitner_btn.grid(sticky='nsew',padx=10,pady=10)
 
                                                                                 # tab Input Word
