@@ -1,5 +1,6 @@
 from customtkinter import *
 import leitner
+import ctypes
 
                                                                                 # main
 window = CTk()
@@ -61,15 +62,24 @@ Exit_Leitner_btn.grid(sticky='nsew',padx=10,pady=10)
 
                                                                                 # tab Input Word
 
+def focus_en(event):
+    ctypes.windll.user32.ActivateKeyboardLayout(0x04090409, 0)
+
+
 en_input = CTkEntry(my_tabs.tab("Input Word"),                          
-                      placeholder_text="english: ")
+                      placeholder_text="english: ",)
 en_input.grid(pady=10)
+en_input.bind("<FocusIn>", focus_en)
+
+def focus_fr(event):
+    ctypes.windll.user32.ActivateKeyboardLayout(0x04290429, 0)
 
 fr_input = CTkEntry(my_tabs.tab("Input Word"),                          
                       placeholder_text=" :فارسی",
                       justify="right",
                       font=CTkFont(family="Vazir"))
 fr_input.grid(pady=10)
+fr_input.bind("<FocusIn>", focus_fr)
 
 
 new_word = int(0)
