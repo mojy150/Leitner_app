@@ -22,15 +22,17 @@ my_tabs.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
 myframe2 = CTkScrollableFrame(window)
 myframe2.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
 
-def click_button():
-    lbl = CTkLabel(myframe2,text="hi")
-    lbl.grid()
 
                                                                                 # tab Leitner
-btn = CTkButton(my_tabs.tab("Leitner"),
-                text="print",
-                command=click_button)
-btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
+
+def Start_Leitner():
+    Run_Leitner_btn.configure(state="disable",fg_color="grey")
+
+
+Run_Leitner_btn = CTkButton(my_tabs.tab("Leitner"),
+                text="Start Leitner",
+                command=Start_Leitner)
+Run_Leitner_btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
 
 
 lbl2 = CTkLabel(my_tabs.tab("Leitner"),
