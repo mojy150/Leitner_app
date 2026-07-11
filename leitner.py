@@ -18,23 +18,13 @@ def my_append(id_0,questionToday_list,temp): # append random word in questionTod
         id_0.remove(no_random)
         temp -= 1
     return questionToday_list
+
 def check(file_csv,number,id_0,questionToday_list): # check for new word or old word
     id_0 = []
     with open(file_csv) as f:
         reader = csv.reader(f)    
         temp = int(0)
-        counter = int(0)
-        if number == '0':
-            for row in reader:
-                if row[3] == number:
-                    id_0.append([row[0],row[1],row[2],row[3],'on'])
-                    counter +=1 
-            if counter != 0:
-                temp = int(input('how much you want new words? : '))
-                if temp > len(id_0):
-                    temp = len(id_0)
-                    print('all new words in csv is %i' % temp)
-        elif number == 'another':
+        if number == 'another':
             for row in reader:
                 if row[3] != '0' and row[3] != '1' and row[3] != '3' and row[3] != '7' and row[3] != '15' and row[3] != '30' and row[3] != '31':
                     list_another.append([row[0],row[1],row[2],row[3],row[4]])
@@ -67,6 +57,7 @@ def last_id(): # give the last id
         for row in reader:
             n = int(row[0])
         return n
+
 def append_list_as_row(file_csv,list_of_elem): # send new word in csv
     # Open file in append mode
     with open(file_csv, 'a+', newline='') as write_obj:
@@ -186,7 +177,6 @@ with open(basic_csv) as f:
     #                 check(basic_csv,'7',id_0,questionToday_list)
     #                 check(basic_csv,'3',id_0,questionToday_list)
     #                 check(basic_csv,'1',id_0,questionToday_list)
-    #                 check(basic_csv,'0',id_0,questionToday_list)
     #                 check(basic_csv,'another',id_0,list_another)
                     
     #                 sure = leitner(questionToday_list)

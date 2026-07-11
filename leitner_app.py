@@ -2,7 +2,15 @@ from customtkinter import *
 import leitner
 import ctypes
 from tkinter import messagebox
+import csv
+from random import choice
+import datetime
+from tempfile import NamedTemporaryFile
+import shutil
+import pyttsx3
 
+basic_csv = 'basic.csv' # csv of word
+time_csv = 'time.csv' # csv of t
 enable_click = False
                                                                                                     # main
 window = CTk()
@@ -137,6 +145,25 @@ Exit_Leitner_btn = CTkButton(Leitner_frame,
 Exit_Leitner_btn.grid(sticky='nsew',padx=10,pady=10)
 
                                                                                                     # new word
+def check_new_word():
+    id_0 = []
+    number = 0
+    with open(basic_csv) as f:
+        reader = csv.reader(f)    
+        temp = int(0)
+        counter = int(0)
+        if number == '0':
+            for row in reader:
+                if row[3] == number:
+                    id_0.append([row[0],row[1],row[2],row[3],'on'])
+                    counter +=1
+            if counter != 0:
+                temp = int(input('how much you want new words? : '))
+                if temp > len(id_0):
+                    temp = len(id_0)
+                    print('all new words in csv is %i' % temp)
+
+
 new_word_babel = CTkLabel(input_new_word,
                     text="We have some words already prepared.\n how many would you like to add?")
 new_word_babel.grid(sticky='nsew',padx=10,pady=10)
@@ -150,7 +177,7 @@ def turn_on_numlock(event=None):
         ctypes.windll.user32.keybd_event(VK_NUMLOCK, 0, 2, 0)
 
 number_new_word_input = CTkEntry(input_new_word,                          
-                      placeholder_text="give me the number: ",)
+                      placeholder_text="give me the number: ")
 number_new_word_input.grid(pady=10)
 number_new_word_input.bind("<FocusIn>", turn_on_numlock)
 
@@ -159,13 +186,55 @@ def get_number_new_word():
     try:
         number_new_word = number_new_word_input.get().strip()
         number_new_word = int(number_new_word)
-        
+        text = (f"[{number_new_word}] new word added to your Leitner")
+        id_0 = []
+        number = "0"
+        selected_new_word = []
+        filename = basic_csv
+        with open(filename) as f:
+            reader = csv.reader(f)
+            counter = int(0)
+            if number == '0':
+                for row in reader:
+                    if row[3] == number:
+                        id_0.append([row[0],row[1],row[2],"1","off"])
+                        counter +=1
+                if counter != 0:
+                    if number_new_word > len(id_0):
+                        number_new_word = len(id_0)
+                        text = ('all new words in csv is [%i] and added to your Leitner' % (number_new_word))
+        selected_new_word = leitner.my_append(id_0,selected_new_word,number_new_word)
+        selected_new_word.sort(key=lambda x: int(x[0]))
+
+        tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
+
+        with open(filename, 'r', newline='') as csvFile, tempfile:
+            reader = csv.reader(csvFile, delimiter=',', quotechar='"')
+            writer = csv.writer(tempfile, delimiter=',', quotechar='"')
+
+            def select_in_list(selected_new_word):
+                try:
+                    return selected_new_word.pop(0)
+                except:
+                    pass
+            temp_list = select_in_list(selected_new_word)
+            for row in reader:
+                if temp_list == None:
+                    break
+                elif temp_list[0] == row[0]:
+                    row[0],row[1],row[2],row[3],row[4] = temp_list[0],temp_list[1],temp_list[2],temp_list[3],temp_list[4]
+                    temp_list = select_in_list(selected_new_word)
+                writer.writerow(row)
+
+        shutil.move(tempfile.name, filename)
+                
+                
         number_new_word_lbl = CTkLabel(myframe2,
-                                       text=f"[{number_new_word}] new word added to your Leitner",)
+                                       text=text,)
         number_new_word_lbl.grid()
         number_new_word_input.delete(0,END)
     except:
-        messagebox.showwarning("هشدار","لطفا عدد وارد کنید")
+        messagebox.showwarning("هشدار","لطفا عدد صحیح وارد کنید")
         number_new_word_input.delete(0,END)
 
 
@@ -206,8 +275,9 @@ def add_the_word():
                                 [str(leitner.last_id() +1),
                                     text_en_input,text_fr_input,'1','off'])
         new_word +=1
-        text = '[%i]You add [%s] => [%s]' % (new_word,text_en_input,
-                                            text_fr_input)
+        text = '[%i]You add [%s] => [%s]' % (new_word,
+                                             text_en_input,
+                                             text_fr_input)
         lbl = CTkLabel(myframe2,text=text,
                     font=CTkFont(family="Vazir"))
         lbl.grid()
