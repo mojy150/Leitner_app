@@ -39,8 +39,8 @@ myframe2.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
                                                                                 # tab Leitner
 
 def Start_Leitner():
-    Run_Leitner_btn.configure(state="disable",fg_color="grey")
-    Exit_Leitner_btn.configure(state="normal",fg_color=default_color)
+    Run_Leitner_btn.configure(state="disabled")
+    Exit_Leitner_btn.configure(state="normal")
     global enable_click
     enable_click = True
     Flash_card_label.configure(text="en")
@@ -63,6 +63,8 @@ def flash_card_func(event):
         else:
             Flash_card_label.configure(text="fr")
             Question_label.configure(text="your quess is true?")
+            True_Rbtn.configure(state="normal")
+            False_Rbtn.configure(state="normal")
         number_question +=1
     
 
@@ -81,13 +83,13 @@ controller_var = IntVar(value=2)
 True_Rbtn = CTkRadioButton(Leitner_frame,
                            text="Yes",
                            variable=controller_var,
-                           value=1,)
+                           value=1,state="disabled")
 True_Rbtn.grid(sticky='nsew',padx=10,pady=10)                       
 
 False_Rbtn = CTkRadioButton(Leitner_frame,
                             text="No",
                             variable=controller_var,
-                            value=0)
+                            value=0,state="disabled")
 False_Rbtn.grid(sticky='nsew',padx=10,pady=10)
 
 check_btn = CTkButton(Leitner_frame,
@@ -95,15 +97,18 @@ check_btn = CTkButton(Leitner_frame,
 check_btn.grid(sticky='nsew',padx=10,pady=10)
 
 def Exit_Leitner():
-    Run_Leitner_btn.configure(state="normal",fg_color=default_color)
-    Exit_Leitner_btn.configure(state="disable",fg_color="grey")
+    Run_Leitner_btn.configure(state="normal")
+    Exit_Leitner_btn.configure(state="disabled")
     global enable_click
     enable_click = False
     Flash_card_label.configure(text="start the Leitner to show the flash card!")
     Question_label.configure(text="")
+    False_Rbtn.configure(state="disabled",value=2)
+    True_Rbtn.configure(state="disabled",value=2)
+    
 
 Exit_Leitner_btn = CTkButton(Leitner_frame,
-                             text="exit Leitner",state="disable",command=Exit_Leitner)
+                             text="exit Leitner",state="disabled",command=Exit_Leitner)
 Exit_Leitner_btn.grid(sticky='nsew',padx=10,pady=10)
 
                                                                                 # tab Input Word
