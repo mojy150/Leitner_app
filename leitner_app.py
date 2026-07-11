@@ -3,6 +3,7 @@ import leitner
 import ctypes
 from tkinter import messagebox
 
+enable_click = False
                                                                                 # main
 window = CTk()
 width = window.winfo_screenwidth()
@@ -40,6 +41,9 @@ myframe2.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
 def Start_Leitner():
     Run_Leitner_btn.configure(state="disable",fg_color="grey")
     Exit_Leitner_btn.configure(state="normal",fg_color=default_color)
+    global enable_click
+    enable_click = True
+    Flash_card_label.configure(text="en")
 
 
 Run_Leitner_btn = CTkButton(Leitner_frame,
@@ -47,6 +51,22 @@ Run_Leitner_btn = CTkButton(Leitner_frame,
                 command=Start_Leitner)
 Run_Leitner_btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
 default_color = Run_Leitner_btn.cget("fg_color")
+
+number_question = 0
+def flash_card_func(event):
+    if enable_click == True:    
+        global number_question
+        if number_question % 2 == 0:
+            Flash_card_label.configure(text="en")
+        else:
+            Flash_card_label.configure(text="fr")
+        number_question +=1
+    
+
+Flash_card_label = CTkLabel(Leitner_frame,
+                text="start the Leitner to show the flash card!")
+Flash_card_label.grid(sticky='nsew',padx=10,pady=10)
+Flash_card_label.bind("<Button-1>", flash_card_func)
 
 lbl2 = CTkLabel(Leitner_frame,
                 text="Your guess is True?")
@@ -74,6 +94,9 @@ check_btn.grid(sticky='nsew',padx=10,pady=10)
 def Exit_Leitner():
     Run_Leitner_btn.configure(state="normal",fg_color=default_color)
     Exit_Leitner_btn.configure(state="disable",fg_color="grey")
+    global enable_click
+    enable_click = False
+    Flash_card_label.configure(text="start the Leitner to show the flash card!")
 
 Exit_Leitner_btn = CTkButton(Leitner_frame,
                              text="exit Leitner",state="disable",command=Exit_Leitner)
