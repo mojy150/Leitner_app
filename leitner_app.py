@@ -44,6 +44,7 @@ def Start_Leitner():
     global enable_click
     enable_click = True
     Flash_card_label.configure(text="en")
+    Question_label.configure(text="click the flash card!")
 
 
 Run_Leitner_btn = CTkButton(Leitner_frame,
@@ -58,19 +59,21 @@ def flash_card_func(event):
         global number_question
         if number_question % 2 == 0:
             Flash_card_label.configure(text="en")
+            Question_label.configure(text="click the flash card!")
         else:
             Flash_card_label.configure(text="fr")
+            Question_label.configure(text="your quess is true?")
         number_question +=1
     
 
 Flash_card_label = CTkLabel(Leitner_frame,
-                text="start the Leitner to show the flash card!")
+                text="start the Leitner to show the flash card!",border_color="black",border_width=2,corner_radius=10)
 Flash_card_label.grid(sticky='nsew',padx=10,pady=10)
 Flash_card_label.bind("<Button-1>", flash_card_func)
 
-lbl2 = CTkLabel(Leitner_frame,
-                text="Your guess is True?")
-lbl2.grid(sticky='nsew',padx=10,pady=10)
+Question_label = CTkLabel(Leitner_frame,
+                text="")
+Question_label.grid(sticky='nsew',padx=10,pady=10)
 
 
 controller_var = IntVar(value=2)
@@ -97,6 +100,7 @@ def Exit_Leitner():
     global enable_click
     enable_click = False
     Flash_card_label.configure(text="start the Leitner to show the flash card!")
+    Question_label.configure(text="")
 
 Exit_Leitner_btn = CTkButton(Leitner_frame,
                              text="exit Leitner",state="disable",command=Exit_Leitner)
