@@ -4,23 +4,23 @@ import ctypes
 from tkinter import messagebox
 
 enable_click = False
-                                                                                # main
+                                                                                                    # main
 window = CTk()
 width = window.winfo_screenwidth()
 height = window.winfo_screenheight()
 window.geometry(f'{width}x{height}+0+0')
 
-                                                                                # wight of row & column for main
+                                                                                                    # wight of row & column for main
 window.grid_columnconfigure([0],weight=3)
 window.grid_columnconfigure([1],weight=1)
 window.grid_rowconfigure([0],weight=1)
-                                                                                # create left tab
+                                                                                                    # create left tab
 my_tabs = CTkTabview(window,)                                   
 my_tabs.add("Leitner")                                 
 my_tabs.add("Input Word")
 my_tabs.add("Status")
 my_tabs.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
-                                                                                # create 2 frame in tab Leitner
+                                                                                                    # create 2 frame in tab Leitner
 
 my_tabs.tab("Leitner").grid_columnconfigure([0],weight=3)
 my_tabs.tab("Leitner").grid_columnconfigure([1],weight=1)
@@ -31,12 +31,12 @@ Leitner_frame.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
 
 input_new_word = CTkFrame(my_tabs.tab("Leitner"))
 input_new_word.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
-                                                                                # create right frame
+                                                                                                    # create right frame
 myframe2 = CTkScrollableFrame(window)
 myframe2.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
 
 
-                                                                                # tab Leitner
+                                                                                                    # tab Leitner
 
 def Start_Leitner():
     Run_Leitner_btn.configure(state="disabled")
@@ -45,6 +45,8 @@ def Start_Leitner():
     enable_click = True
     Flash_card_label.configure(text="en")
     Question_label.configure(text="click the flash card!")
+    number_new_word_input.configure(state="disabled")
+    number_new_word_btn.configure(state="disabled")
 
 
 Run_Leitner_btn = CTkButton(Leitner_frame,
@@ -102,15 +104,18 @@ def Exit_Leitner():
     enable_click = False
     Flash_card_label.configure(text="start the Leitner to show the flash card!")
     Question_label.configure(text="")
-    False_Rbtn.configure(state="disabled",value=2)
-    True_Rbtn.configure(state="disabled",value=2)
-    
+    False_Rbtn.configure(state="disabled",variable=IntVar(value=2))
+    True_Rbtn.configure(state="disabled",variable=IntVar(value=2))
+    number_new_word_input.configure(state="normal")
+    number_new_word_btn.configure(state="normal")
 
 Exit_Leitner_btn = CTkButton(Leitner_frame,
-                             text="exit Leitner",state="disabled",command=Exit_Leitner)
+                             text="exit Leitner",
+                             state="disabled",
+                             command=Exit_Leitner)
 Exit_Leitner_btn.grid(sticky='nsew',padx=10,pady=10)
 
-                                                                                # new word
+                                                                                                    # new word
 new_word_babel = CTkLabel(input_new_word,
                     text="We have some words already prepared.\n how many would you like to add?")
 new_word_babel.grid(sticky='nsew',padx=10,pady=10)
@@ -118,7 +123,7 @@ new_word_babel.grid(sticky='nsew',padx=10,pady=10)
 def turn_on_numlock(event=None):
     VK_NUMLOCK = 0x90
 
-    # وضعیت فعلی Num Lock
+                        # وضعیت فعلی Num Lock
     if not ctypes.windll.user32.GetKeyState(VK_NUMLOCK) & 1:
         ctypes.windll.user32.keybd_event(VK_NUMLOCK, 0, 0, 0)
         ctypes.windll.user32.keybd_event(VK_NUMLOCK, 0, 2, 0)
@@ -147,7 +152,7 @@ number_new_word_btn = CTkButton(input_new_word,
                          command=get_number_new_word)
 number_new_word_btn.grid(sticky='nsew',padx=10,pady=10)
 
-                                                                                # tab Input Word
+                                                                                                    # tab Input Word
 
 def focus_en(event):
     ctypes.windll.user32.ActivateKeyboardLayout(0x04090409, 0)
@@ -191,12 +196,12 @@ add_word_btn = CTkButton(my_tabs.tab("Input Word"),
                          command=add_the_word)
 add_word_btn.grid(sticky='nsew',padx=10,pady=10)
 
-                                                                                # Tab Status
-status_labels = []  # بیرون تابع تعریف کن
+                                                                                                    # Tab Status
+status_labels = []                      # بیرون تابع تعریف کن
 def Show_status():
     global status_labels
 
-    # حذف لیبل‌های قبلی
+                        # حذف لیبل‌های قبلی
     for lbl in status_labels:
         lbl.destroy()
 
