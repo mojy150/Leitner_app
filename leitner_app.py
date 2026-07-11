@@ -56,8 +56,9 @@ Run_Leitner_btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
 
 number_question = 0
 def flash_card_func(event):
+    global number_question
+    number_question +=1
     if enable_click == True:    
-        global number_question
         if number_question % 2 == 0:
             Flash_card_label.configure(text="en")
             Question_label.configure(text="click the flash card!")
@@ -66,17 +67,17 @@ def flash_card_func(event):
             Question_label.configure(text="your quess is true?")
             True_Rbtn.configure(state="normal")
             False_Rbtn.configure(state="normal")
-        number_question +=1
+            check_btn.configure(state="normal")
     
 
 Flash_card_label = CTkLabel(Leitner_frame,
                 text="start the Leitner to show the flash card!",border_color="black",border_width=2,corner_radius=10)
-Flash_card_label.grid(sticky='nsew',padx=10,pady=10)
+Flash_card_label.grid(sticky='nsew',padx=10,pady=10) # TODO
 Flash_card_label.bind("<Button-1>", flash_card_func)
 
 Question_label = CTkLabel(Leitner_frame,
                 text="")
-Question_label.grid(sticky='nsew',padx=10,pady=10)
+Question_label.grid(sticky='nsew',padx=10,pady=10) # TODO
 
 
 controller_var = IntVar(value=2)
@@ -85,17 +86,35 @@ True_Rbtn = CTkRadioButton(Leitner_frame,
                            text="Yes",
                            variable=controller_var,
                            value=1,state="disabled")
-True_Rbtn.grid(sticky='nsew',padx=10,pady=10)                       
+True_Rbtn.grid(sticky='nsew',padx=10,pady=10)       # TODO                
 
 False_Rbtn = CTkRadioButton(Leitner_frame,
                             text="No",
                             variable=controller_var,
                             value=0,state="disabled")
-False_Rbtn.grid(sticky='nsew',padx=10,pady=10)
+False_Rbtn.grid(sticky='nsew',padx=10,pady=10)      # TODO
+
+def check_btn_func():
+    if controller_var.get() != 2:
+        text = ""
+        if controller_var.get() == 0:
+            text = f"[No] I didn't know {"en"} meant {"fr"}"
+        elif controller_var.get() == 1:
+            text = f"[Yes] I did know {"en"} meant {"fr"}"
+        lbl = CTkLabel(myframe2,text=text,
+                    font=CTkFont(family="Vazir"))
+        lbl.grid()
+        controller_var.set(2)
+        Flash_card_label.configure(text="en")
+        Question_label.configure(text="click the flash card!")
+    else:
+        messagebox.showwarning("هشدار","لطفا یک دکمه را انتخاب کنید")
 
 check_btn = CTkButton(Leitner_frame,
-                      text="Apply the guess",)
-check_btn.grid(sticky='nsew',padx=10,pady=10)
+                      text="Apply the guess",
+                      state="disabled",
+                      command=check_btn_func,)
+check_btn.grid(sticky='nsew',padx=10,pady=10) # TODO
 
 def Exit_Leitner():
     Run_Leitner_btn.configure(state="normal")
@@ -104,10 +123,12 @@ def Exit_Leitner():
     enable_click = False
     Flash_card_label.configure(text="start the Leitner to show the flash card!")
     Question_label.configure(text="")
-    False_Rbtn.configure(state="disabled",variable=IntVar(value=2))
-    True_Rbtn.configure(state="disabled",variable=IntVar(value=2))
+    controller_var.set(2)
+    False_Rbtn.configure(state="disabled",variable=controller_var)
+    True_Rbtn.configure(state="disabled",variable=controller_var)
     number_new_word_input.configure(state="normal")
     number_new_word_btn.configure(state="normal")
+    check_btn.configure(state="disabled")
 
 Exit_Leitner_btn = CTkButton(Leitner_frame,
                              text="exit Leitner",
@@ -139,7 +160,8 @@ def get_number_new_word():
         number_new_word = number_new_word_input.get().strip()
         number_new_word = int(number_new_word)
         
-        number_new_word_lbl = CTkLabel(myframe2,text=f"[{number_new_word}] new word added to your Leitner",)
+        number_new_word_lbl = CTkLabel(myframe2,
+                                       text=f"[{number_new_word}] new word added to your Leitner",)
         number_new_word_lbl.grid()
         number_new_word_input.delete(0,END)
     except:
