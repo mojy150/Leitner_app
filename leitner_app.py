@@ -198,20 +198,23 @@ fr_input.bind("<FocusIn>", focus_fr)
 
 new_word = int(0)
 def add_the_word():
-    global new_word
-    text_en_input= en_input.get().strip()
-    text_fr_input= fr_input.get().strip()
-    leitner.append_list_as_row(leitner.basic_csv,
-                               [str(leitner.last_id() +1),
-                                text_en_input,text_fr_input,'1','off'])
-    new_word +=1
-    text = '[%i]You add [%s] => [%s]' % (new_word,text_en_input,
-                                          text_fr_input)
-    lbl = CTkLabel(myframe2,text=text,
-                   font=CTkFont(family="Vazir"))
-    lbl.grid()
-    en_input.delete(0,END)
-    fr_input.delete(0,END)
+    if en_input.get().strip() != "" and fr_input.get().strip() != "":
+        global new_word
+        text_en_input= en_input.get().strip()
+        text_fr_input= fr_input.get().strip()
+        leitner.append_list_as_row(leitner.basic_csv,
+                                [str(leitner.last_id() +1),
+                                    text_en_input,text_fr_input,'1','off'])
+        new_word +=1
+        text = '[%i]You add [%s] => [%s]' % (new_word,text_en_input,
+                                            text_fr_input)
+        lbl = CTkLabel(myframe2,text=text,
+                    font=CTkFont(family="Vazir"))
+        lbl.grid()
+        en_input.delete(0,END)
+        fr_input.delete(0,END)
+    else:
+        messagebox.showwarning("هشدار","لطفا کادرها را پر کنید")
 
 add_word_btn = CTkButton(my_tabs.tab("Input Word"),
                          text="add the word",
