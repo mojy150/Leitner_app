@@ -145,23 +145,6 @@ Exit_Leitner_btn = CTkButton(Leitner_frame,
 Exit_Leitner_btn.grid(sticky='nsew',padx=10,pady=10)
 
                                                                                                     # new word
-def check_new_word():
-    id_0 = []
-    number = 0
-    with open(basic_csv) as f:
-        reader = csv.reader(f)    
-        temp = int(0)
-        counter = int(0)
-        if number == '0':
-            for row in reader:
-                if row[3] == number:
-                    id_0.append([row[0],row[1],row[2],row[3],'on'])
-                    counter +=1
-            if counter != 0:
-                temp = int(input('how much you want new words? : '))
-                if temp > len(id_0):
-                    temp = len(id_0)
-                    print('all new words in csv is %i' % temp)
 
 
 new_word_babel = CTkLabel(input_new_word,
@@ -197,7 +180,7 @@ def get_number_new_word():
             if number == '0':
                 for row in reader:
                     if row[3] == number:
-                        id_0.append([row[0],row[1],row[2],"1","off"])
+                        id_0.append([row[0],row[1],row[2],1,'off'])
                         counter +=1
                 if counter != 0:
                     if number_new_word > len(id_0):
@@ -220,7 +203,7 @@ def get_number_new_word():
             temp_list = select_in_list(selected_new_word)
             for row in reader:
                 if temp_list == None:
-                    break
+                    pass
                 elif temp_list[0] == row[0]:
                     row[0],row[1],row[2],row[3],row[4] = temp_list[0],temp_list[1],temp_list[2],temp_list[3],temp_list[4]
                     temp_list = select_in_list(selected_new_word)
