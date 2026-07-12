@@ -1,4 +1,2 @@
 pyttsx3==2.90
-shutil
 customtkinter
-tkinter
