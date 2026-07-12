@@ -9,9 +9,17 @@ from tempfile import NamedTemporaryFile
 import shutil
 import pyttsx3
 
+engine = pyttsx3.init()
+engine.setProperty('rate', 170)
 basic_csv = 'basic.csv' # csv of word
 time_csv = 'time.csv' # csv of t
 enable_click = False
+en_question = ""
+fr_question = ""
+Answer = "s"
+sure = "null"
+questionToday_list = list()
+generator = None
                                                                                                     # main
 window = CTk()
 width = window.winfo_screenwidth()
@@ -46,15 +54,151 @@ myframe2.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
 
                                                                                                     # tab Leitner
 
+def leitner_func(): # question words
+    global en_question
+    global fr_question
+    global Answer
+    global questionToday_list
+    global list_another
+    # sure = 'null'
+    for item in questionToday_list:
+        if item[4] == 'on':
+            # print(item[1])
+            en_question = item[1]
+            Flash_card_label.configure(text=en_question)
+            Question_label.configure(text="click the flash card!")
+            # engine.say(en_question)
+            # engine.runAndWait()
+            # Question_label.configure(text="click the flash card!")
+            # engine.say(en_question)
+            # engine.runAndWait()
+            fr_question = item[2]
+            # temp = input(' you want continue? (y/n): ')
+            yield item
+            # if temp == 'n' or temp == 'N':
+            #     sure = input('are you sure? (y/n): ')
+            #     if sure == 'n' or sure == 'N':
+            #         temp = 'y' # TODO
+            #     elif sure == 'y' or sure == 'Y' or sure == '':
+            #         print('leitner is off!')
+            #         break
+            
+            # if temp == 'y' or temp == 'Y' or temp == '':
+            # print('[%s] meant [%s]' % (item[1] , item[2]))
+            # Flash_card_label.configure(text=item[2])
+            # javab = input('your hads is true? (y/n): ')
+            # while True:
+            # print("now",Answer)
+            if Answer == 'n' or Answer == 'N':
+                item[3] , item[4] = '1' , 'off'
+                # i +=1
+                # print(Answer)
+                Answer = ""
+            elif Answer == 'y' or Answer == 'Y':
+                item[3] , item[4] = str(int(item[3]) + 1) , 'off'
+                # print(Answer)
+                # i +=1
+                Answer = ""
+    # return sure
+    # if sure != 'y' or sure != 'Y' or sure != '':
+    #     for row in list_another:
+    #         if (row[0] == '1' or row[0] == '3' or row[0] == '7' or row[0] == '15' or row[0] == '30') and row[4] == 'off':
+    #             leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],'on')
+                
+    #         elif row[0] != '0' or row[0] != '1' or row[0] != '3' or row[0] != '7' or row[0] != '15' or row[0] != '30':
+    #         # TODO elif or else
+    #             leitner.edit_csv(basic_csv,row[0],row[1],row[2],str(int(row[3]) +1),row[4]) # TODO (row[4] or 'off')
+    tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
+    leitner.edit_time_csv(time_csv,tomorrow.year,tomorrow.month,tomorrow.day)
+    
+    if len(questionToday_list) == 0:
+        print('len list is zero (0).')
+    # questionToday_list.sort() # TODO
+    # print(questionToday_list)
+    
+    for row in questionToday_list:
+        leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
+    # for row in questionToday_list: # TODO
+    #     edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
+
+def Run_Leitner():
+    global generator
+    global questionToday_list
+    global list_another
+    with open(basic_csv) as f:
+        reader = csv.reader(f)
+        id_0 = list() # list Ids in CSV
+        questionToday_list = list() # list word of question day
+        list_another = list() # list word of does't question day
+        questionToday_list = []
+        with open(time_csv) as time_tomorrow:
+            reader = csv.reader(time_tomorrow)
+            for row in reader:
+                tomorrow_year , tomorrow_month , tomorrow_day = int(row[0]) , int(row[1]) , int(row[2])
+            e = datetime.datetime.now()
+            if e.year > tomorrow_year or (e.year == tomorrow_year and e.month > tomorrow_month) or (e.year == tomorrow_year and e.month == tomorrow_month and e.day >= tomorrow_day):
+                leitner.check(basic_csv,'30',id_0,questionToday_list)
+                leitner.check(basic_csv,'15',id_0,questionToday_list)
+                leitner.check(basic_csv,'7',id_0,questionToday_list)
+                leitner.check(basic_csv,'3',id_0,questionToday_list)
+                leitner.check(basic_csv,'1',id_0,questionToday_list)
+                leitner.check(basic_csv,'another',id_0,list_another)
+                
+                generator = leitner_func()
+                sure = next(generator)
+                # if sure != 'y' or sure != 'Y' or sure != '':
+                #     for row in list_another:
+                #         if (row[0] == '1' or row[0] == '3' or row[0] == '7' or row[0] == '15' or row[0] == '30') and row[4] == 'off':
+                #             leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],'on')
+                            
+                #         elif row[0] != '0' or row[0] != '1' or row[0] != '3' or row[0] != '7' or row[0] != '15' or row[0] != '30':
+                #         # TODO elif or else
+                #             leitner.edit_csv(basic_csv,row[0],row[1],row[2],str(int(row[3]) +1),row[4]) # TODO (row[4] or 'off')
+                # tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
+                # leitner.edit_time_csv(time_csv,tomorrow.year,tomorrow.month,tomorrow.day)
+                
+                # if len(questionToday_list) == 0:
+                #     print('len list is zero (0).')
+                # # questionToday_list.sort() # TODO
+                # # print(questionToday_list)
+                
+                # for row in questionToday_list:
+                #     leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
+            # else:
+            #     questionToday_list = []
+            #     leitner.check_again(basic_csv,'30',questionToday_list)
+            #     leitner.check_again(basic_csv,'15',questionToday_list)
+            #     leitner.check_again(basic_csv,'7',questionToday_list)
+            #     leitner.check_again(basic_csv,'3',questionToday_list)
+            #     leitner.check_again(basic_csv,'1',questionToday_list)
+            #     leitner.check_again(basic_csv,'0',questionToday_list)
+            #     if len(questionToday_list) == 0:
+            #         print("you can'n use leitner now")
+            #         temp = input('but you can insert new word\n you want continue? (y/n): ')
+            #         if temp == 'y' or temp == 'Y' or temp == '':
+            #             check(basic_csv,'0',id_0,questionToday_list)
+            #             sure = leitner(questionToday_list) # TODO (sure = or not)
+            #             for row in questionToday_list:
+            #                 leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
+            #     else:
+            #         print("you can just continue leitner now")
+            #         sure = leitner(questionToday_list) # TODO (sure = or not)
+            #         for row in questionToday_list:
+            #             leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
+            #         # print(questionToday_list)
+            #         if len(questionToday_list) == 0:
+            #             print('len list is zero (0). ')
+
 def Start_Leitner():
     Run_Leitner_btn.configure(state="disabled")
     Exit_Leitner_btn.configure(state="normal")
     global enable_click
     enable_click = True
-    Flash_card_label.configure(text="en")
+    # Flash_card_label.configure(text="en")
     Question_label.configure(text="click the flash card!")
     number_new_word_input.configure(state="disabled")
     number_new_word_btn.configure(state="disabled")
+    Run_Leitner()
 
 
 Run_Leitner_btn = CTkButton(Leitner_frame,
@@ -65,13 +209,17 @@ Run_Leitner_btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
 number_question = 0
 def flash_card_func(event):
     global number_question
+    global en_question
+    global fr_question
     number_question +=1
     if enable_click == True:    
         if number_question % 2 == 0:
-            Flash_card_label.configure(text="en")
+            Flash_card_label.configure(text=en_question)
             Question_label.configure(text="click the flash card!")
         else:
-            Flash_card_label.configure(text="fr")
+            engine.say(en_question)
+            engine.runAndWait()
+            Flash_card_label.configure(text=fr_question)
             Question_label.configure(text="your quess is true?")
             True_Rbtn.configure(state="normal")
             False_Rbtn.configure(state="normal")
@@ -103,18 +251,30 @@ False_Rbtn = CTkRadioButton(Leitner_frame,
 False_Rbtn.grid(sticky='nsew',padx=10,pady=10)      # TODO
 
 def check_btn_func():
+    global Answer
+    global en_question
+    global fr_question
+    global generator
+
     if controller_var.get() != 2:
-        text = ""
+        # text = ""
         if controller_var.get() == 0:
-            text = f"[No] I didn't know {"en"} meant {"fr"}"
+            Answer = "n"
+            text = f"[No] I didn't know [{en_question}] meant [{fr_question}]"
         elif controller_var.get() == 1:
-            text = f"[Yes] I did know {"en"} meant {"fr"}"
+            Answer = "y"
+            text = f"[Yes] I did know [{en_question}] meant [{fr_question}]"
         lbl = CTkLabel(myframe2,text=text,
                     font=CTkFont(family="Vazir"))
         lbl.grid()
         controller_var.set(2)
-        Flash_card_label.configure(text="en")
-        Question_label.configure(text="click the flash card!")
+        # generator = leitner_func()
+        try:
+            s = next(generator)
+        except:
+            Exit_Leitner_btn.invoke()
+        # Flash_card_label.configure(text="en")
+        # Question_label.configure(text="click the flash card!")
     else:
         messagebox.showwarning("هشدار","لطفا یک دکمه را انتخاب کنید")
 
