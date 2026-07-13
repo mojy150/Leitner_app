@@ -48,7 +48,7 @@ def check_again(file_csv,number,questionToday_list): # check again for new word 
             for row in reader:
                 if row[3] == number and row[4] == 'on':
                     questionToday_list.append([row[0],row[1],row[2],row[3],row[4]])
-    return questionToday_list
+    questionToday_list
 
 def last_id(): # give the last id
     n = int(0)

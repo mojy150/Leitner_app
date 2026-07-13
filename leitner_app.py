@@ -172,15 +172,31 @@ def Run_Leitner():
                 
                 # for row in questionToday_list:
                 #     leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
-            # else:
-            #     questionToday_list = []
-            #     leitner.check_again(basic_csv,'30',questionToday_list)
-            #     leitner.check_again(basic_csv,'15',questionToday_list)
-            #     leitner.check_again(basic_csv,'7',questionToday_list)
-            #     leitner.check_again(basic_csv,'3',questionToday_list)
-            #     leitner.check_again(basic_csv,'1',questionToday_list)
-            #     leitner.check_again(basic_csv,'0',questionToday_list)
-            #     if len(questionToday_list) == 0:
+            else:
+                questionToday_list = []
+                leitner.check_again(basic_csv,'30',questionToday_list)
+                leitner.check_again(basic_csv,'15',questionToday_list)
+                leitner.check_again(basic_csv,'7',questionToday_list)
+                leitner.check_again(basic_csv,'3',questionToday_list)
+                leitner.check_again(basic_csv,'1',questionToday_list)
+                leitner.check_again(basic_csv,'0',questionToday_list)
+                try:
+                    generator = leitner_func()
+                    sure = next(generator)
+                except:
+                    if len(questionToday_list) == 0:
+                        text = "The Leitner is empty, but if you want, you can add a new word or add one of our ready-made words to your Leitner."
+                        text_box = CTkTextbox(
+                                    myframe2,
+                                    wrap="word",
+                                    height=50,
+                                    font=en_font
+                                )
+                        text_box.insert("0.0", text)
+                        text_box.configure(state="disabled")
+                        text_box.grid(row=0, column=0, sticky="ew")
+                        Exit_Leitner_btn.invoke()
+                # if len(questionToday_list) == 0:
             #         print("you can'n use leitner now")
             #         temp = input('but you can insert new word\n you want continue? (y/n): ')
             #         if temp == 'y' or temp == 'Y' or temp == '':
@@ -327,16 +343,20 @@ def Exit_Leitner():
     number_new_word_input.configure(state="normal")
     number_new_word_btn.configure(state="normal")
     check_btn.configure(state="disabled")
-    with open(time_csv) as time_tomorrow:
-        reader = csv.reader(time_tomorrow)
-        for row in reader:
-            tomorrow_year , tomorrow_month , tomorrow_day = int(row[0]) , int(row[1]) , int(row[2])
-        e = datetime.datetime.now()
-        if e.year > tomorrow_year or (e.year == tomorrow_year and e.month > tomorrow_month) or (e.year == tomorrow_year and e.month == tomorrow_month and e.day >= tomorrow_day):    
-            tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
-            leitner.edit_time_csv(time_csv,tomorrow.year,tomorrow.month,tomorrow.day)
-            for row in questionToday_list:
-                leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
+    if len(questionToday_list) != 0:
+        with open(time_csv) as time_tomorrow:
+            reader = csv.reader(time_tomorrow)
+            for row in reader:
+                tomorrow_year , tomorrow_month , tomorrow_day = int(row[0]) , int(row[1]) , int(row[2])
+            e = datetime.datetime.now()
+            if e.year > tomorrow_year or (e.year == tomorrow_year and e.month > tomorrow_month) or (e.year == tomorrow_year and e.month == tomorrow_month and e.day >= tomorrow_day):    
+                tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
+                leitner.edit_time_csv(time_csv,tomorrow.year,tomorrow.month,tomorrow.day)
+                for row in questionToday_list:
+                    leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
+            else:
+                for row in questionToday_list:
+                    leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
 
 Exit_Leitner_btn = CTkButton(Leitner_frame,
                              text="exit Leitner",
