@@ -20,6 +20,7 @@ Answer = "s"
 sure = "null"
 questionToday_list = list()
 generator = None
+number_question = 0
                                                                                                     # main
 window = CTk()
 fr_font = CTkFont(family="vazir",size=15)
@@ -119,6 +120,7 @@ def Run_Leitner():
     global generator
     global questionToday_list
     global list_another
+    global number_question
     with open(basic_csv) as f:
         reader = csv.reader(f)
         id_0 = list() # list Ids in CSV
@@ -173,6 +175,7 @@ def Run_Leitner():
                 # for row in questionToday_list:
                 #     leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
             else:
+                number_question = 0
                 questionToday_list = []
                 leitner.check_again(basic_csv,'30',questionToday_list)
                 leitner.check_again(basic_csv,'15',questionToday_list)
@@ -240,7 +243,7 @@ Run_Leitner_btn = CTkButton(Leitner_frame,
                 command=Start_Leitner)
 Run_Leitner_btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
 
-number_question = 0
+
 def flash_card_func(event):
     global number_question
     global en_question
