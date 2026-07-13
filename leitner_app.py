@@ -22,7 +22,8 @@ questionToday_list = list()
 generator = None
                                                                                                     # main
 window = CTk()
-
+fr_font = CTkFont(family="vazir",size=15)
+en_font = CTkFont(family="Arial",size=15)
                                                                                                     # wight of row & column for main
 window.grid_columnconfigure([0],weight=4)
 window.grid_columnconfigure([1],weight=2)
@@ -150,6 +151,7 @@ def Run_Leitner():
                                     myframe2,
                                     wrap="word",
                                     height=50,
+                                    font=en_font
                                 )
                         text_box.insert("0.0", text)
                         text_box.configure(state="disabled")
@@ -222,6 +224,7 @@ Leitner_frame.grid_columnconfigure(0, weight=1)
 
 Run_Leitner_btn = CTkButton(Leitner_frame,
                 text="Start Leitner",
+                font=en_font,
                 command=Start_Leitner)
 Run_Leitner_btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
 
@@ -246,12 +249,17 @@ def flash_card_func(event):
     
 
 Flash_card_label = CTkLabel(Leitner_frame,
-                text="start the Leitner to show the flash card!",border_color="black",border_width=2,corner_radius=10)
+                text="start the Leitner to show the flash card!",
+                font=en_font,
+                border_color="black",
+                border_width=2,
+                corner_radius=10)
 Flash_card_label.grid(column=0,row=1,sticky='nsew',padx=10,pady=10) # TODO
 Flash_card_label.bind("<Button-1>", flash_card_func)
 
 Question_label = CTkLabel(Leitner_frame,
-                text="")
+                text="",
+                font=fr_font,)
 Question_label.grid(column=0,row=2,sticky='nsew',padx=10,pady=10) # TODO
 
 Radio_frame = CTkFrame(Leitner_frame,)
@@ -263,12 +271,14 @@ controller_var = IntVar(value=2)
 
 True_Rbtn = CTkRadioButton(Radio_frame,
                            text="Yes",
+                           font=en_font,
                            variable=controller_var,
                            value=1,state="disabled")
 True_Rbtn.grid(column=0,row=0,sticky='nsew',padx=10, pady=10)       # TODO                
 
 False_Rbtn = CTkRadioButton(Radio_frame,
                             text="No",
+                            font=en_font,
                             variable=controller_var,
                             value=0,state="disabled")
 False_Rbtn.grid(column=1,row=0,sticky='nsew',padx=10, pady=10)      # TODO
@@ -288,7 +298,7 @@ def check_btn_func():
             Answer = "y"
             text = f"[Yes] I did know [{en_question}] meant [{fr_question}]"
         lbl = CTkLabel(myframe2,text=text,
-                    font=CTkFont(family="Vazir"))
+                    font=fr_font)
         lbl.grid(sticky='nw', padx=5, pady=2)
         controller_var.set(2)
         # generator = leitner_func()
@@ -303,6 +313,7 @@ def check_btn_func():
 
 check_btn = CTkButton(Leitner_frame,
                       text="Apply the guess",
+                      font=en_font,
                       state="disabled",
                       command=check_btn_func,)
 check_btn.grid(column=0,row=4,sticky='nsew',padx=10,pady=10) # TODO
@@ -323,6 +334,7 @@ def Exit_Leitner():
 
 Exit_Leitner_btn = CTkButton(Leitner_frame,
                              text="exit Leitner",
+                             font=en_font,
                              state="disabled",
                              command=Exit_Leitner)
 Exit_Leitner_btn.grid(column=0,row=5,sticky='nsew',padx=10,pady=10)
@@ -336,7 +348,8 @@ input_new_word.grid_rowconfigure(1, weight=1)
 input_new_word.grid_rowconfigure(2, weight=1)
 
 new_word_babel = CTkLabel(input_new_word,
-                    text="We have some words already prepared.\n how many would you like to add?")
+                    text="We have some words already prepared.\n how many would you like to add?",
+                    font=en_font)
 new_word_babel.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
 
 def turn_on_numlock(event=None):
@@ -349,8 +362,8 @@ def turn_on_numlock(event=None):
 
 number_new_word_input = CTkEntry(input_new_word,                          
                       placeholder_text="give me the number: ",
-                      height=125,width=400)
-number_new_word_input.grid(column=0,row=1,pady=10)
+                      font=en_font,justify="center")
+number_new_word_input.grid(sticky='nsew',column=0,row=1,pady=10)
 number_new_word_input.bind("<FocusIn>", turn_on_numlock)
 
 
@@ -402,7 +415,8 @@ def get_number_new_word():
                 
                 
         number_new_word_lbl = CTkLabel(myframe2,
-                                       text=text,)
+                                       text=text,
+                                       font=en_font,)
         number_new_word_lbl.grid(sticky='nw', padx=5, pady=2)
         number_new_word_input.delete(0,END)
     except:
@@ -412,6 +426,7 @@ def get_number_new_word():
 
 number_new_word_btn = CTkButton(input_new_word,
                          text="add the word",
+                         font=en_font,
                          command=get_number_new_word)
 number_new_word_btn.grid(column=0,row=2,sticky='nsew',padx=10,pady=10)
 
@@ -432,8 +447,9 @@ def focus_en(event):
 
 en_input = CTkEntry(my_tabs.tab("Input Word"),                          
                       placeholder_text="english: ",
-                      height=125,width=400)
-en_input.grid(column=0,row=0, pady=10)
+                      font=en_font,
+                      justify="center",)
+en_input.grid(sticky='nsew',column=0,row=0, pady=10)
 en_input.bind("<FocusIn>", focus_en)
 
 def focus_fr(event):
@@ -441,10 +457,9 @@ def focus_fr(event):
 
 fr_input = CTkEntry(my_tabs.tab("Input Word"),                          
                       placeholder_text=" :فارسی",
-                      justify="right",
-                      font=CTkFont(family="Vazir"),
-                      height=125,width=400)
-fr_input.grid(column=0,row=1,pady=10)
+                      font=fr_font,
+                      justify="center",)
+fr_input.grid(sticky='nsew',column=0,row=1,pady=10)
 fr_input.bind("<FocusIn>", focus_fr)
 
 
@@ -462,7 +477,7 @@ def add_the_word():
                                              text_en_input,
                                              text_fr_input)
         lbl = CTkLabel(myframe2,text=text,
-                    font=CTkFont(family="Vazir"))
+                    font=fr_font,)
         lbl.grid(sticky='nw', padx=5, pady=2)
         en_input.delete(0,END)
         fr_input.delete(0,END)
@@ -471,6 +486,7 @@ def add_the_word():
 
 add_word_btn = CTkButton(my_tabs.tab("Input Word"),
                          text="add the word",
+                         font=en_font,
                          command=add_the_word)
 add_word_btn.grid(column=0,row=2,sticky='nsew',padx=10,pady=10)
 
@@ -478,14 +494,13 @@ add_word_btn.grid(column=0,row=2,sticky='nsew',padx=10,pady=10)
 status_tab = my_tabs.tab("Status")
 
 status_tab.grid_columnconfigure(0, weight=1)
-status_tab.grid_rowconfigure(1, weight=1)
+# status_tab.grid_rowconfigure(1, weight=1)
 
-
-status_labels = []                      # بیرون تابع تعریف کن
+status_labels = []  # بیرون تابع تعریف کن
 def Show_status():
     global status_labels
 
-                        # حذف لیبل‌های قبلی
+    # حذف لیبل‌های قبلی
     for lbl in status_labels:
         lbl.destroy()
 
@@ -493,7 +508,7 @@ def Show_status():
 
     show_list = leitner.show()
 
-    # row = 1
+    row = 1
     for i in range(len(show_list)):
         if show_list[i] != 0:
             text = 'value words [%s] day house is [%i]' % (i, show_list[i])
@@ -501,10 +516,10 @@ def Show_status():
             lbl = CTkLabel(
                 my_tabs.tab("Status"),
                 text=text,
-                font=CTkFont(size=15)
+                font=en_font,
             )
 
-            lbl.grid(sticky='nw', padx=10, pady=2)
+            lbl.grid(row=row, column=0, sticky='nw', padx=10, pady=2)
 
             status_labels.append(lbl)
             row += 1
@@ -513,6 +528,7 @@ def Show_status():
 Show_status_btn = CTkButton(
     my_tabs.tab("Status"),
     text="Show status",
+    font=en_font,
     command=Show_status
 )
 
