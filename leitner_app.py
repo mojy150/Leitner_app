@@ -50,6 +50,7 @@ myframe2.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
 
 myframe2.grid_columnconfigure(0, weight=1)
 
+
                                                                                                     # tab Leitner
 
 def leitner_func(): # question words
@@ -109,8 +110,6 @@ def leitner_func(): # question words
     tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
     leitner.edit_time_csv(time_csv,tomorrow.year,tomorrow.month,tomorrow.day)
     
-    if len(questionToday_list) == 0:
-        print('len list is zero (0).')
     # questionToday_list.sort() # TODO
     # print(questionToday_list)
     
@@ -141,9 +140,22 @@ def Run_Leitner():
                 leitner.check(basic_csv,'3',id_0,questionToday_list)
                 leitner.check(basic_csv,'1',id_0,questionToday_list)
                 leitner.check(basic_csv,'another',id_0,list_another)
-                
-                generator = leitner_func()
-                sure = next(generator)
+                try:
+                    generator = leitner_func()
+                    sure = next(generator)
+                except:
+                    if len(questionToday_list) == 0:
+                        text = "The Leitner is empty, but if you want, you can add a new word or add one of our ready-made words to your Leitner."
+                        text_box = CTkTextbox(
+                                    myframe2,
+                                    wrap="word",
+                                    height=50,
+                                )
+                        text_box.insert("0.0", text)
+                        text_box.configure(state="disabled")
+                        text_box.grid(row=0, column=0, sticky="ew")
+                        Exit_Leitner_btn.invoke()
+                        # print('len list is zero (0).')
                 # if sure != 'y' or sure != 'Y' or sure != '':
                 #     for row in list_another:
                 #         if (row[0] == '1' or row[0] == '3' or row[0] == '7' or row[0] == '15' or row[0] == '30') and row[4] == 'off':
