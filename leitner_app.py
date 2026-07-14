@@ -26,15 +26,16 @@ window = CTk()
 fr_font = CTkFont(family="vazir",size=15)
 en_font = CTkFont(family="Arial",size=15)
                                                                                                     # wight of row & column for main
-window.grid_columnconfigure([0],weight=4)
-window.grid_columnconfigure([1],weight=2)
+window.grid_columnconfigure([0],weight=0)
+window.grid_columnconfigure([1],weight=4)
+window.grid_columnconfigure([2],weight=2)
 window.grid_rowconfigure([0],weight=1)
                                                                                                     # create left tab
 my_tabs = CTkTabview(window,)                                   
 my_tabs.add("Leitner")                                 
 my_tabs.add("Input Word")
 my_tabs.add("Status")
-my_tabs.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
+my_tabs.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
                                                                                                     # create 2 frame in tab Leitner
 
 my_tabs.tab("Leitner").grid_columnconfigure([0],weight=3)
@@ -48,10 +49,67 @@ input_new_word = CTkFrame(my_tabs.tab("Leitner"))
 input_new_word.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
                                                                                                     # create right frame
 myframe2 = CTkScrollableFrame(window)
-myframe2.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
+myframe2.grid(column=2,row=0,sticky='nsew',padx=10,pady=10)
 
 myframe2.grid_columnconfigure(0, weight=1)
 
+                                                                                                    # setting
+settings_frame = CTkFrame(
+    window,
+    corner_radius=15,
+    border_width=2,
+    fg_color="#2B2B2B"
+)
+
+num_setting = 0
+def show_settings():
+    global num_setting
+    if num_setting % 2 == 0:
+        settings_frame.place(
+            relx=0,
+            rely=0,
+            relwidth=0.20,
+            relheight=1,
+            anchor="nw"
+        )
+        num_setting +=1
+    else:
+        settings_frame.place_forget()
+        num_setting +=1
+
+settings_btn = CTkButton(
+    window,
+    text="Settings",
+    command=show_settings
+)
+settings_btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
+
+def theme_func():
+    global Theme_text
+    if theme_switch.get() == "on":
+        set_appearance_mode("dark")
+        theme_switch.configure(text="dark mode")
+        settings_frame.configure(fg_color="#2B2B2B")
+    else:
+        set_appearance_mode("light")
+        theme_switch.configure(text="light mode")
+        settings_frame.configure(fg_color="#F2F2F2")
+
+settings_frame.grid_columnconfigure(0, weight=1)
+
+theme_switch = CTkSwitch(settings_frame,
+                        text="dark mode",
+                        onvalue="on",
+                        offvalue="off",
+                        variable=StringVar(value="on"),
+                        command=theme_func)
+theme_switch.grid(
+    row=0,
+    column=0,
+    padx=20,
+    pady=20,
+    sticky="e"
+)
 
                                                                                                     # tab Leitner
 
@@ -541,7 +599,8 @@ def Show_status():
     row = 1
     for i in range(len(show_list)):
         if show_list[i] != 0:
-            text = 'value words [%s] day house is [%i]' % (i, show_list[i])
+            # text = 'value words [%s] day house is [%i]' % (i, show_list[i])
+            text = "[%i] flashcards in the [%s]-day box" % (show_list[i], i)
 
             lbl = CTkLabel(
                 my_tabs.tab("Status"),
