@@ -303,7 +303,7 @@ def check_btn_func():
     global en_question
     global fr_question
     global generator
-
+    global number_question
     if controller_var.get() != 2:
         # text = ""
         if controller_var.get() == 0:
@@ -317,6 +317,7 @@ def check_btn_func():
         lbl.grid(sticky='nw', padx=5, pady=2)
         controller_var.set(2)
         # generator = leitner_func()
+        number_question = 0
         try:
             s = next(generator)
         except:
