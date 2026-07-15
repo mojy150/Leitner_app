@@ -12,7 +12,8 @@ import pyttsx3
 engine = pyttsx3.init()
 engine.setProperty('rate', 170)
 basic_csv = 'basic.csv' # csv of word
-time_csv = 'time.csv' # csv of t
+time_csv = 'time.csv' # csv of time
+setting_csv = "setting_data.csv"
 enable_click = False
 en_question = ""
 fr_question = ""
@@ -110,6 +111,26 @@ theme_switch.grid(
     pady=20,
     sticky="e"
 )
+
+def read_setting():
+    with open(setting_csv) as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if row[0] == "theme":
+                if row[1] == "dark":
+                    theme_switch.select()
+                    set_appearance_mode("dark")
+                    theme_switch.configure(text="dark mode")
+                    settings_frame.configure(fg_color="#2B2B2B")
+                else:
+                    theme_switch.deselect()
+                    set_appearance_mode("light")
+                    theme_switch.configure(text="light mode")
+                    settings_frame.configure(fg_color="#F2F2F2")
+            else:
+                pass
+
+read_setting()
 
                                                                                                     # tab Leitner
 
