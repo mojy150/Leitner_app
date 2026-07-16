@@ -160,9 +160,17 @@ def save_setting_func():
 
     shutil.move(tempfile.name, setting_csv)
 
+font_size_label = CTkLabel(settings_frame,
+                           text = "font size",
+                           font=CTkFont(size=15)
+                        #    font=en_font,      #TODO
+                           )
+font_size_label.grid(row=1,column=0,padx=35,sticky="e")
+
 def set_font_size(value):
     global font_size
     font_size = int(value)
+    font_size_label.configure(text=f"font size : {font_size}")
     en_font.configure(size=font_size)
     fr_font.configure(size=font_size)
 
@@ -172,7 +180,7 @@ font_size_slider = CTkSlider(settings_frame,
                       variable=IntVar(value=font_size),     
                       command=set_font_size,
                       number_of_steps=11,width=130)                      # به چند بخش تقسیم بشه
-font_size_slider.grid(row=1,column=0,padx=10,pady=10,sticky="e")
+font_size_slider.grid(row=2,column=0,padx=10,pady=10,sticky="e")
 
 settings_save_btn = CTkButton(
     settings_frame,
