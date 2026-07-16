@@ -77,6 +77,7 @@ def show_settings():
     else:
         settings_frame.place_forget()
         num_setting +=1
+        save_setting_func()
 
 settings_btn = CTkButton(
     window,
@@ -131,6 +132,30 @@ def read_setting():
                 pass
 
 read_setting()
+
+def save_setting_func():
+    tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
+
+    with open(setting_csv, 'r', newline='') as csvFile, tempfile:
+        reader = csv.reader(csvFile, delimiter=',', quotechar='"')
+        writer = csv.writer(tempfile, delimiter=',', quotechar='"')
+
+        for row in reader:
+            if row[0] == "theme":
+                if theme_switch.get() == "on":
+                    row[1] = "dark"
+                else:
+                    row[1] = "light"
+            writer.writerow(row)
+
+    shutil.move(tempfile.name, setting_csv)
+
+settings_save_btn = CTkButton(
+    settings_frame,
+    text="Save Setting",
+    command=save_setting_func,
+)
+settings_save_btn.grid(padx=10,pady=10,sticky="se")
 
                                                                                                     # tab Leitner
 
