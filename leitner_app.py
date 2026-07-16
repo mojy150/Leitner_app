@@ -22,6 +22,7 @@ sure = "null"
 questionToday_list = list()
 generator = None
 number_question = 0
+font_size = 15
                                                                                                     # main
 window = CTk()
 fr_font = CTkFont(family="vazir",size=15)
@@ -82,6 +83,7 @@ def show_settings():
 settings_btn = CTkButton(
     window,
     text="Settings",
+    font=en_font,
     command=show_settings
 )
 settings_btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
@@ -101,6 +103,7 @@ settings_frame.grid_columnconfigure(0, weight=1)
 
 theme_switch = CTkSwitch(settings_frame,
                         text="dark mode",
+                        font=en_font,
                         onvalue="on",
                         offvalue="off",
                         variable=StringVar(value="on"),
@@ -114,6 +117,7 @@ theme_switch.grid(
 )
 
 def read_setting():
+    global font_size
     with open(setting_csv) as f:
         reader = csv.reader(f)
         for row in reader:
@@ -128,6 +132,10 @@ def read_setting():
                     set_appearance_mode("light")
                     theme_switch.configure(text="light mode")
                     settings_frame.configure(fg_color="#F2F2F2")
+            elif row[0] == "font_size":
+                font_size = int(row[1])
+                en_font.configure(size=font_size)
+                fr_font.configure(size=font_size)
             else:
                 pass
 
@@ -146,13 +154,30 @@ def save_setting_func():
                     row[1] = "dark"
                 else:
                     row[1] = "light"
+            elif row[0] == "font_size":
+                row[1] = str(font_size)
             writer.writerow(row)
 
     shutil.move(tempfile.name, setting_csv)
 
+def set_font_size(value):
+    global font_size
+    font_size = int(value)
+    en_font.configure(size=font_size)
+    fr_font.configure(size=font_size)
+
+font_size_slider = CTkSlider(settings_frame,
+                      from_=10,                                  # کمترین مقدار
+                      to=32,                                     # بیشترین مقدار
+                      variable=IntVar(value=font_size),     
+                      command=set_font_size,
+                      number_of_steps=11,width=130)                      # به چند بخش تقسیم بشه
+font_size_slider.grid(row=1,column=0,padx=10,pady=10,sticky="e")
+
 settings_save_btn = CTkButton(
     settings_frame,
     text="Save Setting",
+    font=en_font,
     command=save_setting_func,
 )
 settings_save_btn.grid(padx=10,pady=10,sticky="se")
