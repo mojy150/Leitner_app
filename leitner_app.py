@@ -210,67 +210,82 @@ settings_save_btn = CTkButton(
 settings_save_btn.grid(padx=10,pady=10,sticky="se")
 
                                                                                                     # tutorial
-tutorial_frame = CTkFrame(
-    window,
-    fg_color="#2B2B2B"
-)
-tutorial_frame.place(
-            relx=0,
-            rely=0,
-            relwidth=1,
-            relheight=1,
-            # anchor="nw"
-        )
+with open("tutorial.csv") as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if row[0] == "don't understand":
+                tutorial_frame = CTkFrame(
+                    window,
+                    fg_color="#2B2B2B"
+                )
+                tutorial_frame.place(
+                            relx=0,
+                            rely=0,
+                            relwidth=1,
+                            relheight=1,
+                            # anchor="nw"
+                        )
 
-tutorial_frame.grid_columnconfigure([0],weight=1)
-tutorial_frame.grid_columnconfigure([1],weight=6)
-tutorial_frame.grid_columnconfigure([2],weight=1)
-tutorial_frame.grid_rowconfigure([0],weight=6)
+                tutorial_frame.grid_columnconfigure([0],weight=1)
+                tutorial_frame.grid_columnconfigure([1],weight=6)
+                tutorial_frame.grid_columnconfigure([2],weight=1)
+                tutorial_frame.grid_rowconfigure([0],weight=6)
 
-i = 1
+                i = 1
 
-def left_side_func():
-    global i
-    if i>1:
-        i-=1
-        tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
+                def left_side_func():
+                    global i
+                    if i>1:
+                        i-=1
+                        tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
 
-left_side_btn = CTkButton(tutorial_frame,
-                          image=CTkImage(Image.open(f"./media/left_side.png")),
-                          text="",
-                          command=left_side_func)
-left_side_btn.grid(column=0,row=0,padx=10,pady=10)
-
-
-tutorial_label = CTkLabel(tutorial_frame,
-                          text="",
-                          image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
-tutorial_label.grid(column=1,row=0,padx=10,pady=10,)
+                left_side_btn = CTkButton(tutorial_frame,
+                                        image=CTkImage(Image.open(f"./media/left_side.png")),
+                                        text="",
+                                        command=left_side_func)
+                left_side_btn.grid(column=0,row=0,padx=10,pady=10)
 
 
-def right_side_func():
-    global i
-    if i<8:
-        i+=1
-        tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
+                tutorial_label = CTkLabel(tutorial_frame,
+                                        text="",
+                                        image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
+                tutorial_label.grid(column=1,row=0,padx=10,pady=10,)
 
 
-right_side_btn = CTkButton(tutorial_frame,
-                          image=CTkImage(Image.open(f"./media/right_side.png")),
-                          text="",
-                          command=right_side_func)
-right_side_btn.grid(column=2,row=0,padx=10,pady=10)
+                def right_side_func():
+                    global i
+                    if i<8:
+                        i+=1
+                        tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
 
-def close_tutorial():
-    tutorial_frame.place_forget()
 
-tutorial_btn = CTkButton(
-    tutorial_frame,
-    text="I'm understand",
-    font=en_font,
-    command=close_tutorial
-)
-tutorial_btn.grid(column=1,row=1,padx=10,pady=10,sticky="s")
+                right_side_btn = CTkButton(tutorial_frame,
+                                        image=CTkImage(Image.open(f"./media/right_side.png")),
+                                        text="",
+                                        command=right_side_func)
+                right_side_btn.grid(column=2,row=0,padx=10,pady=10)
+
+                def close_tutorial():
+                    tutorial_frame.place_forget()
+                    tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
+
+                    with open("tutorial.csv", 'r', newline='') as csvFile, tempfile:
+                        reader = csv.reader(csvFile, delimiter=',', quotechar='"')
+                        writer = csv.writer(tempfile, delimiter=',', quotechar='"')
+
+                        for row in reader:
+                            row[0]="understand"
+                            writer.writerow(row)
+
+                    shutil.move(tempfile.name, "tutorial.csv")
+
+                tutorial_btn = CTkButton(
+                    tutorial_frame,
+                    text="I'm understand",
+                    font=en_font,
+                    command=close_tutorial
+                )
+                tutorial_btn.grid(column=1,row=1,padx=10,pady=10,sticky="s")
 
                                                                                                     # tab Leitner
 
