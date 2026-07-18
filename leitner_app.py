@@ -11,6 +11,7 @@ import shutil
 from variable import *
                                                                                                     # main
 window = CTk()
+window.title("Leitner app")
 fr_font = CTkFont(family="vazir",size=15)
 en_font = CTkFont(family="Arial",size=15)
 flashcard_fr_font = CTkFont(family="vazir",size=15)
