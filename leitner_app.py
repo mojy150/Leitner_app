@@ -23,10 +23,13 @@ questionToday_list = list()
 generator = None
 number_question = 0
 font_size = 15
+flashcard_font_size = 15
                                                                                                     # main
 window = CTk()
 fr_font = CTkFont(family="vazir",size=15)
 en_font = CTkFont(family="Arial",size=15)
+flashcard_fr_font = CTkFont(family="vazir",size=15)
+flashcard_en_font = CTkFont(family="Arial",size=15)
                                                                                                     # wight of row & column for main
 window.grid_columnconfigure([0],weight=0)
 window.grid_columnconfigure([1],weight=4)
@@ -70,7 +73,7 @@ def show_settings():
         settings_frame.place(
             relx=0,
             rely=0,
-            relwidth=0.20,
+            relwidth=0.24,
             relheight=1,
             anchor="nw"
         )
@@ -87,7 +90,7 @@ settings_btn = CTkButton(
     command=show_settings
 )
 settings_btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
-
+                                                                                                    # setting Theme
 def theme_func():
     global Theme_text
     if theme_switch.get() == "on":
@@ -115,7 +118,7 @@ theme_switch.grid(
     pady=20,
     sticky="e"
 )
-
+                                                                                                    # setting read data
 def read_setting():
     global font_size
     with open(setting_csv) as f:
@@ -136,11 +139,13 @@ def read_setting():
                 font_size = int(row[1])
                 en_font.configure(size=font_size)
                 fr_font.configure(size=font_size)
-            else:
-                pass
+            elif row[0] == "font_size_flashcard":
+                flashcard_font_size = int(row[1])
+                flashcard_en_font.configure(size=flashcard_font_size)
+                flashcard_fr_font.configure(size=flashcard_font_size)
 
 read_setting()
-
+                                                                                                    # setting save data
 def save_setting_func():
     tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
 
@@ -156,10 +161,14 @@ def save_setting_func():
                     row[1] = "light"
             elif row[0] == "font_size":
                 row[1] = str(font_size)
+            elif row[0] == "font_size_flashcard":
+                row[1] = str(flashcard_font_size)
+
+
             writer.writerow(row)
 
     shutil.move(tempfile.name, setting_csv)
-
+                                                                                                    # setting font size
 font_size_label = CTkLabel(settings_frame,
                            text = "font size",
                            font=CTkFont(size=15)
@@ -181,6 +190,29 @@ font_size_slider = CTkSlider(settings_frame,
                       command=set_font_size,
                       number_of_steps=11,width=130)                      # به چند بخش تقسیم بشه
 font_size_slider.grid(row=2,column=0,padx=10,pady=10,sticky="e")
+                                                                                                    # setting flashcard font size
+flashcard_font_size_label = CTkLabel(settings_frame,
+                           text = "flashcard font size",
+                           font=CTkFont(size=18)
+                        #    font=en_font,      #TODO
+                           )
+flashcard_font_size_label.grid(row=3,column=0,padx=35,sticky="e")
+
+def set_font_size(value):
+    global flashcard_font_size
+    flashcard_font_size = int(value)
+    flashcard_font_size_label.configure(text=f"flashcard font size: {flashcard_font_size}")
+    flashcard_en_font.configure(size=flashcard_font_size)
+    flashcard_fr_font.configure(size=flashcard_font_size)
+
+flashcard_font_size_slider = CTkSlider(settings_frame,
+                      from_=10,                                  # کمترین مقدار
+                      to=36,                                     # بیشترین مقدار
+                      variable=IntVar(value=flashcard_font_size),     
+                      command=set_font_size,
+                      number_of_steps=13,
+                      width=130)                      # به چند بخش تقسیم بشه
+flashcard_font_size_slider.grid(row=4,column=0,padx=10,pady=10,sticky="e")
 
 settings_save_btn = CTkButton(
     settings_frame,
@@ -402,7 +434,7 @@ def flash_card_func(event):
 
 Flash_card_label = CTkLabel(Leitner_frame,
                 text="start the Leitner to show the flash card!",
-                font=en_font,
+                font=flashcard_fr_font,
                 border_color="black",
                 border_width=2,
                 corner_radius=10)
@@ -411,7 +443,7 @@ Flash_card_label.bind("<Button-1>", flash_card_func)
 
 Question_label = CTkLabel(Leitner_frame,
                 text="",
-                font=fr_font,)
+                font=en_font,)
 Question_label.grid(column=0,row=2,sticky='nsew',padx=10,pady=10) # TODO
 
 Radio_frame = CTkFrame(Leitner_frame,)
