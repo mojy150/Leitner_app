@@ -9,3 +9,6 @@ I hope you enjoy it.
   * `pip install customtkinter`
 * Install pyttsx3:
   * `pip install pyttsx3==2.90`
+* Install pillow:
+  * `pip install pillow`
+
