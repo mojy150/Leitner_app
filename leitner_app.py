@@ -54,7 +54,7 @@ settings_frame = CTkFrame(
 )
 
 num_setting = 0
-def show_settings():
+def show_settings(event):
     global num_setting
     if num_setting % 2 == 0:
         settings_frame.place(
@@ -77,6 +77,8 @@ settings_btn = CTkButton(
     command=show_settings
 )
 settings_btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
+window.bind("<Escape>", show_settings)
+
                                                                                                     # setting Theme
 def theme_func():
     global Theme_text
