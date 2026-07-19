@@ -522,6 +522,10 @@ def selected_guess(event):
     if enable_click == True: 
         check_btn.invoke()
 
+def select_True_guess(event):
+    if enable_click == True: 
+        True_Rbtn.select()
+
 True_Rbtn = CTkRadioButton(Radio_frame,
                            text="Yes",
                            font=en_font,
@@ -529,6 +533,11 @@ True_Rbtn = CTkRadioButton(Radio_frame,
                            value=1,state="disabled")
 True_Rbtn.grid(column=0,row=0,sticky='nsew',padx=10, pady=10)       # TODO                
 True_Rbtn.bind("<Double 1>", selected_guess)
+window.bind("<Left>", select_True_guess)
+
+def select_False_guess(event):
+    if enable_click == True: 
+        False_Rbtn.select()
 
 False_Rbtn = CTkRadioButton(Radio_frame,
                             text="No",
@@ -537,6 +546,7 @@ False_Rbtn = CTkRadioButton(Radio_frame,
                             value=0,state="disabled")
 False_Rbtn.grid(column=1,row=0,sticky='nsew',padx=10, pady=10)      # TODO
 False_Rbtn.bind("<Double 1>", selected_guess)
+window.bind("<Right>", select_False_guess)
 
 def check_btn_func():
     global Answer
