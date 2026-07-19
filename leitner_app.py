@@ -714,6 +714,8 @@ tab.grid_rowconfigure(3, weight=8)
 def focus_en(event):
     ctypes.windll.user32.ActivateKeyboardLayout(0x04090409, 0)
 
+def focus_next(event):
+    event.widget.tk_focusNext().focus()
 
 en_input = CTkEntry(my_tabs.tab("Input Word"),                          
                       placeholder_text="english: ",
@@ -721,9 +723,13 @@ en_input = CTkEntry(my_tabs.tab("Input Word"),
                       justify="center",)
 en_input.grid(sticky='nsew',column=0,row=0, pady=10)
 en_input.bind("<FocusIn>", focus_en)
+en_input.bind("<Return>", focus_next)
 
 def focus_fr(event):
     ctypes.windll.user32.ActivateKeyboardLayout(0x04290429, 0)
+
+def send_to_add_word_btn(event):
+    add_word_btn.invoke()
 
 fr_input = CTkEntry(my_tabs.tab("Input Word"),                          
                       placeholder_text=" :فارسی",
@@ -731,6 +737,7 @@ fr_input = CTkEntry(my_tabs.tab("Input Word"),
                       justify="center",)
 fr_input.grid(sticky='nsew',column=0,row=1,pady=10)
 fr_input.bind("<FocusIn>", focus_fr)
+fr_input.bind("<Return>", send_to_add_word_btn)
 
 
 new_word = int(0)
