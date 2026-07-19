@@ -641,11 +641,15 @@ def turn_on_numlock(event=None):
         ctypes.windll.user32.keybd_event(VK_NUMLOCK, 0, 0, 0)
         ctypes.windll.user32.keybd_event(VK_NUMLOCK, 0, 2, 0)
 
+def send_number_new_word_btn(event):
+    number_new_word_btn.invoke()
+
 number_new_word_input = CTkEntry(input_new_word,                          
                       placeholder_text="give me the number: ",
                       font=en_font,justify="center")
 number_new_word_input.grid(sticky='nsew',column=0,row=1,pady=10)
 number_new_word_input.bind("<FocusIn>", turn_on_numlock)
+number_new_word_input.bind("<Return>", send_number_new_word_btn)
 
 
 def get_number_new_word():
@@ -701,7 +705,7 @@ def get_number_new_word():
         number_new_word_lbl.grid(sticky='nw', padx=5, pady=2)
         number_new_word_input.delete(0,END)
     except:
-        messagebox.showwarning("هشدار","لطفا عدد صحیح وارد کنید")
+        messagebox.showwarning("هشدار","لطفا عدد صحیح وارد کنید") # TODO
         number_new_word_input.delete(0,END)
 
 
