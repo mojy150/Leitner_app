@@ -54,7 +54,7 @@ settings_frame = CTkFrame(
 )
 
 num_setting = 0
-def show_settings(event):
+def show_settings(event=None):
     global num_setting
     if num_setting % 2 == 0:
         settings_frame.place(
