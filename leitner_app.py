@@ -518,12 +518,17 @@ Radio_frame.grid_columnconfigure([0,1],weight=1)
 
 controller_var = IntVar(value=2)
 
+def selected_guess(event):
+    if enable_click == True: 
+        check_btn.invoke()
+
 True_Rbtn = CTkRadioButton(Radio_frame,
                            text="Yes",
                            font=en_font,
                            variable=controller_var,
                            value=1,state="disabled")
 True_Rbtn.grid(column=0,row=0,sticky='nsew',padx=10, pady=10)       # TODO                
+True_Rbtn.bind("<Double 1>", selected_guess)
 
 False_Rbtn = CTkRadioButton(Radio_frame,
                             text="No",
@@ -531,6 +536,7 @@ False_Rbtn = CTkRadioButton(Radio_frame,
                             variable=controller_var,
                             value=0,state="disabled")
 False_Rbtn.grid(column=1,row=0,sticky='nsew',padx=10, pady=10)      # TODO
+False_Rbtn.bind("<Double 1>", selected_guess)
 
 def check_btn_func():
     global Answer

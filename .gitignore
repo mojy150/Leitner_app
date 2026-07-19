@@ -34,6 +34,6 @@ dist/
 Thumbs.db
 
 # Another
-roodmap.rtl.md
+*.rtl.md
 leitner_app.spec
 *.rar
