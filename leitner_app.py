@@ -505,6 +505,7 @@ Flash_card_label = CTkLabel(Leitner_frame,
                 corner_radius=10)
 Flash_card_label.grid(column=0,row=1,sticky='nsew',padx=10,pady=10) # TODO
 Flash_card_label.bind("<Button-1>", flash_card_func)
+window.bind("<space>", flash_card_func)
 
 Question_label = CTkLabel(Leitner_frame,
                 text="",
