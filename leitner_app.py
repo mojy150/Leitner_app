@@ -8,8 +8,11 @@ import datetime
 from tempfile import NamedTemporaryFile
 import shutil
 from PIL import Image
+import sqlite3
 
 from variable import *
+conn = sqlite3.connect("Leitner_DB.db")
+cursor = conn.cursor()
                                                                                                     # main
 window = CTk()
 window.title("Leitner app")
@@ -110,28 +113,51 @@ theme_switch.grid(
                                                                                                     # setting read data
 def read_setting():
     global font_size
-    with open(setting_csv) as f:
-        reader = csv.reader(f)
-        for row in reader:
-            if row[0] == "theme":
-                if row[1] == "dark":
-                    theme_switch.select()
-                    set_appearance_mode("dark")
-                    theme_switch.configure(text="dark mode")
-                    settings_frame.configure(fg_color="#2B2B2B")
-                else:
-                    theme_switch.deselect()
-                    set_appearance_mode("light")
-                    theme_switch.configure(text="light mode")
-                    settings_frame.configure(fg_color="#F2F2F2")
-            elif row[0] == "font_size":
-                font_size = int(row[1])
-                en_font.configure(size=font_size)
-                fr_font.configure(size=font_size)
-            elif row[0] == "font_size_flashcard":
-                flashcard_font_size = int(row[1])
-                flashcard_en_font.configure(size=flashcard_font_size)
-                flashcard_fr_font.configure(size=flashcard_font_size)
+    cursor.execute("SELECT * FROM Setting")
+    setting_data = cursor.fetchall()
+    for row in setting_data:
+        if row[0] == "theme":
+            if row[1] == "dark":
+                theme_switch.select()
+                set_appearance_mode("dark")
+                theme_switch.configure(text="dark mode")
+                settings_frame.configure(fg_color="#2B2B2B")
+            else:
+                theme_switch.deselect()
+                set_appearance_mode("light")
+                theme_switch.configure(text="light mode")
+                settings_frame.configure(fg_color="#F2F2F2")
+        elif row[0] == "font_size":
+            font_size = int(row[1])
+            en_font.configure(size=font_size)
+            fr_font.configure(size=font_size)
+        elif row[0] == "font_size_flashcard":
+            flashcard_font_size = int(row[1])
+            flashcard_en_font.configure(size=flashcard_font_size)
+            flashcard_fr_font.configure(size=flashcard_font_size)
+
+    # with open(setting_csv) as f:
+    #     reader = csv.reader(f)
+    #     for row in reader:
+    #         if row[0] == "theme":
+    #             if row[1] == "dark":
+    #                 theme_switch.select()
+    #                 set_appearance_mode("dark")
+    #                 theme_switch.configure(text="dark mode")
+    #                 settings_frame.configure(fg_color="#2B2B2B")
+    #             else:
+    #                 theme_switch.deselect()
+    #                 set_appearance_mode("light")
+    #                 theme_switch.configure(text="light mode")
+    #                 settings_frame.configure(fg_color="#F2F2F2")
+    #         elif row[0] == "font_size":
+    #             font_size = int(row[1])
+    #             en_font.configure(size=font_size)
+    #             fr_font.configure(size=font_size)
+    #         elif row[0] == "font_size_flashcard":
+    #             flashcard_font_size = int(row[1])
+    #             flashcard_en_font.configure(size=flashcard_font_size)
+    #             flashcard_fr_font.configure(size=flashcard_font_size)
 
 read_setting()
                                                                                                     # setting save data
