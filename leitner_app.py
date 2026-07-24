@@ -99,8 +99,8 @@ settings_frame.grid_columnconfigure(0, weight=1)
 theme_switch = CTkSwitch(settings_frame,
                         text="dark mode",
                         font=en_font,
-                        onvalue="on",
-                        offvalue="off",
+                        onvalue="dark",
+                        offvalue="light",
                         variable=StringVar(value="on"),
                         command=theme_func)
 theme_switch.grid(
@@ -162,27 +162,33 @@ def read_setting():
 read_setting()
                                                                                                     # setting save data
 def save_setting_func():
-    tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
-
-    with open(setting_csv, 'r', newline='') as csvFile, tempfile:
-        reader = csv.reader(csvFile, delimiter=',', quotechar='"')
-        writer = csv.writer(tempfile, delimiter=',', quotechar='"')
-
-        for row in reader:
-            if row[0] == "theme":
-                if theme_switch.get() == "on":
-                    row[1] = "dark"
-                else:
-                    row[1] = "light"
-            elif row[0] == "font_size":
-                row[1] = str(font_size)
-            elif row[0] == "font_size_flashcard":
-                row[1] = str(flashcard_font_size)
+    cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(theme_switch.get(),"theme"))
+    cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(str(font_size),"font_size"))
+    cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(str(flashcard_font_size),"font_size_flashcard"))
+    conn.commit()
 
 
-            writer.writerow(row)
+    # tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
 
-    shutil.move(tempfile.name, setting_csv)
+    # with open(setting_csv, 'r', newline='') as csvFile, tempfile:
+    #     reader = csv.reader(csvFile, delimiter=',', quotechar='"')
+    #     writer = csv.writer(tempfile, delimiter=',', quotechar='"')
+
+    #     for row in reader:
+    #         if row[0] == "theme":
+    #             if theme_switch.get() == "dark":
+    #                 row[1] = "dark"
+    #             else:
+    #                 row[1] = "light"
+    #         elif row[0] == "font_size":
+    #             row[1] = str(font_size)
+    #         elif row[0] == "font_size_flashcard":
+    #             row[1] = str(flashcard_font_size)
+
+
+    #         writer.writerow(row)
+
+    # shutil.move(tempfile.name, setting_csv)
                                                                                                     # setting font size
 font_size_label = CTkLabel(settings_frame,
                            text = "font size",
