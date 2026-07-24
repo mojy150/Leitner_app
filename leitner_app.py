@@ -369,12 +369,12 @@ def Run_Leitner():
                 tomorrow_year , tomorrow_month , tomorrow_day = int(row[0]) , int(row[1]) , int(row[2])
             e = datetime.datetime.now()
             if e.year > tomorrow_year or (e.year == tomorrow_year and e.month > tomorrow_month) or (e.year == tomorrow_year and e.month == tomorrow_month and e.day >= tomorrow_day):
-                leitner.check(basic_csv,'30',id_0,questionToday_list)
-                leitner.check(basic_csv,'15',id_0,questionToday_list)
-                leitner.check(basic_csv,'7',id_0,questionToday_list)
-                leitner.check(basic_csv,'3',id_0,questionToday_list)
-                leitner.check(basic_csv,'1',id_0,questionToday_list)
-                leitner.check(basic_csv,'another',id_0,list_another)
+                leitner.check(basic_csv,'30',id_0,questionToday_list,list_another)
+                leitner.check(basic_csv,'15',id_0,questionToday_list,list_another)
+                leitner.check(basic_csv,'7',id_0,questionToday_list,list_another)
+                leitner.check(basic_csv,'3',id_0,questionToday_list,list_another)
+                leitner.check(basic_csv,'1',id_0,questionToday_list,list_another)
+                leitner.check(basic_csv,'another',id_0,list_another,list_another)
                 try:
                     generator = leitner_func()
                     sure = next(generator)
@@ -600,20 +600,26 @@ def Exit_Leitner():
     number_new_word_input.configure(state="normal")
     number_new_word_btn.configure(state="normal")
     check_btn.configure(state="disabled")
-    if len(questionToday_list) != 0:
-        with open(time_csv) as time_tomorrow:
-            reader = csv.reader(time_tomorrow)
-            for row in reader:
-                tomorrow_year , tomorrow_month , tomorrow_day = int(row[0]) , int(row[1]) , int(row[2])
-            e = datetime.datetime.now()
-            if e.year > tomorrow_year or (e.year == tomorrow_year and e.month > tomorrow_month) or (e.year == tomorrow_year and e.month == tomorrow_month and e.day >= tomorrow_day):    
-                tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
-                leitner.edit_time_csv(time_csv,tomorrow.year,tomorrow.month,tomorrow.day)
-                for row in questionToday_list:
-                    leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
-            else:
-                for row in questionToday_list:
-                    leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
+    with open(time_csv) as time_tomorrow:
+        reader = csv.reader(time_tomorrow)
+        for row in reader:
+            tomorrow_year , tomorrow_month , tomorrow_day = int(row[0]) , int(row[1]) , int(row[2])
+        e = datetime.datetime.now()
+        if e.year > tomorrow_year or (e.year == tomorrow_year and e.month > tomorrow_month) or (e.year == tomorrow_year and e.month == tomorrow_month and e.day >= tomorrow_day):    
+            for row in list_another:
+                if (row[0] == '1' or row[0] == '3' or row[0] == '7' or row[0] == '15' or row[0] == '30') and row[4] == 'off':
+                    leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],'on')
+                    
+                elif row[0] != '0' or row[0] != '1' or row[0] != '3' or row[0] != '7' or row[0] != '15' or row[0] != '30':
+                # TODO elif or else
+                    leitner.edit_csv(basic_csv,row[0],row[1],row[2],str(int(row[3]) +1),row[4]) # TODO (row[4] or 'off')
+            tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
+            leitner.edit_time_csv(time_csv,tomorrow.year,tomorrow.month,tomorrow.day)
+            for row in questionToday_list:
+                leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
+        else:
+            for row in questionToday_list:
+                leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
 
 Exit_Leitner_btn = CTkButton(Leitner_frame,
                              text="exit Leitner",

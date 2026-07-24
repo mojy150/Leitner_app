@@ -19,7 +19,7 @@ def my_append(id_0,questionToday_list,temp): # append random word in questionTod
         temp -= 1
     return questionToday_list
 
-def check(file_csv,number,id_0,questionToday_list): # check for new word or old word
+def check(file_csv,number,id_0,questionToday_list,list_another): # check for new word or old word
     id_0 = []
     with open(file_csv) as f:
         reader = csv.reader(f)    
@@ -134,11 +134,8 @@ def show():
             # if show_list[i] != 0:
             #     return 'value words [%s] day house is [%i]' % (i,show_list[i])
 
-with open(basic_csv) as f:
-    reader = csv.reader(f)
-    id_0 = list() # list Ids in CSV
-    questionToday_list = list() # list word of question day
-    list_another = list() # list word of does't question day
+# with open(basic_csv) as f:
+#     reader = csv.reader(f)
     # while True:    
     #     init = input('do you want? (leitner[l]/input word in app[i]/show status[s]/off the app[o]): ')
         
