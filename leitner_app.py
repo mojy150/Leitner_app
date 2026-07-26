@@ -792,45 +792,53 @@ def get_number_new_word():
         number_new_word = int(number_new_word)
         text = (f"[{number_new_word}] new word added to your Leitner")
         id_0 = []
-        number = "0"
+        # number = "0"
         selected_new_word = []
-        filename = basic_csv
-        with open(filename) as f:
-            reader = csv.reader(f)
-            counter = int(0)
-            if number == '0':
-                for row in reader:
-                    if row[3] == number:
-                        id_0.append([row[0],row[1],row[2],1,'off'])
-                        counter +=1
-                if counter != 0:
-                    if number_new_word > len(id_0):
-                        number_new_word = len(id_0)
-                        text = ('all new words in csv is [%i] and added to your Leitner' % (number_new_word))
+        # filename = basic_csv
+        Table_name = "FlashCards"
+        cursor.execute(f"SELECT * FROM {Table_name} WHERE day = 0")
+        Day_Zero_data = cursor.fetchall()
+        # with open(filename) as f:
+        #     reader = csv.reader(f)
+        counter = int(0)
+        # if number == '0':
+            # for row in reader:
+        for row in Day_Zero_data:
+            # if row[3] == number:
+            if row[3] == 0:
+                id_0.append([row[0],row[1],row[2],1,'off'])
+                counter +=1
+        if counter != 0:
+            if number_new_word > len(id_0):
+                number_new_word = len(id_0)
+                text = ('all new words in csv is [%i] and added to your Leitner' % (number_new_word))
         selected_new_word = leitner.my_append(id_0,selected_new_word,number_new_word)
         selected_new_word.sort(key=lambda x: int(x[0]))
 
-        tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
+        # tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
 
-        with open(filename, 'r', newline='') as csvFile, tempfile:
-            reader = csv.reader(csvFile, delimiter=',', quotechar='"')
-            writer = csv.writer(tempfile, delimiter=',', quotechar='"')
+        # with open(filename, 'r', newline='') as csvFile, tempfile:
+        #     reader = csv.reader(csvFile, delimiter=',', quotechar='"')
+        #     writer = csv.writer(tempfile, delimiter=',', quotechar='"')
+        for temp_list in selected_new_word:
+            cursor.execute(f"UPDATE {Table_name} SET question=?,answer=?,day=?,on_off=? WHERE id = ?",(temp_list[1],temp_list[2],temp_list[3],temp_list[4],temp_list[0]))
+            conn.commit()
 
-            def select_in_list(selected_new_word):
-                try:
-                    return selected_new_word.pop(0)
-                except:
-                    pass
-            temp_list = select_in_list(selected_new_word)
-            for row in reader:
-                if temp_list == None:
-                    pass
-                elif temp_list[0] == row[0]:
-                    row[0],row[1],row[2],row[3],row[4] = temp_list[0],temp_list[1],temp_list[2],temp_list[3],temp_list[4]
-                    temp_list = select_in_list(selected_new_word)
-                writer.writerow(row)
+            # def select_in_list(selected_new_word):
+            #     try:
+            #         return selected_new_word.pop(0)
+            #     except:
+            #         pass
+            # temp_list = select_in_list(selected_new_word)
+        #     for row in reader:
+        #         if temp_list == None:
+        #             pass
+        #         elif temp_list[0] == row[0]:
+        #             row[0],row[1],row[2],row[3],row[4] = temp_list[0],temp_list[1],temp_list[2],temp_list[3],temp_list[4]
+        #             temp_list = select_in_list(selected_new_word)
+        #         writer.writerow(row)
 
-        shutil.move(tempfile.name, filename)
+        # shutil.move(tempfile.name, filename)
                 
                 
         number_new_word_lbl = CTkLabel(myframe2,
