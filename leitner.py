@@ -40,10 +40,8 @@ def check(file_csv,number,id_0,questionToday_list,list_another): # check for new
     questionToday_list = my_append(id_0,questionToday_list,temp)
 
 def check_again(file_csv,number,questionToday_list): # check again for new word or old word
-    id_0 = []
     with open(file_csv) as f:
-        reader = csv.reader(f)    
-        temp = int(0)
+        reader = csv.reader(f)
         if number == '0':
             for row in reader:
                 if row[3] == number and row[4] == 'on':
@@ -54,14 +52,14 @@ def check_again(file_csv,number,questionToday_list): # check again for new word 
                     questionToday_list.append([row[0],row[1],row[2],row[3],row[4]])
     questionToday_list
 
-def last_id(): # give the last id
+def last_id(Table_name): # give the last id
     # n = int(0)
     # with open(basic_csv) as f:
     #     reader = csv.reader(f)
     #     for row in reader:
     #         n = int(row[0])
     #     return n
-    cursor.execute("SELECT MAX(id) FROM users")
+    cursor.execute(f"SELECT MAX(id) FROM {Table_name}")
     last_id = cursor.fetchone()[0]
     return last_id
 
@@ -83,6 +81,7 @@ def append_list_as_row(Table_name,row): # send new word in csv
                 row[3],
                 row[4],
             ))
+    conn.commit()
         
 def edit_csv(filename,line0,line1,line2,line3,line4): # edit csv for basic.csv
     tempfile = NamedTemporaryFile('w+t', newline='', delete=False)

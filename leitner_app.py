@@ -894,7 +894,7 @@ def add_the_word():
         #                         [str(leitner.last_id() +1),
         #                             text_en_input,text_fr_input,'1','off'])
         leitner.append_list_as_row("FlashCards",
-                                [leitner.last_id() +1,
+                                [leitner.last_id("FlashCards") +1,
                                     text_en_input,text_fr_input,1,'off'])
         new_word +=1
         text = '[%i]You add [%s] => [%s]' % (new_word,
