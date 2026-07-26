@@ -890,9 +890,12 @@ def add_the_word():
         global new_word
         text_en_input= en_input.get().strip()
         text_fr_input= fr_input.get().strip()
-        leitner.append_list_as_row(leitner.basic_csv,
-                                [str(leitner.last_id() +1),
-                                    text_en_input,text_fr_input,'1','off'])
+        # leitner.append_list_as_row(leitner.basic_csv,
+        #                         [str(leitner.last_id() +1),
+        #                             text_en_input,text_fr_input,'1','off'])
+        leitner.append_list_as_row("FlashCards",
+                                [leitner.last_id() +1,
+                                    text_en_input,text_fr_input,1,'off'])
         new_word +=1
         text = '[%i]You add [%s] => [%s]' % (new_word,
                                              text_en_input,

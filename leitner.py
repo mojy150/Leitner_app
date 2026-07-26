@@ -65,14 +65,24 @@ def last_id(): # give the last id
     last_id = cursor.fetchone()[0]
     return last_id
 
-def append_list_as_row(file_csv,list_of_elem): # send new word in csv
+def append_list_as_row(Table_name,row): # send new word in csv
     # Open file in append mode
-    with open(file_csv, 'a+', newline='') as write_obj:
-        # Create a writer object from csv module
-        csv_writer = csv.writer(write_obj)
-        # Add contents of list as last row in the csv file
-        csv_writer.writerow(list_of_elem)
-        # List of strings
+    # with open(file_csv, 'a+', newline='') as write_obj:
+    #     # Create a writer object from csv module
+    #     csv_writer = csv.writer(write_obj)
+    #     # Add contents of list as last row in the csv file
+    #     csv_writer.writerow(list_of_elem)
+    #     # List of strings
+    cursor.execute(f"""
+            INSERT INTO {Table_name} VALUES (?, ?,?,?,?)
+            """,
+            (
+                row[0],
+                row[1],
+                row[2],
+                row[3],
+                row[4],
+            ))
         
 def edit_csv(filename,line0,line1,line2,line3,line4): # edit csv for basic.csv
     tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
