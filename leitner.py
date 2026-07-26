@@ -111,41 +111,44 @@ def edit_time_csv(filename,line0,line1,line2): # edit csv for time.csv
 
     shutil.move(tempfile.name, filename)    
 
-def leitner(questionToday_list): # question words
-    sure = 'null'
-    for item in questionToday_list:
-        if item[4] == 'on':
-            print(item[1])
-            engine.say(item[1])
-            engine.runAndWait()
-            temp = input(' you want continue? (y/n): ')
+# def leitner(questionToday_list): # question words
+#     sure = 'null'
+#     for item in questionToday_list:
+#         if item[4] == 'on':
+#             print(item[1])
+#             engine.say(item[1])
+#             engine.runAndWait()
+#             temp = input(' you want continue? (y/n): ')
             
-            if temp == 'n' or temp == 'N':
-                sure = input('are you sure? (y/n): ')
-                if sure == 'n' or sure == 'N':
-                    temp = 'y' # TODO
-                elif sure == 'y' or sure == 'Y' or sure == '':
-                    print('leitner is off!')
-                    break
+#             if temp == 'n' or temp == 'N':
+#                 sure = input('are you sure? (y/n): ')
+#                 if sure == 'n' or sure == 'N':
+#                     temp = 'y' # TODO
+#                 elif sure == 'y' or sure == 'Y' or sure == '':
+#                     print('leitner is off!')
+#                     break
                 
-            if temp == 'y' or temp == 'Y' or temp == '':
-                print('[%s] mishavad [%s]' % (item[1] , item[2]))
-                javab = input('your hads is true? (y/n): ')
-                if javab == 'n' or javab == 'N':
-                    item[3] , item[4] = '1' , 'off'
-                elif javab == 'y' or javab == 'Y' or javab == '':
-                    item[3] , item[4] = str(int(item[3]) + 1) , 'off'
-    return sure
+#             if temp == 'y' or temp == 'Y' or temp == '':
+#                 print('[%s] mishavad [%s]' % (item[1] , item[2]))
+#                 javab = input('your hads is true? (y/n): ')
+#                 if javab == 'n' or javab == 'N':
+#                     item[3] , item[4] = '1' , 'off'
+#                 elif javab == 'y' or javab == 'Y' or javab == '':
+#                     item[3] , item[4] = str(int(item[3]) + 1) , 'off'
+#     return sure
     # for row in questionToday_list: # TODO
     #     edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
 
-def show():
+def show(Table_name):
     show_list = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    with open(basic_csv) as f:
-        reader = csv.reader(f)
-        for row in reader:
-            show_list[int(row[3])] += 1
-        return show_list
+    # with open(basic_csv) as f:
+    #     reader = csv.reader(f)
+    cursor.execute(f"SELECT id FROM {Table_name}")
+    Id_data = cursor.fetchall()
+    for row in Id_data:
+        # show_list[int(row[3])] += 1
+        show_list[row[0]] += 1
+    return show_list
         # for i in range(len(show_list)):
             # if show_list[i] != 0:
             #     return 'value words [%s] day house is [%i]' % (i,show_list[i])

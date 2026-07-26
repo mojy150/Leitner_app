@@ -930,7 +930,7 @@ def Show_status():
 
     status_labels.clear()
 
-    show_list = leitner.show()
+    show_list = leitner.show("FlashCards")
 
     row = 1
     for i in range(len(show_list)):
