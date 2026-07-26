@@ -492,16 +492,17 @@ def Run_Leitner():
                 sure = next(generator)
             except:
                 if len(questionToday_list) == 0:
-                    text = "The Leitner is empty, but if you want, you can add a new word or add one of our ready-made words to your Leitner."
-                    text_box = CTkTextbox(
-                                myframe2,
-                                wrap="word",
-                                height=50,
-                                font=en_font
-                            )
-                    text_box.insert("0.0", text)
-                    text_box.configure(state="disabled")
-                    text_box.grid(row=0, column=0, sticky="ew")
+                    # text = "The Leitner is empty, but if you want, you can add a new word or add one of our ready-made words to your Leitner."
+                    # text_box = CTkTextbox(
+                    #             myframe2,
+                    #             wrap="word",
+                    #             height=50,
+                    #             font=en_font
+                    #         )
+                    # text_box.insert("0.0", text)
+                    # text_box.configure(state="disabled")
+                    # text_box.grid(row=0, column=0, sticky="ew")
+                    messagebox.showwarning("توجه","لایتنر خالیست،\n اما اگر شما بخواید میتوانید فلش کارت های جدید اضافه کنید\n یا از فلش کارت هایی که برایتان اماده کرده ایم استفاده کنید.")
                     Exit_Leitner_btn.invoke()
                     # print('len list is zero (0).')
             # if sure != 'y' or sure != 'Y' or sure != '':
