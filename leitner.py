@@ -5,6 +5,10 @@ import datetime
 from tempfile import NamedTemporaryFile
 import shutil
 import pyttsx3
+import sqlite3
+
+conn = sqlite3.connect("Leitner_DB.db")
+cursor = conn.cursor()
 
 engine = pyttsx3.init()
 engine.setProperty('rate', 170)
@@ -51,12 +55,15 @@ def check_again(file_csv,number,questionToday_list): # check again for new word 
     questionToday_list
 
 def last_id(): # give the last id
-    n = int(0)
-    with open(basic_csv) as f:
-        reader = csv.reader(f)
-        for row in reader:
-            n = int(row[0])
-        return n
+    # n = int(0)
+    # with open(basic_csv) as f:
+    #     reader = csv.reader(f)
+    #     for row in reader:
+    #         n = int(row[0])
+    #     return n
+    cursor.execute("SELECT MAX(id) FROM users")
+    last_id = cursor.fetchone()[0]
+    return last_id
 
 def append_list_as_row(file_csv,list_of_elem): # send new word in csv
     # Open file in append mode
