@@ -721,10 +721,15 @@ def Exit_Leitner():
         # with open(time_csv) as time_tomorrow:
         #     reader = csv.reader(time_tomorrow)
         #     for row in reader:
-        cursor.execute(f"SELECT * FROM Time")
-        time_tomorrow = cursor.fetchall()
-        for row in time_tomorrow:
-            tomorrow_year , tomorrow_month , tomorrow_day = int(row[0]) , int(row[1]) , int(row[2])
+        cursor.execute("""
+            SELECT * FROM Time
+            ORDER BY id DESC
+            LIMIT 1
+        """)
+        row = cursor.fetchone()
+
+        # for row in time_tomorrow:
+        tomorrow_year , tomorrow_month , tomorrow_day = int(row[0]) , int(row[1]) , int(row[2])
         e = datetime.datetime.now()
         if e.year > tomorrow_year or (e.year == tomorrow_year and e.month > tomorrow_month) or (e.year == tomorrow_year and e.month == tomorrow_month and e.day >= tomorrow_day):    
             for row in list_another:
@@ -735,7 +740,7 @@ def Exit_Leitner():
                 # TODO elif or else
                     leitner.edit_csv(basic_csv,row[0],row[1],row[2],str(int(row[3]) +1),row[4]) # TODO (row[4] or 'off')
             tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
-            leitner.edit_time_csv(time_csv,tomorrow.year,tomorrow.month,tomorrow.day)
+            leitner.edit_time_csv("Time",tomorrow.year,tomorrow.month,tomorrow.day)
             for row in questionToday_list:
                 leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
         else:

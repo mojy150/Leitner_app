@@ -98,18 +98,28 @@ def edit_csv(filename,line0,line1,line2,line3,line4): # edit csv for basic.csv
 
     shutil.move(tempfile.name, filename)
     
-def edit_time_csv(filename,line0,line1,line2): # edit csv for time.csv
-    tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
+def edit_time_csv(Table_name,line0,line1,line2): # edit csv for time.csv
+    # tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
 
-    with open(filename, 'r', newline='') as csvFile, tempfile:
-        reader = csv.reader(csvFile, delimiter=',', quotechar='"')
-        writer = csv.writer(tempfile, delimiter=',', quotechar='"')
+    # with open(filename, 'r', newline='') as csvFile, tempfile:
+    #     reader = csv.reader(csvFile, delimiter=',', quotechar='"')
+    #     writer = csv.writer(tempfile, delimiter=',', quotechar='"')
 
-        for row in reader:
-            row[0],row[1],row[2] = line0 ,line1 ,line2
-            writer.writerow(row)
+    #     for row in reader:
+    #         row[0],row[1],row[2] = line0 ,line1 ,line2
+    #         writer.writerow(row)
 
-    shutil.move(tempfile.name, filename)    
+    # shutil.move(tempfile.name, filename)  
+    cursor.execute(f"""
+                INSERT INTO {Table_name} VALUES (?, ?,?,?)
+                """,
+                (
+                    (last_id(Table_name) +1),
+                    line0,
+                    line1,
+                    line2,
+                ))
+    conn.commit()
 
 # def leitner(questionToday_list): # question words
 #     sure = 'null'
