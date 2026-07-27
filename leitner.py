@@ -37,20 +37,23 @@ def check(file_csv,number,id_0,questionToday_list,list_another): # check for new
                 if row[3] == number:
                     id_0.append([row[0],row[1],row[2],row[3],'on'])
             temp = len(id_0)
-    questionToday_list = my_append(id_0,questionToday_list,temp)
+    questionToday_list = my_append(id_0,questionToday_list,temp) #TODO
 
-def check_again(file_csv,number,questionToday_list): # check again for new word or old word
-    with open(file_csv) as f:
-        reader = csv.reader(f)
-        if number == '0':
-            for row in reader:
-                if row[3] == number and row[4] == 'on':
-                    questionToday_list.append([row[0],row[1],row[2],row[3],row[4]]) 
-        else:
-            for row in reader:
-                if row[3] == number and row[4] == 'on':
-                    questionToday_list.append([row[0],row[1],row[2],row[3],row[4]])
-    questionToday_list
+def check_again(Table_name,number_day,questionToday_list): # check again for new word or old word
+    # with open(file_csv) as f:
+    #     reader = csv.reader(f)
+
+    cursor.execute(f"SELECT * FROM {Table_name} WHERE on_off = {"on"} AND day = {number_day}")
+    questionToday_list.extend(cursor.fetchall())
+        # if number == '0':
+    # for row in on_data:
+    #     # if row[3] == number and row[4] == 'on':
+    #     questionToday_list.append(row) 
+    # else:
+        # for row in reader:
+        #     if row[3] == number and row[4] == 'on':
+        #         questionToday_list.append([row[0],row[1],row[2],row[3],row[4]])
+    return questionToday_list
 
 def last_id(Table_name): # give the last id
     # n = int(0)

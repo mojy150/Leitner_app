@@ -529,12 +529,12 @@ def Run_Leitner():
     else:
         number_question = 0
         questionToday_list = []
-        leitner.check_again(basic_csv,'30',questionToday_list)
-        leitner.check_again(basic_csv,'15',questionToday_list)
-        leitner.check_again(basic_csv,'7',questionToday_list)
-        leitner.check_again(basic_csv,'3',questionToday_list)
-        leitner.check_again(basic_csv,'1',questionToday_list)
-        leitner.check_again(basic_csv,'0',questionToday_list)
+        questionToday_list = leitner.check_again(basic_csv,30,questionToday_list)
+        questionToday_list = leitner.check_again(basic_csv,15,questionToday_list)
+        questionToday_list = leitner.check_again(basic_csv,7,questionToday_list)
+        questionToday_list = leitner.check_again(basic_csv,3,questionToday_list)
+        questionToday_list = leitner.check_again(basic_csv,1,questionToday_list)
+        questionToday_list = leitner.check_again(basic_csv,0,questionToday_list)
         try:
             generator = leitner_func()
             sure = next(generator)
@@ -811,7 +811,7 @@ def get_number_new_word():
         if counter != 0:
             if number_new_word > len(id_0):
                 number_new_word = len(id_0)
-                text = ('all new words in csv is [%i] and added to your Leitner' % (number_new_word))
+                text = ('all new words in database is [%i] and added to your Leitner' % (number_new_word))
         selected_new_word = leitner.my_append(id_0,selected_new_word,number_new_word)
         selected_new_word.sort(key=lambda x: int(x[0]))
 
