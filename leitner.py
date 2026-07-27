@@ -108,7 +108,7 @@ def edit_database(Table_name,line0,line1,line2,line3,line4): # edit batabase for
 
     # shutil.move(tempfile.name, filename)
     
-def edit_time_database(Table_name,line0,line1,line2): # edit database for Table Time
+# def edit_time_database(Table_name,line0,line1,line2,elapsed): # edit database for Table Time
     # tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
 
     # with open(filename, 'r', newline='') as csvFile, tempfile:
@@ -120,16 +120,7 @@ def edit_time_database(Table_name,line0,line1,line2): # edit database for Table 
     #         writer.writerow(row)
 
     # shutil.move(tempfile.name, filename)  
-    cursor.execute(f"""
-                INSERT INTO {Table_name} VALUES (?, ?,?,?)
-                """,
-                (
-                    (last_id(Table_name) +1),
-                    line0,
-                    line1,
-                    line2,
-                ))
-    conn.commit()
+    
 
 # def leitner(questionToday_list): # question words
 #     sure = 'null'

@@ -20,3 +20,4 @@ flashcard_font_size = 15
 Table_name = "FlashCards"
 conn = sqlite3.connect("Leitner_DB.db")
 cursor = conn.cursor()
+start_time = 0

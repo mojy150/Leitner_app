@@ -8,6 +8,7 @@ import datetime
 from tempfile import NamedTemporaryFile
 import shutil
 from PIL import Image
+import time
 
 from variable import *
                                                                                                     # main
@@ -571,10 +572,11 @@ def Start_Leitner():
     Exit_Leitner_btn.configure(state="normal")
     global enable_click
     enable_click = True
-    # Flash_card_label.configure(text="en")
     Question_label.configure(text="click the flash card!")
     number_new_word_input.configure(state="disabled")
     number_new_word_btn.configure(state="disabled")
+    global start_time
+    start_time = time.perf_counter()
     Run_Leitner()
 
 Leitner_frame.grid_rowconfigure(0, weight=1)  # Start
@@ -703,6 +705,7 @@ check_btn.grid(column=0,row=4,sticky='nsew',padx=10,pady=10) # TODO
 
 def Exit_Leitner():
     global enable_click
+    global start_time
     Run_Leitner_btn.configure(state="normal")
     Exit_Leitner_btn.configure(state="disabled")
     enable_click = False
@@ -726,7 +729,7 @@ def Exit_Leitner():
         row = cursor.fetchone()
 
         # for row in time_tomorrow:
-        tomorrow_year , tomorrow_month , tomorrow_day = int(row[0]) , int(row[1]) , int(row[2])
+        tomorrow_year , tomorrow_month , tomorrow_day = int(row[1]) , int(row[2]) , int(row[3])
         e = datetime.datetime.now()
         if e.year > tomorrow_year or (e.year == tomorrow_year and e.month > tomorrow_month) or (e.year == tomorrow_year and e.month == tomorrow_month and e.day >= tomorrow_day):    
             for row in list_another:
@@ -737,10 +740,33 @@ def Exit_Leitner():
                 # TODO elif or else
                     leitner.edit_database("FlashCards",row[0],row[1],row[2],str(int(row[3]) +1),row[4]) # TODO (row[4] or 'off')
             tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
-            leitner.edit_time_database("Time",tomorrow.year,tomorrow.month,tomorrow.day)
+            if start_time is not None:
+                elapsed = time.perf_counter() - start_time
+            # leitner.edit_time_database("Time",tomorrow.year,tomorrow.month,tomorrow.day)
+            cursor.execute(f"""
+                            INSERT INTO {"Time"} VALUES (?, ?,?,?,?)
+                            """,
+                            (
+                                (leitner.last_id("Time") +1),
+                                tomorrow.year,
+                                tomorrow.month,
+                                tomorrow.day,
+                                elapsed
+                            ))
+            conn.commit()
             for row in questionToday_list:
                 leitner.edit_database("FlashCards",row[0],row[1],row[2],row[3],row[4])
         else:
+            if start_time is not None:
+                New_elapsed = time.perf_counter() - start_time
+            cursor.execute(f"SELECT Time_spent FROM {"Time"} WHERE id = {leitner.last_id("Time")}")
+            elapsed = cursor.fetchone()[0]
+            elapsed = elapsed + New_elapsed
+            cursor.execute(f"UPDATE {"Time"} SET Time_spent = ? WHERE id = ?",
+                           (elapsed,
+                            leitner.last_id("Time")
+                            ))
+            conn.commit()
             for row in questionToday_list:
                 leitner.edit_database("FlashCards",row[0],row[1],row[2],row[3],row[4])
 
