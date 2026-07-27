@@ -484,12 +484,12 @@ def Run_Leitner():
         tomorrow_year , tomorrow_month , tomorrow_day = int(row[0]) , int(row[1]) , int(row[2])
     e = datetime.datetime.now()
     if e.year > tomorrow_year or (e.year == tomorrow_year and e.month > tomorrow_month) or (e.year == tomorrow_year and e.month == tomorrow_month and e.day >= tomorrow_day):
-        leitner.check(basic_csv,'30',id_0,questionToday_list,list_another)
-        leitner.check(basic_csv,'15',id_0,questionToday_list,list_another)
-        leitner.check(basic_csv,'7',id_0,questionToday_list,list_another)
-        leitner.check(basic_csv,'3',id_0,questionToday_list,list_another)
-        leitner.check(basic_csv,'1',id_0,questionToday_list,list_another)
-        leitner.check(basic_csv,'another',id_0,list_another,list_another)
+        questionToday_list.extend(leitner.check("FlashCards",30,id_0,questionToday_list,list_another))
+        questionToday_list.extend(leitner.check("FlashCards",15,id_0,questionToday_list,list_another))
+        questionToday_list.extend(leitner.check("FlashCards",7,id_0,questionToday_list,list_another))
+        questionToday_list.extend(leitner.check("FlashCards",3,id_0,questionToday_list,list_another))
+        questionToday_list.extend(leitner.check("FlashCards",1,id_0,questionToday_list,list_another))
+        questionToday_list.extend(leitner.check("FlashCards",'another',id_0,list_another,list_another))
         try:
             generator = leitner_func()
             sure = next(generator)
@@ -529,12 +529,12 @@ def Run_Leitner():
     else:
         number_question = 0
         questionToday_list = []
-        questionToday_list = leitner.check_again(basic_csv,30,questionToday_list)
-        questionToday_list = leitner.check_again(basic_csv,15,questionToday_list)
-        questionToday_list = leitner.check_again(basic_csv,7,questionToday_list)
-        questionToday_list = leitner.check_again(basic_csv,3,questionToday_list)
-        questionToday_list = leitner.check_again(basic_csv,1,questionToday_list)
-        questionToday_list = leitner.check_again(basic_csv,0,questionToday_list)
+        questionToday_list.extend(leitner.check_again("FlashCards",30,questionToday_list))
+        questionToday_list.extend(leitner.check_again("FlashCards",15,questionToday_list))
+        questionToday_list.extend(leitner.check_again("FlashCards",7,questionToday_list))
+        questionToday_list.extend(leitner.check_again("FlashCards",3,questionToday_list))
+        questionToday_list.extend(leitner.check_again("FlashCards",1,questionToday_list))
+        questionToday_list.extend(leitner.check_again("FlashCards",0,questionToday_list))
         try:
             generator = leitner_func()
             sure = next(generator)
@@ -705,9 +705,9 @@ check_btn = CTkButton(Leitner_frame,
 check_btn.grid(column=0,row=4,sticky='nsew',padx=10,pady=10) # TODO
 
 def Exit_Leitner():
+    global enable_click
     Run_Leitner_btn.configure(state="normal")
     Exit_Leitner_btn.configure(state="disabled")
-    global enable_click
     enable_click = False
     Flash_card_label.configure(text="start the Leitner to show the flash card!")
     Question_label.configure(text="")

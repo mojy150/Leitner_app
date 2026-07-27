@@ -23,21 +23,27 @@ def my_append(id_0,questionToday_list,temp): # append random word in questionTod
         temp -= 1
     return questionToday_list
 
-def check(file_csv,number,id_0,questionToday_list,list_another): # check for new word or old word
+def check(Table_name,number_day,id_0,questionToday_list,list_another): # check for new word or old word
     id_0 = []
-    with open(file_csv) as f:
-        reader = csv.reader(f)    
-        temp = int(0)
-        if number == 'another':
-            for row in reader:
-                if row[3] != '0' and row[3] != '1' and row[3] != '3' and row[3] != '7' and row[3] != '15' and row[3] != '30' and row[3] != '31':
-                    list_another.append([row[0],row[1],row[2],row[3],row[4]])
-        else:
-            for row in reader:
-                if row[3] == number:
-                    id_0.append([row[0],row[1],row[2],row[3],'on'])
-            temp = len(id_0)
-    questionToday_list = my_append(id_0,questionToday_list,temp) #TODO
+    # with open(file_csv) as f:
+    #     reader = csv.reader(f)    
+    temp = int(0)
+    if number_day == 'another':
+        cursor.execute(f"SELECT * FROM {Table_name} WHERE day NOT IN ({0},{1},{3},{7},{15},{30},{31})")
+        list_another.extend(cursor.fetchall())
+        # for row in reader:
+        #     if row[3] != '0' and row[3] != '1' and row[3] != '3' and row[3] != '7' and row[3] != '15' and row[3] != '30' and row[3] != '31':
+        #         list_another.append([row[0],row[1],row[2],row[3],row[4]])
+    else:
+        cursor.execute(f"SELECT * FROM {Table_name} WHERE day = {number_day}")
+        reader = cursor.fetchall()
+        for row in reader:
+            # if row[3] == number:
+            id_0.append([row[0],row[1],row[2],row[3],'on'])
+                # id_0.append([row[0],row[1],row[2],row[3],'on'])
+        temp = len(id_0)
+    questionToday_list = my_append(id_0,questionToday_list,temp)
+    return questionToday_list
 
 def check_again(Table_name,number_day,questionToday_list): # check again for new word or old word
     # with open(file_csv) as f:
