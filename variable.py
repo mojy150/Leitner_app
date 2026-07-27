@@ -1,5 +1,5 @@
 import pyttsx3
-
+import sqlite3
 
 engine = pyttsx3.init()
 engine.setProperty('rate', 170)
@@ -17,3 +17,6 @@ generator = None
 number_question = 0
 font_size = 15
 flashcard_font_size = 15
+Table_name = "FlashCards"
+conn = sqlite3.connect("Leitner_DB.db")
+cursor = conn.cursor()

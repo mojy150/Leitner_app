@@ -72,7 +72,7 @@ def last_id(Table_name): # give the last id
     last_id = cursor.fetchone()[0]
     return last_id
 
-def append_list_as_row(Table_name,row): # send new word in csv
+def append_list_as_row(Table_name,row): # send new word in database
     # Open file in append mode
     # with open(file_csv, 'a+', newline='') as write_obj:
     #     # Create a writer object from csv module
@@ -92,7 +92,7 @@ def append_list_as_row(Table_name,row): # send new word in csv
             ))
     conn.commit()
         
-def edit_csv(Table_name,line0,line1,line2,line3,line4): # edit csv for basic.csv
+def edit_database(Table_name,line0,line1,line2,line3,line4): # edit batabase for Flashcards
     # tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
 
     # with open(filename, 'r', newline='') as csvFile, tempfile:
@@ -108,7 +108,7 @@ def edit_csv(Table_name,line0,line1,line2,line3,line4): # edit csv for basic.csv
 
     # shutil.move(tempfile.name, filename)
     
-def edit_time_csv(Table_name,line0,line1,line2): # edit csv for time.csv
+def edit_time_database(Table_name,line0,line1,line2): # edit database for Table Time
     # tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
 
     # with open(filename, 'r', newline='') as csvFile, tempfile:

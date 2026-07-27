@@ -8,11 +8,8 @@ import datetime
 from tempfile import NamedTemporaryFile
 import shutil
 from PIL import Image
-import sqlite3
 
 from variable import *
-conn = sqlite3.connect("Leitner_DB.db")
-cursor = conn.cursor()
                                                                                                     # main
 window = CTk()
 window.title("Leitner app")
@@ -471,7 +468,7 @@ def Run_Leitner():
     global questionToday_list
     global list_another
     global number_question
-    id_0 = list() # list Ids in CSV
+    id_0 = list() # list Ids in database
     questionToday_list = list() # list word of question day
     list_another = list() # list word of does't question day
     questionToday_list = []
@@ -734,18 +731,18 @@ def Exit_Leitner():
         if e.year > tomorrow_year or (e.year == tomorrow_year and e.month > tomorrow_month) or (e.year == tomorrow_year and e.month == tomorrow_month and e.day >= tomorrow_day):    
             for row in list_another:
                 if (row[0] == '1' or row[0] == '3' or row[0] == '7' or row[0] == '15' or row[0] == '30') and row[4] == 'off':
-                    leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],'on')
+                    leitner.edit_database("FlashCards",row[0],row[1],row[2],row[3],'on')
                     
                 elif row[0] != '0' or row[0] != '1' or row[0] != '3' or row[0] != '7' or row[0] != '15' or row[0] != '30':
                 # TODO elif or else
-                    leitner.edit_csv(basic_csv,row[0],row[1],row[2],str(int(row[3]) +1),row[4]) # TODO (row[4] or 'off')
+                    leitner.edit_database("FlashCards",row[0],row[1],row[2],str(int(row[3]) +1),row[4]) # TODO (row[4] or 'off')
             tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
-            leitner.edit_time_csv("Time",tomorrow.year,tomorrow.month,tomorrow.day)
+            leitner.edit_time_database("Time",tomorrow.year,tomorrow.month,tomorrow.day)
             for row in questionToday_list:
-                leitner.edit_csv("FlashCards",row[0],row[1],row[2],row[3],row[4])
+                leitner.edit_database("FlashCards",row[0],row[1],row[2],row[3],row[4])
         else:
             for row in questionToday_list:
-                leitner.edit_csv("FlashCards",row[0],row[1],row[2],row[3],row[4])
+                leitner.edit_database("FlashCards",row[0],row[1],row[2],row[3],row[4])
 
 Exit_Leitner_btn = CTkButton(Leitner_frame,
                              text="exit Leitner",
@@ -788,6 +785,7 @@ number_new_word_input.bind("<Return>", send_number_new_word_btn)
 
 def get_number_new_word():
     try:
+        global Table_name
         number_new_word = number_new_word_input.get().strip()
         number_new_word = int(number_new_word)
         text = (f"[{number_new_word}] new word added to your Leitner")
@@ -795,7 +793,6 @@ def get_number_new_word():
         # number = "0"
         selected_new_word = []
         # filename = basic_csv
-        Table_name = "FlashCards"
         cursor.execute(f"SELECT * FROM {Table_name} WHERE day = 0")
         Day_Zero_data = cursor.fetchall()
         # with open(filename) as f:
