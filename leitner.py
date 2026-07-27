@@ -154,7 +154,7 @@ def show(Table_name):
     show_list = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     # with open(basic_csv) as f:
     #     reader = csv.reader(f)
-    cursor.execute(f"SELECT id FROM {Table_name}")
+    cursor.execute(f"SELECT day FROM {Table_name}")
     Id_data = cursor.fetchall()
     for row in Id_data:
         # show_list[int(row[3])] += 1

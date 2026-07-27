@@ -959,6 +959,18 @@ status_tab.grid_columnconfigure(0, weight=1)
 status_labels = []  # بیرون تابع تعریف کن
 def Show_status():
     global status_labels
+    cursor.execute(f"SELECT * FROM {"Time"} WHERE id = {leitner.last_id("Time")}")
+    Last_day = cursor.fetchone()
+    Day_th , Time_spent = Last_day[0],Last_day[4]
+    text = f"Today is the {Day_th-1}th day and your time spent is {int(Time_spent)} seconds."
+
+    lbl = CTkLabel(
+        my_tabs.tab("Status"),
+        text=text,
+        font=en_font,
+    )
+
+    lbl.grid(row=1, column=0, sticky='nw', padx=10, pady=2)
 
     # حذف لیبل‌های قبلی
     for lbl in status_labels:
@@ -968,7 +980,7 @@ def Show_status():
 
     show_list = leitner.show("FlashCards")
 
-    row = 1
+    row = 2
     for i in range(len(show_list)):
         if show_list[i] != 0:
             # text = 'value words [%s] day house is [%i]' % (i, show_list[i])
