@@ -742,10 +742,10 @@ def Exit_Leitner():
             tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
             leitner.edit_time_csv("Time",tomorrow.year,tomorrow.month,tomorrow.day)
             for row in questionToday_list:
-                leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
+                leitner.edit_csv("FlashCards",row[0],row[1],row[2],row[3],row[4])
         else:
             for row in questionToday_list:
-                leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
+                leitner.edit_csv("FlashCards",row[0],row[1],row[2],row[3],row[4])
 
 Exit_Leitner_btn = CTkButton(Leitner_frame,
                              text="exit Leitner",

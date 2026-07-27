@@ -92,20 +92,21 @@ def append_list_as_row(Table_name,row): # send new word in csv
             ))
     conn.commit()
         
-def edit_csv(filename,line0,line1,line2,line3,line4): # edit csv for basic.csv
-    tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
+def edit_csv(Table_name,line0,line1,line2,line3,line4): # edit csv for basic.csv
+    # tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
 
-    with open(filename, 'r', newline='') as csvFile, tempfile:
-        reader = csv.reader(csvFile, delimiter=',', quotechar='"')
-        writer = csv.writer(tempfile, delimiter=',', quotechar='"')
-
-        for row in reader:
-            if line0 == row[0]:
-                row[0],row[1],row[2],row[3],row[4] = line0 ,line1 ,line2 ,line3 ,line4
+    # with open(filename, 'r', newline='') as csvFile, tempfile:
+    #     reader = csv.reader(csvFile, delimiter=',', quotechar='"')
+    #     writer = csv.writer(tempfile, delimiter=',', quotechar='"')
+    cursor.execute(f"UPDATE {Table_name} SET question=?,answer=?,day=?,on_off=? WHERE id = ?",(line1,line2,line3,line4,line0))
+    conn.commit()
+    #     for row in reader:
+    #         if line0 == row[0]:
+    #             row[0],row[1],row[2],row[3],row[4] = line0 ,line1 ,line2 ,line3 ,line4
                 
-            writer.writerow(row)
+    #         writer.writerow(row)
 
-    shutil.move(tempfile.name, filename)
+    # shutil.move(tempfile.name, filename)
     
 def edit_time_csv(Table_name,line0,line1,line2): # edit csv for time.csv
     # tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
