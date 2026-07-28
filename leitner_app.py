@@ -1,11 +1,12 @@
 from customtkinter import *
 import leitner
 import ctypes
-from tkinter import messagebox
+from tkinter import messagebox,filedialog
 import datetime
 from tempfile import NamedTemporaryFile
 from PIL import Image
 import time
+import csv
 
 from variable import *
                                                                                                     # main
@@ -626,6 +627,7 @@ tab.grid_rowconfigure(0, weight=1)
 tab.grid_rowconfigure(1, weight=1)
 tab.grid_rowconfigure(2, weight=1)
 tab.grid_rowconfigure(3, weight=8)
+tab.grid_rowconfigure([4,5,6], weight=1)
 
 
 def focus_en(event):
@@ -685,6 +687,72 @@ add_word_btn = CTkButton(my_tabs.tab("Input Word"),
                          font=en_font,
                          command=add_the_word)
 add_word_btn.grid(column=0,row=2,sticky='nsew',padx=10,pady=10)
+
+def focus_next(event):
+    event.widget.tk_focusNext().focus()
+
+Question_column_number_input = CTkEntry(my_tabs.tab("Input Word"),                          
+                      placeholder_text="Question column number(2):",
+                      font=en_font,
+                      justify="center",)
+
+Question_column_number_input.grid(column=0,row=4,sticky='nsew', pady=10)
+Question_column_number_input.bind("<FocusIn>", turn_on_numlock)
+Question_column_number_input.bind("<Return>", focus_next)
+
+def send_to_add_word_btn(event):
+    add_file_to_database_btn.invoke()
+
+Answer_column_number_input = CTkEntry(my_tabs.tab("Input Word"),                          
+                      placeholder_text="Answer column number(3):",
+                      font=fr_font,
+                      justify="center",)
+
+Answer_column_number_input.grid(column=0,row=5,sticky='nsew',pady=10)
+Answer_column_number_input.bind("<FocusIn>", turn_on_numlock)
+Answer_column_number_input.bind("<Return>", send_to_add_word_btn)
+
+def add_file_to_database():
+        global new_word
+        if Question_column_number_input.get().strip() != "" and Answer_column_number_input.get().strip() != "":
+            Question_column_number= Question_column_number_input.get().strip()
+            Answer_column_number= Answer_column_number_input.get().strip()
+            file_csv = filedialog.askopenfilename(
+                                                    title="Choose your CSV",
+                                                    filetypes=[("CSV files", "*.csv")]
+                                                )
+            if file_csv != "":
+                try:
+                    Table_name = "FlashCards" # TODO
+                    # cursor.execute(f"""CREATE TABLE IF NOT EXISTS {Table_name}(
+                    # Title TEXT,
+                    # Data TEXT
+                    # )""")
+                    # conn.commit() # TODO
+
+                    with open(file_csv, "r", encoding="utf-8") as file:
+                        reader = csv.reader(file)
+                        for row in reader:
+                                                                                                                        # TODO 👇  👇
+                            row = [leitner.last_id(Table_name) +1,row[int(Question_column_number)-1],row[int(Answer_column_number)-1],row[3],row[4]] 
+                            leitner.append_list_as_row(Table_name,row)
+
+                    conn.commit()
+                except:
+                    messagebox.showwarning("هشدار","لطفا عدد صحیح وارد کنید")
+            Question_column_number_input.delete(0,END)
+            Answer_column_number_input.delete(0,END)
+        else:
+            messagebox.showwarning("هشدار","لطفا کادرها را پر کنید")
+
+    
+
+add_file_to_database_btn = CTkButton(my_tabs.tab("Input Word"),
+                         text="Add your CSV file",
+                         font=en_font,
+                         command=add_file_to_database)
+
+add_file_to_database_btn.grid(column=0,row=6,sticky='nsew',padx=10,pady=10)
 
                                                                                                     # Tab Status
 status_tab = my_tabs.tab("Status")
