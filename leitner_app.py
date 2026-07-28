@@ -2,11 +2,8 @@ from customtkinter import *
 import leitner
 import ctypes
 from tkinter import messagebox
-import csv
-from random import choice
 import datetime
 from tempfile import NamedTemporaryFile
-import shutil
 from PIL import Image
 import time
 
@@ -134,59 +131,15 @@ def read_setting():
             flashcard_en_font.configure(size=flashcard_font_size)
             flashcard_fr_font.configure(size=flashcard_font_size)
 
-    # with open(setting_csv) as f:
-    #     reader = csv.reader(f)
-    #     for row in reader:
-    #         if row[0] == "theme":
-    #             if row[1] == "dark":
-    #                 theme_switch.select()
-    #                 set_appearance_mode("dark")
-    #                 theme_switch.configure(text="dark mode")
-    #                 settings_frame.configure(fg_color="#2B2B2B")
-    #             else:
-    #                 theme_switch.deselect()
-    #                 set_appearance_mode("light")
-    #                 theme_switch.configure(text="light mode")
-    #                 settings_frame.configure(fg_color="#F2F2F2")
-    #         elif row[0] == "font_size":
-    #             font_size = int(row[1])
-    #             en_font.configure(size=font_size)
-    #             fr_font.configure(size=font_size)
-    #         elif row[0] == "font_size_flashcard":
-    #             flashcard_font_size = int(row[1])
-    #             flashcard_en_font.configure(size=flashcard_font_size)
-    #             flashcard_fr_font.configure(size=flashcard_font_size)
-
 read_setting()
                                                                                                     # setting save data
+
 def save_setting_func():
     cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(theme_switch.get(),"theme"))
     cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(str(font_size),"font_size"))
     cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(str(flashcard_font_size),"font_size_flashcard"))
     conn.commit()
 
-
-    # tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
-
-    # with open(setting_csv, 'r', newline='') as csvFile, tempfile:
-    #     reader = csv.reader(csvFile, delimiter=',', quotechar='"')
-    #     writer = csv.writer(tempfile, delimiter=',', quotechar='"')
-
-    #     for row in reader:
-    #         if row[0] == "theme":
-    #             if theme_switch.get() == "dark":
-    #                 row[1] = "dark"
-    #             else:
-    #                 row[1] = "light"
-    #         elif row[0] == "font_size":
-    #             row[1] = str(font_size)
-    #         elif row[0] == "font_size_flashcard":
-    #             row[1] = str(flashcard_font_size)
-
-
-    #         writer.writerow(row)
-
-    # shutil.move(tempfile.name, setting_csv)
                                                                                                     # setting font size
 font_size_label = CTkLabel(settings_frame,
                            text = "font size",
@@ -302,20 +255,6 @@ for row in Tutorial_data:
             cursor.execute(f"UPDATE Tutorial SET Understand = ?",("understand",))
             conn.commit()
 
-
-
-            # tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
-
-            # with open("tutorial.csv", 'r', newline='') as csvFile, tempfile:
-            #     reader = csv.reader(csvFile, delimiter=',', quotechar='"')
-            #     writer = csv.writer(tempfile, delimiter=',', quotechar='"')
-
-            #     for row in reader:
-            #         row[0]="understand"
-            #         writer.writerow(row)
-
-            # shutil.move(tempfile.name, "tutorial.csv")
-
         tutorial_btn = CTkButton(
             tutorial_frame,
             text="I'm understand",
@@ -323,83 +262,6 @@ for row in Tutorial_data:
             command=close_tutorial
         )
         tutorial_btn.grid(column=1,row=1,padx=10,pady=10,sticky="s")
-
-# with open("tutorial.csv") as f:
-#         reader = csv.reader(f)
-#         for row in reader:
-#             if row[0] == "don't understand":
-#                 tutorial_frame = CTkFrame(
-#                     window,
-#                     fg_color="#2B2B2B"
-#                 )
-#                 tutorial_frame.place(
-#                             relx=0,
-#                             rely=0,
-#                             relwidth=1,
-#                             relheight=1,
-#                             # anchor="nw"
-#                         )
-
-#                 tutorial_frame.grid_columnconfigure([0],weight=1)
-#                 tutorial_frame.grid_columnconfigure([1],weight=6)
-#                 tutorial_frame.grid_columnconfigure([2],weight=1)
-#                 tutorial_frame.grid_rowconfigure([0],weight=6)
-
-#                 i = 1
-
-#                 def left_side_func():
-#                     global i
-#                     if i>1:
-#                         i-=1
-#                         tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
-
-#                 left_side_btn = CTkButton(tutorial_frame,
-#                                         image=CTkImage(Image.open(f"./media/left_side.png")),
-#                                         text="",
-#                                         command=left_side_func)
-#                 left_side_btn.grid(column=0,row=0,padx=10,pady=10)
-
-
-#                 tutorial_label = CTkLabel(tutorial_frame,
-#                                         text="",
-#                                         image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
-#                 tutorial_label.grid(column=1,row=0,padx=10,pady=10,)
-
-
-#                 def right_side_func():
-#                     global i
-#                     if i<8:
-#                         i+=1
-#                         tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
-
-
-#                 right_side_btn = CTkButton(tutorial_frame,
-#                                         image=CTkImage(Image.open(f"./media/right_side.png")),
-#                                         text="",
-#                                         command=right_side_func)
-#                 right_side_btn.grid(column=2,row=0,padx=10,pady=10)
-
-#                 def close_tutorial():
-#                     tutorial_frame.place_forget()
-#                     tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
-
-#                     with open("tutorial.csv", 'r', newline='') as csvFile, tempfile:
-#                         reader = csv.reader(csvFile, delimiter=',', quotechar='"')
-#                         writer = csv.writer(tempfile, delimiter=',', quotechar='"')
-
-#                         for row in reader:
-#                             row[0]="understand"
-#                             writer.writerow(row)
-
-#                     shutil.move(tempfile.name, "tutorial.csv")
-
-#                 tutorial_btn = CTkButton(
-#                     tutorial_frame,
-#                     text="I'm understand",
-#                     font=en_font,
-#                     command=close_tutorial
-#                 )
-#                 tutorial_btn.grid(column=1,row=1,padx=10,pady=10,sticky="s")
 
                                                                                                     # tab Leitner
 
@@ -416,53 +278,14 @@ def leitner_func(): # question words
             en_question = item[1]
             Flash_card_label.configure(text=en_question)
             Question_label.configure(text="click the flash card!")
-            # engine.say(en_question)
-            # engine.runAndWait()
-            # Question_label.configure(text="click the flash card!")
-            # engine.say(en_question)
-            # engine.runAndWait()
             fr_question = item[2]
-            # temp = input(' you want continue? (y/n): ')
             yield item
-            # if temp == 'n' or temp == 'N':
-            #     sure = input('are you sure? (y/n): ')
-            #     if sure == 'n' or sure == 'N':
-            #         temp = 'y' # TODO
-            #     elif sure == 'y' or sure == 'Y' or sure == '':
-            #         print('leitner is off!')
-            #         break
-            
-            # if temp == 'y' or temp == 'Y' or temp == '':
-            # print('[%s] meant [%s]' % (item[1] , item[2]))
-            # Flash_card_label.configure(text=item[2])
-            # javab = input('your hads is true? (y/n): ')
-            # while True:
-            # print("now",Answer)
             if Answer == 'n' or Answer == 'N':
                 item[3] , item[4] = '1' , 'off'
-                # i +=1
-                # print(Answer)
                 Answer = ""
             elif Answer == 'y' or Answer == 'Y':
                 item[3] , item[4] = str(int(item[3]) + 1) , 'off'
-                # print(Answer)
-                # i +=1
                 Answer = ""
-    # return sure
-    # if sure != 'y' or sure != 'Y' or sure != '':
-    #     for row in list_another:
-    #         if (row[0] == '1' or row[0] == '3' or row[0] == '7' or row[0] == '15' or row[0] == '30') and row[4] == 'off':
-    #             leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],'on')
-                
-    #         elif row[0] != '0' or row[0] != '1' or row[0] != '3' or row[0] != '7' or row[0] != '15' or row[0] != '30':
-    #         # TODO elif or else
-    #             leitner.edit_csv(basic_csv,row[0],row[1],row[2],str(int(row[3]) +1),row[4]) # TODO (row[4] or 'off')
-    
-    
-    # questionToday_list.sort() # TODO
-    # print(questionToday_list)
-    # for row in questionToday_list: # TODO
-    #     edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
 
 def Run_Leitner():
     global generator
@@ -473,14 +296,13 @@ def Run_Leitner():
     questionToday_list = list() # list word of question day
     list_another = list() # list word of does't question day
     questionToday_list = []
-    # with open(time_csv) as time_tomorrow:
-    #     reader = csv.reader(time_tomorrow)
-    #     for row in reader:
+
     cursor.execute(f"SELECT * FROM Time")
     time_tomorrow = cursor.fetchall()
     for row in time_tomorrow:
         tomorrow_year , tomorrow_month , tomorrow_day = int(row[0]) , int(row[1]) , int(row[2])
     e = datetime.datetime.now()
+
     if e.year > tomorrow_year or (e.year == tomorrow_year and e.month > tomorrow_month) or (e.year == tomorrow_year and e.month == tomorrow_month and e.day >= tomorrow_day):
         questionToday_list.extend(leitner.check("FlashCards",30,id_0,questionToday_list,list_another))
         questionToday_list.extend(leitner.check("FlashCards",15,id_0,questionToday_list,list_another))
@@ -493,37 +315,9 @@ def Run_Leitner():
             sure = next(generator)
         except:
             if len(questionToday_list) == 0:
-                # text = "The Leitner is empty, but if you want, you can add a new word or add one of our ready-made words to your Leitner."
-                # text_box = CTkTextbox(
-                #             myframe2,
-                #             wrap="word",
-                #             height=50,
-                #             font=en_font
-                #         )
-                # text_box.insert("0.0", text)
-                # text_box.configure(state="disabled")
-                # text_box.grid(row=0, column=0, sticky="ew")
                 messagebox.showwarning("توجه","لایتنر خالیست،\n اما اگر شما بخواید میتوانید فلش کارت های جدید اضافه کنید\n یا از فلش کارت هایی که برایتان اماده کرده ایم استفاده کنید.")
                 Exit_Leitner_btn.invoke()
-                # print('len list is zero (0).')
-        # if sure != 'y' or sure != 'Y' or sure != '':
-        #     for row in list_another:
-        #         if (row[0] == '1' or row[0] == '3' or row[0] == '7' or row[0] == '15' or row[0] == '30') and row[4] == 'off':
-        #             leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],'on')
-                    
-        #         elif row[0] != '0' or row[0] != '1' or row[0] != '3' or row[0] != '7' or row[0] != '15' or row[0] != '30':
-        #         # TODO elif or else
-        #             leitner.edit_csv(basic_csv,row[0],row[1],row[2],str(int(row[3]) +1),row[4]) # TODO (row[4] or 'off')
-        # tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
-        # leitner.edit_time_csv(time_csv,tomorrow.year,tomorrow.month,tomorrow.day)
-        
-        # if len(questionToday_list) == 0:
-        #     print('len list is zero (0).')
-        # # questionToday_list.sort() # TODO
-        # # print(questionToday_list)
-        
-        # for row in questionToday_list:
-        #     leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
+
     else:
         number_question = 0
         questionToday_list = []
@@ -538,34 +332,8 @@ def Run_Leitner():
             sure = next(generator)
         except:
             if len(questionToday_list) == 0:
-                # text = "The Leitner is empty, but if you want, you can add a new word or add one of our ready-made words to your Leitner."
-                # text_box = CTkTextbox(
-                #             myframe2,
-                #             wrap="word",
-                #             height=50,
-                #             font=en_font
-                #         )
-                # text_box.insert("0.0", text)
-                # text_box.configure(state="disabled")
-                # text_box.grid(row=0, column=0, sticky="ew")
                 messagebox.showwarning("توجه","لایتنر خالیست،\n اما اگر شما بخواید میتوانید فلش کارت های جدید اضافه کنید\n یا از فلش کارت هایی که برایتان اماده کرده ایم استفاده کنید.")
                 Exit_Leitner_btn.invoke()
-        # if len(questionToday_list) == 0:
-    #         print("you can'n use leitner now")
-    #         temp = input('but you can insert new word\n you want continue? (y/n): ')
-    #         if temp == 'y' or temp == 'Y' or temp == '':
-    #             check(basic_csv,'0',id_0,questionToday_list)
-    #             sure = leitner(questionToday_list) # TODO (sure = or not)
-    #             for row in questionToday_list:
-    #                 leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
-    #     else:
-    #         print("you can just continue leitner now")
-    #         sure = leitner(questionToday_list) # TODO (sure = or not)
-    #         for row in questionToday_list:
-    #             leitner.edit_csv(basic_csv,row[0],row[1],row[2],row[3],row[4])
-    #         # print(questionToday_list)
-    #         if len(questionToday_list) == 0:
-    #             print('len list is zero (0). ')
 
 def Start_Leitner():
     Run_Leitner_btn.configure(state="disabled")
@@ -685,14 +453,11 @@ def check_btn_func():
                     font=fr_font)
         lbl.grid(sticky='nw', padx=5, pady=2)
         controller_var.set(2)
-        # generator = leitner_func()
         number_question = 0
         try:
             s = next(generator)
         except:
             Exit_Leitner_btn.invoke()
-        # Flash_card_label.configure(text="en")
-        # Question_label.configure(text="click the flash card!")
     else:
         messagebox.showwarning("هشدار","لطفا یک دکمه را انتخاب کنید")
 
@@ -717,10 +482,8 @@ def Exit_Leitner():
     number_new_word_input.configure(state="normal")
     number_new_word_btn.configure(state="normal")
     check_btn.configure(state="disabled")
+
     if questionToday_list !=0:
-        # with open(time_csv) as time_tomorrow:
-        #     reader = csv.reader(time_tomorrow)
-        #     for row in reader:
         cursor.execute("""
             SELECT * FROM Time
             ORDER BY id DESC
@@ -728,7 +491,6 @@ def Exit_Leitner():
         """)
         row = cursor.fetchone()
 
-        # for row in time_tomorrow:
         tomorrow_year , tomorrow_month , tomorrow_day = int(row[1]) , int(row[2]) , int(row[3])
         e = datetime.datetime.now()
         if e.year > tomorrow_year or (e.year == tomorrow_year and e.month > tomorrow_month) or (e.year == tomorrow_year and e.month == tomorrow_month and e.day >= tomorrow_day):    
@@ -740,9 +502,9 @@ def Exit_Leitner():
                 # TODO elif or else
                     leitner.edit_database("FlashCards",row[0],row[1],row[2],str(int(row[3]) +1),row[4]) # TODO (row[4] or 'off')
             tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
+
             if start_time is not None:
                 elapsed = time.perf_counter() - start_time
-            # leitner.edit_time_database("Time",tomorrow.year,tomorrow.month,tomorrow.day)
             cursor.execute(f"""
                             INSERT INTO {"Time"} VALUES (?, ?,?,?,?)
                             """,
@@ -816,59 +578,34 @@ def get_number_new_word():
         number_new_word = int(number_new_word)
         text = (f"[{number_new_word}] new word added to your Leitner")
         id_0 = []
-        # number = "0"
         selected_new_word = []
-        # filename = basic_csv
         cursor.execute(f"SELECT * FROM {Table_name} WHERE day = 0")
         Day_Zero_data = cursor.fetchall()
-        # with open(filename) as f:
-        #     reader = csv.reader(f)
         counter = int(0)
-        # if number == '0':
-            # for row in reader:
+
         for row in Day_Zero_data:
-            # if row[3] == number:
             if row[3] == 0:
                 id_0.append([row[0],row[1],row[2],1,'off'])
                 counter +=1
+
         if counter != 0:
             if number_new_word > len(id_0):
                 number_new_word = len(id_0)
                 text = ('all new words in database is [%i] and added to your Leitner' % (number_new_word))
+
         selected_new_word = leitner.my_append(id_0,selected_new_word,number_new_word)
         selected_new_word.sort(key=lambda x: int(x[0]))
 
-        # tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
-
-        # with open(filename, 'r', newline='') as csvFile, tempfile:
-        #     reader = csv.reader(csvFile, delimiter=',', quotechar='"')
-        #     writer = csv.writer(tempfile, delimiter=',', quotechar='"')
         for temp_list in selected_new_word:
             cursor.execute(f"UPDATE {Table_name} SET question=?,answer=?,day=?,on_off=? WHERE id = ?",(temp_list[1],temp_list[2],temp_list[3],temp_list[4],temp_list[0]))
             conn.commit()
-
-            # def select_in_list(selected_new_word):
-            #     try:
-            #         return selected_new_word.pop(0)
-            #     except:
-            #         pass
-            # temp_list = select_in_list(selected_new_word)
-        #     for row in reader:
-        #         if temp_list == None:
-        #             pass
-        #         elif temp_list[0] == row[0]:
-        #             row[0],row[1],row[2],row[3],row[4] = temp_list[0],temp_list[1],temp_list[2],temp_list[3],temp_list[4]
-        #             temp_list = select_in_list(selected_new_word)
-        #         writer.writerow(row)
-
-        # shutil.move(tempfile.name, filename)
-                
-                
+                              
         number_new_word_lbl = CTkLabel(myframe2,
                                        text=text,
                                        font=en_font,)
         number_new_word_lbl.grid(sticky='nw', padx=5, pady=2)
         number_new_word_input.delete(0,END)
+
     except:
         messagebox.showwarning("هشدار","لطفا عدد صحیح وارد کنید") # TODO
         number_new_word_input.delete(0,END)
@@ -926,9 +663,7 @@ def add_the_word():
         global new_word
         text_en_input= en_input.get().strip()
         text_fr_input= fr_input.get().strip()
-        # leitner.append_list_as_row(leitner.basic_csv,
-        #                         [str(leitner.last_id() +1),
-        #                             text_en_input,text_fr_input,'1','off'])
+
         leitner.append_list_as_row("FlashCards",
                                 [leitner.last_id("FlashCards") +1,
                                     text_en_input,text_fr_input,1,'off'])
@@ -941,6 +676,7 @@ def add_the_word():
         lbl.grid(sticky='nw', padx=5, pady=2)
         en_input.delete(0,END)
         fr_input.delete(0,END)
+
     else:
         messagebox.showwarning("هشدار","لطفا کادرها را پر کنید")
 
@@ -954,7 +690,6 @@ add_word_btn.grid(column=0,row=2,sticky='nsew',padx=10,pady=10)
 status_tab = my_tabs.tab("Status")
 
 status_tab.grid_columnconfigure(0, weight=1)
-# status_tab.grid_rowconfigure(1, weight=1)
 
 status_labels = []  # بیرون تابع تعریف کن
 def Show_status():
@@ -983,7 +718,6 @@ def Show_status():
     row = 2
     for i in range(len(show_list)):
         if show_list[i] != 0:
-            # text = 'value words [%s] day house is [%i]' % (i, show_list[i])
             text = "[%i] flashcards in the [%s]-day box" % (show_list[i], i)
 
             lbl = CTkLabel(
@@ -993,7 +727,6 @@ def Show_status():
             )
 
             lbl.grid(row=row, column=0, sticky='nw', padx=10, pady=2)
-
             status_labels.append(lbl)
             row += 1
 
