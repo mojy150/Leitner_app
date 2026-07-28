@@ -450,9 +450,19 @@ def check_btn_func():
         elif controller_var.get() == 1:
             Answer = "y"
             text = f"[Yes] I did know [{en_question}] meant [{fr_question}]"
-        lbl = CTkLabel(myframe2,text=text,
-                    font=fr_font)
-        lbl.grid(sticky='nw', padx=5, pady=2)
+        row = myframe2.grid_size()[1]
+        lbl = CTkLabel(myframe2,
+                        text=text,
+                        wraplength=320,
+                        font=fr_font,
+                        justify="left",
+                        anchor="w",
+                    )
+        lbl.grid(row=row,column=0,sticky='ew',padx=10, pady=2)
+
+        myframe2.update_idletasks()
+        myframe2._parent_canvas.yview_moveto(1.0)
+
         controller_var.set(2)
         number_question = 0
         try:
@@ -600,12 +610,21 @@ def get_number_new_word():
         for temp_list in selected_new_word:
             cursor.execute(f"UPDATE {Table_name} SET question=?,answer=?,day=?,on_off=? WHERE id = ?",(temp_list[1],temp_list[2],temp_list[3],temp_list[4],temp_list[0]))
             conn.commit()
-                              
+
+        row = myframe2.grid_size()[1]
         number_new_word_lbl = CTkLabel(myframe2,
-                                       text=text,
-                                       font=en_font,)
-        number_new_word_lbl.grid(sticky='nw', padx=5, pady=2)
+                                        text=text,
+                                        wraplength=320,
+                                        font=en_font,
+                                        justify="left",
+                                        anchor="w",
+                                       )
+        number_new_word_lbl.grid(sticky='ew',column=0,row=row,padx=10, pady=2)
         number_new_word_input.delete(0,END)
+
+        myframe2.update_idletasks()
+        myframe2._parent_canvas.yview_moveto(1.0)
+        
 
     except:
         messagebox.showwarning("هشدار","لطفا عدد صحیح وارد کنید") # TODO
@@ -673,9 +692,19 @@ def add_the_word():
         text = '[%i]You add [%s] => [%s]' % (new_word,
                                              text_en_input,
                                              text_fr_input)
-        lbl = CTkLabel(myframe2,text=text,
-                    font=fr_font,)
-        lbl.grid(sticky='nw', padx=5, pady=2)
+        row = myframe2.grid_size()[1]
+        lbl = CTkLabel(myframe2,
+                        text=text,
+                        wraplength=320,
+                        font=fr_font,
+                        justify="left",
+                        anchor="w",
+                    )
+        lbl.grid(sticky='ew',column=0,row=row,padx=10, pady=2)
+
+        myframe2.update_idletasks()
+        myframe2._parent_canvas.yview_moveto(1.0)
+
         en_input.delete(0,END)
         fr_input.delete(0,END)
 
@@ -761,7 +790,11 @@ add_file_to_database_btn = CTkButton(my_tabs.tab("Input Word"),
 add_file_to_database_btn.grid(column=0,row=6,sticky='nsew',padx=10,pady=10)
 
                                                                                                     # Tab Status
-status_tab = my_tabs.tab("Status")
+my_tabs.tab("Status").grid_columnconfigure(0, weight=1)
+my_tabs.tab("Status").grid_rowconfigure(0, weight=1)
+
+status_tab = CTkScrollableFrame(my_tabs.tab("Status"))
+status_tab.grid(row=0, column=0,sticky='nsew')
 
 status_tab.grid_columnconfigure(0, weight=1)
 
@@ -774,7 +807,7 @@ def Show_status():
     text = f"Today is the {Day_th-1}th day and your time spent is {int(Time_spent)} seconds."
 
     lbl = CTkLabel(
-        my_tabs.tab("Status"),
+        status_tab,
         text=text,
         font=en_font,
     )
@@ -795,7 +828,7 @@ def Show_status():
             text = "[%i] flashcards in the [%s]-day box" % (show_list[i], i)
 
             lbl = CTkLabel(
-                my_tabs.tab("Status"),
+                status_tab,
                 text=text,
                 font=en_font,
             )
@@ -806,7 +839,7 @@ def Show_status():
 
 
 Show_status_btn = CTkButton(
-    my_tabs.tab("Status"),
+    status_tab,
     text="Show status",
     font=en_font,
     command=Show_status
