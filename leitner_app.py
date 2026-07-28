@@ -762,6 +762,7 @@ def add_file_to_database():
                         reader = csv.reader(file)
                         try:
                             for row in reader:
+                                                                                                                                      # TODO 👇  👇
                                 row = [leitner.last_id(Table_name) +1,row[int(Question_column_number)-1],row[int(Answer_column_number)-1],row[3],row[4]] 
                                 leitner.append_list_as_row(Table_name,row)
 
@@ -769,6 +770,7 @@ def add_file_to_database():
 
                         except:
                             for row in reader:
+                                                                                                                                  # TODO 👇  👇
                                 row = [leitner.last_id(Table_name) +1,row[int(Question_column_number)-1],row[int(Answer_column_number)-1],0,"off"] 
                                 leitner.append_list_as_row(Table_name,row)
 
