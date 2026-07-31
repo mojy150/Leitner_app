@@ -43,6 +43,8 @@ def check_again(Table_name,number_day,questionToday_list): # check again for new
 def last_id(Table_name): # give the last id
     cursor.execute(f"SELECT MAX(id) FROM {Table_name}")
     last_id = cursor.fetchone()[0]
+    if last_id == None:
+        last_id = 0
     return last_id
 
 def append_list_as_row(Table_name,row): # send new word in database
