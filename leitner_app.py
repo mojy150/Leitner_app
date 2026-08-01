@@ -695,33 +695,37 @@ fr_input.bind("<Return>", send_to_add_word_btn)
 
 new_word = int(0)
 def add_the_word():
+    global new_word
     if en_input.get().strip() != "" and fr_input.get().strip() != "":
-        global new_word
         text_en_input= en_input.get().strip()
         text_fr_input= fr_input.get().strip()
+        cursor.execute(f"SELECT * FROM {"FlashCards"} WHERE question = ?",(text_en_input,))
+        check_question = cursor.fetchone()
+        if check_question == None:
+            leitner.append_list_as_row("FlashCards",
+                                    [leitner.last_id("FlashCards") +1,
+                                        text_en_input,text_fr_input,1,'off'])
+            new_word +=1
+            text = '[%i]You add [%s] => [%s]' % (new_word,
+                                                text_en_input,
+                                                text_fr_input)
+            row = myframe2.grid_size()[1]
+            lbl = CTkLabel(myframe2,
+                            text=text,
+                            wraplength=320,
+                            font=fr_font,
+                            justify="left",
+                            anchor="w",
+                        )
+            lbl.grid(sticky='ew',column=0,row=row,padx=10, pady=2)
 
-        leitner.append_list_as_row("FlashCards",
-                                [leitner.last_id("FlashCards") +1,
-                                    text_en_input,text_fr_input,1,'off'])
-        new_word +=1
-        text = '[%i]You add [%s] => [%s]' % (new_word,
-                                             text_en_input,
-                                             text_fr_input)
-        row = myframe2.grid_size()[1]
-        lbl = CTkLabel(myframe2,
-                        text=text,
-                        wraplength=320,
-                        font=fr_font,
-                        justify="left",
-                        anchor="w",
-                    )
-        lbl.grid(sticky='ew',column=0,row=row,padx=10, pady=2)
+            myframe2.update_idletasks()
+            myframe2._parent_canvas.yview_moveto(1.0)
 
-        myframe2.update_idletasks()
-        myframe2._parent_canvas.yview_moveto(1.0)
-
-        en_input.delete(0,END)
-        fr_input.delete(0,END)
+            en_input.delete(0,END)
+            fr_input.delete(0,END)
+        else:
+            messagebox.showwarning("هشدار","این فلش کارت در دیتابیس وجود دارد!")
 
     else:
         messagebox.showwarning("هشدار","لطفا کادرها را پر کنید")
