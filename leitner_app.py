@@ -1,7 +1,6 @@
 from customtkinter import *
 import leitner
 import ctypes
-from tkinter import messagebox,filedialog
 import datetime
 from tempfile import NamedTemporaryFile
 from PIL import Image
@@ -9,6 +8,7 @@ import time
 import csv
 
 from variable import *
+import warning_app
                                                                                                     # main
 window = CTk()
 window.title("Leitner app")
@@ -725,7 +725,10 @@ def add_the_word():
             en_input.delete(0,END)
             fr_input.delete(0,END)
         else:
-            messagebox.showwarning("هشدار",f"این فلش کارت در دیتابیس وجود دارد! \n [{check_question[1]}] meant [{check_question[2]}]")
+            warning_app.warning_app1(window,check_question[1],check_question[2],"FlashCards")
+            en_input.delete(0,END)
+            fr_input.delete(0,END)
+            # messagebox.showwarning("هشدار",f"این فلش کارت در دیتابیس وجود دارد! \n [{check_question[1]}] meant [{check_question[2]}]")
 
     else:
         messagebox.showwarning("هشدار","لطفا کادرها را پر کنید")
@@ -736,8 +739,8 @@ add_word_btn = CTkButton(my_tabs.tab("Input Word"),
                          command=add_the_word)
 add_word_btn.grid(column=0,row=2,sticky='nsew',padx=10,pady=10)
 
-def focus_next(event):
-    event.widget.tk_focusNext().focus()
+# def focus_next(event):
+#     event.widget.tk_focusNext().focus()
 
 Question_column_number_input = CTkEntry(my_tabs.tab("Input Word"),                          
                       placeholder_text="Question column number(2):",
@@ -748,7 +751,7 @@ Question_column_number_input.grid(column=0,row=4,sticky='nsew', pady=10)
 Question_column_number_input.bind("<FocusIn>", turn_on_numlock)
 Question_column_number_input.bind("<Return>", focus_next)
 
-def send_to_add_word_btn(event):
+def send_to_add_file_btn(event):
     add_file_to_database_btn.invoke()
 
 Answer_column_number_input = CTkEntry(my_tabs.tab("Input Word"),                          
@@ -758,7 +761,7 @@ Answer_column_number_input = CTkEntry(my_tabs.tab("Input Word"),
 
 Answer_column_number_input.grid(column=0,row=5,sticky='nsew',pady=10)
 Answer_column_number_input.bind("<FocusIn>", turn_on_numlock)
-Answer_column_number_input.bind("<Return>", send_to_add_word_btn)
+Answer_column_number_input.bind("<Return>", send_to_add_file_btn)
 
 def add_file_to_database():
         global new_word
