@@ -725,7 +725,7 @@ def add_the_word():
             en_input.delete(0,END)
             fr_input.delete(0,END)
         else:
-            messagebox.showwarning("هشدار","این فلش کارت در دیتابیس وجود دارد!")
+            messagebox.showwarning("هشدار",f"این فلش کارت در دیتابیس وجود دارد! \n [{check_question[1]}] meant [{check_question[2]}]")
 
     else:
         messagebox.showwarning("هشدار","لطفا کادرها را پر کنید")
