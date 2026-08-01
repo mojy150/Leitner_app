@@ -521,7 +521,7 @@ def Exit_Leitner():
                 elif row[0] != 0 and row[0] != 1 and row[0] != 3 and row[0] != 7 and row[0] != 15 and row[0] != 30:
                 # TODO elif or else
                     leitner.edit_database("FlashCards",row[0],row[1],row[2],(row[3] +1),row[4]) # TODO (row[4] or 'off')
-            tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
+            tomorrow = datetime.date.today() + datetime.timedelta(days=1)
 
             if start_time is not None:
                 elapsed = time.perf_counter() - start_time

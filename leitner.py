@@ -36,9 +36,13 @@ def check(Table_name,number_day,id_0,questionToday_list,list_another): # check f
     return questionToday_list
 
 def check_again(Table_name,number_day,questionToday_list): # check again for new word or old word
+    id_0 = []   
+    temp = int(0)
     cursor.execute(f"SELECT * FROM {Table_name} WHERE on_off = ? AND day = ?"
                    ,("on",number_day))
-    questionToday_list.extend(cursor.fetchall())
+    id_0.extend(cursor.fetchall())
+    temp = len(id_0)
+    questionToday_list = my_append(id_0,questionToday_list,temp)
     return questionToday_list
 
 def last_id(Table_name): # give the last id
