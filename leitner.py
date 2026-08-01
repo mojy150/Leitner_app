@@ -36,7 +36,8 @@ def check(Table_name,number_day,id_0,questionToday_list,list_another): # check f
     return questionToday_list
 
 def check_again(Table_name,number_day,questionToday_list): # check again for new word or old word
-    cursor.execute(f"SELECT * FROM {Table_name} WHERE on_off = {"on"} AND day = {number_day}")
+    cursor.execute(f"SELECT * FROM {Table_name} WHERE on_off = ? AND day = ?"
+                   ,("on",number_day))
     questionToday_list.extend(cursor.fetchall())
     return questionToday_list
 
@@ -61,7 +62,13 @@ def append_list_as_row(Table_name,row): # send new word in database
     conn.commit()
         
 def edit_database(Table_name,line0,line1,line2,line3,line4): # edit batabase for Flashcards
-    cursor.execute(f"UPDATE {Table_name} SET question=?,answer=?,day=?,on_off=? WHERE id = ?",(line1,line2,line3,line4,line0))
+    cursor.execute(f"UPDATE {Table_name} SET question=?,answer=?,day=?,on_off=? WHERE id = ?",
+                   (line1,
+                    line2,
+                    line3,
+                    line4,
+                    line0
+                    ))
     conn.commit()
 
 def show(Table_name):

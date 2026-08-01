@@ -272,20 +272,23 @@ def leitner_func(): # question words
     global Answer
     global questionToday_list
     global list_another
-    # sure = 'null'
+
     for item in questionToday_list:
         if item[4] == 'on':
-            # print(item[1])
             en_question = item[1]
             Flash_card_label.configure(text=en_question)
             Question_label.configure(text="click the flash card!")
             fr_question = item[2]
             yield item
             if Answer == 'n' or Answer == 'N':
-                item[3] , item[4] = '1' , 'off'
+                leitner.edit_database("FlashCards",item[0],item[1],item[2],1,"off")
+                # item[3] , item[4] = 1 , 'off'
+                questionToday_list.remove(item)
                 Answer = ""
             elif Answer == 'y' or Answer == 'Y':
-                item[3] , item[4] = str(int(item[3]) + 1) , 'off'
+                # item[3] , item[4] = (item[3] + 1) , 'off'
+                leitner.edit_database("FlashCards",item[0],item[1],item[2],(item[3] + 1),"off")
+                questionToday_list.remove(item)
                 Answer = ""
 
 def Run_Leitner():
@@ -298,19 +301,23 @@ def Run_Leitner():
     list_another = list() # list word of does't question day
     questionToday_list = []
 
-    cursor.execute(f"SELECT * FROM Time")
-    time_tomorrow = cursor.fetchall()
-    for row in time_tomorrow:
-        tomorrow_year , tomorrow_month , tomorrow_day = int(row[0]) , int(row[1]) , int(row[2])
+    cursor.execute("""
+        SELECT * FROM Time
+        ORDER BY id DESC
+        LIMIT 1
+    """)
+    row = cursor.fetchone()
+
+    tomorrow_year , tomorrow_month , tomorrow_day = int(row[1]) , int(row[2]) , int(row[3])
     e = datetime.datetime.now()
 
     if e.year > tomorrow_year or (e.year == tomorrow_year and e.month > tomorrow_month) or (e.year == tomorrow_year and e.month == tomorrow_month and e.day >= tomorrow_day):
-        questionToday_list.extend(leitner.check("FlashCards",30,id_0,questionToday_list,list_another))
-        questionToday_list.extend(leitner.check("FlashCards",15,id_0,questionToday_list,list_another))
-        questionToday_list.extend(leitner.check("FlashCards",7,id_0,questionToday_list,list_another))
-        questionToday_list.extend(leitner.check("FlashCards",3,id_0,questionToday_list,list_another))
-        questionToday_list.extend(leitner.check("FlashCards",1,id_0,questionToday_list,list_another))
-        questionToday_list.extend(leitner.check("FlashCards",'another',id_0,list_another,list_another))
+        leitner.check("FlashCards",30,id_0,questionToday_list,list_another)
+        leitner.check("FlashCards",15,id_0,questionToday_list,list_another)
+        leitner.check("FlashCards",7,id_0,questionToday_list,list_another)
+        leitner.check("FlashCards",3,id_0,questionToday_list,list_another)
+        leitner.check("FlashCards",1,id_0,questionToday_list,list_another)
+        leitner.check("FlashCards",'another',id_0,list_another,list_another)
         try:
             generator = leitner_func()
             sure = next(generator)
@@ -322,12 +329,12 @@ def Run_Leitner():
     else:
         number_question = 0
         questionToday_list = []
-        questionToday_list.extend(leitner.check_again("FlashCards",30,questionToday_list))
-        questionToday_list.extend(leitner.check_again("FlashCards",15,questionToday_list))
-        questionToday_list.extend(leitner.check_again("FlashCards",7,questionToday_list))
-        questionToday_list.extend(leitner.check_again("FlashCards",3,questionToday_list))
-        questionToday_list.extend(leitner.check_again("FlashCards",1,questionToday_list))
-        questionToday_list.extend(leitner.check_again("FlashCards",0,questionToday_list))
+        leitner.check_again("FlashCards",30,questionToday_list)
+        leitner.check_again("FlashCards",15,questionToday_list)
+        leitner.check_again("FlashCards",7,questionToday_list)
+        leitner.check_again("FlashCards",3,questionToday_list)
+        leitner.check_again("FlashCards",1,questionToday_list)
+        leitner.check_again("FlashCards",0,questionToday_list)
         try:
             generator = leitner_func()
             sure = next(generator)
@@ -337,15 +344,15 @@ def Run_Leitner():
                 Exit_Leitner_btn.invoke()
 
 def Start_Leitner():
-    Run_Leitner_btn.configure(state="disabled")
-    Exit_Leitner_btn.configure(state="normal")
+    global start_time
     global enable_click
     enable_click = True
+    start_time = time.perf_counter()
+    Run_Leitner_btn.configure(state="disabled")
+    Exit_Leitner_btn.configure(state="normal")
     Question_label.configure(text="click the flash card!")
     number_new_word_input.configure(state="disabled")
     number_new_word_btn.configure(state="disabled")
-    global start_time
-    start_time = time.perf_counter()
     Run_Leitner()
 
 Leitner_frame.grid_rowconfigure(0, weight=1)  # Start
@@ -482,6 +489,8 @@ check_btn.grid(column=0,row=4,sticky='nsew',padx=10,pady=10) # TODO
 def Exit_Leitner():
     global enable_click
     global start_time
+    global Answer
+    Answer = "s"
     Run_Leitner_btn.configure(state="normal")
     Exit_Leitner_btn.configure(state="disabled")
     enable_click = False
@@ -506,27 +515,27 @@ def Exit_Leitner():
         e = datetime.datetime.now()
         if e.year > tomorrow_year or (e.year == tomorrow_year and e.month > tomorrow_month) or (e.year == tomorrow_year and e.month == tomorrow_month and e.day >= tomorrow_day):    
             for row in list_another:
-                if (row[0] == '1' or row[0] == '3' or row[0] == '7' or row[0] == '15' or row[0] == '30') and row[4] == 'off':
+                if (row[0] == 1 or row[0] == 3 or row[0] == 7 or row[0] == 15 or row[0] == 30) and row[4] == 'off':
                     leitner.edit_database("FlashCards",row[0],row[1],row[2],row[3],'on')
                     
-                elif row[0] != '0' or row[0] != '1' or row[0] != '3' or row[0] != '7' or row[0] != '15' or row[0] != '30':
+                elif row[0] != 0 and row[0] != 1 and row[0] != 3 and row[0] != 7 and row[0] != 15 and row[0] != 30:
                 # TODO elif or else
-                    leitner.edit_database("FlashCards",row[0],row[1],row[2],str(int(row[3]) +1),row[4]) # TODO (row[4] or 'off')
+                    leitner.edit_database("FlashCards",row[0],row[1],row[2],(row[3] +1),row[4]) # TODO (row[4] or 'off')
             tomorrow = datetime.date.today() + datetime.timedelta(days=1) # TODO
 
             if start_time is not None:
                 elapsed = time.perf_counter() - start_time
-            cursor.execute(f"""
-                            INSERT INTO {"Time"} VALUES (?, ?,?,?,?)
-                            """,
-                            (
-                                (leitner.last_id("Time") +1),
-                                tomorrow.year,
-                                tomorrow.month,
-                                tomorrow.day,
-                                elapsed
-                            ))
-            conn.commit()
+                cursor.execute(f"""
+                                INSERT INTO {"Time"} VALUES (?, ?,?,?,?)
+                                """,
+                                (
+                                    (leitner.last_id("Time") +1),
+                                    tomorrow.year,
+                                    tomorrow.month,
+                                    tomorrow.day,
+                                    elapsed
+                                ))
+                conn.commit()
             for row in questionToday_list:
                 leitner.edit_database("FlashCards",row[0],row[1],row[2],row[3],row[4])
         else:
@@ -608,7 +617,13 @@ def get_number_new_word():
         selected_new_word.sort(key=lambda x: int(x[0]))
 
         for temp_list in selected_new_word:
-            cursor.execute(f"UPDATE {Table_name} SET question=?,answer=?,day=?,on_off=? WHERE id = ?",(temp_list[1],temp_list[2],temp_list[3],temp_list[4],temp_list[0]))
+            cursor.execute(f"UPDATE {Table_name} SET question=?,answer=?,day=?,on_off=? WHERE id = ?",
+                           (temp_list[1],
+                            temp_list[2],
+                            temp_list[3],
+                            temp_list[4],
+                            temp_list[0])
+                            )
             conn.commit()
 
         row = myframe2.grid_size()[1]
