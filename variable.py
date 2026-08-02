@@ -34,5 +34,5 @@ questionToday_list = list()
 generator = None
 number_question = 0
 font_size = 15
-flashcard_font_size = 15
+flashcard_font_size = 18
 start_time = 0

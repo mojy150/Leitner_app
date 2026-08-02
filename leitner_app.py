@@ -95,6 +95,7 @@ theme_switch.grid(
                                                                                                     # setting read data
 def read_setting():
     global font_size
+    global flashcard_font_size
     cursor.execute("SELECT * FROM Setting")
     setting_data = cursor.fetchall()
     for row in setting_data:
@@ -123,8 +124,8 @@ read_setting()
 
 def save_setting_func():
     cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(theme_switch.get(),"theme"))
-    cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(str(font_size),"font_size"))
-    cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(str(flashcard_font_size),"font_size_flashcard"))
+    cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(font_size,"font_size"))
+    cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(flashcard_font_size,"font_size_flashcard"))
     conn.commit()
 
                                                                                                     # setting font size
