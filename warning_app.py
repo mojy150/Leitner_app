@@ -63,7 +63,7 @@ def warning_app1(parent,en_text,fr_text,Table_name):
                                     ))
                 conn.commit()
             else:
-                cursor.execute(f"UPDATE {Table_name} SET answer=? AND day=? WHERE question=?",
+                cursor.execute(f"UPDATE {Table_name} SET answer=?, day=? WHERE question=?",
                                                     (text_fr_input,
                                                     1,
                                                     text_en_input,
