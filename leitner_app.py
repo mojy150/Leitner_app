@@ -1,21 +1,7 @@
-from customtkinter import *
 import leitner
-import ctypes
-import datetime
-from tempfile import NamedTemporaryFile
-from PIL import Image
-import time
-import csv
-
 from variable import *
 import warning_app
-                                                                                                    # main
-window = CTk()
-window.title("Leitner app")
-fr_font = CTkFont(family="vazir",size=15)
-en_font = CTkFont(family="Arial",size=15)
-flashcard_fr_font = CTkFont(family="vazir",size=15)
-flashcard_en_font = CTkFont(family="Arial",size=15)
+
                                                                                                     # wight of row & column for main
 window.grid_columnconfigure([0],weight=0)
 window.grid_columnconfigure([1],weight=4)

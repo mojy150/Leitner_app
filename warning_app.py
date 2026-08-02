@@ -1,5 +1,3 @@
-from customtkinter import *
-import ctypes
 from variable import *
 
 # warning_app = CTk()

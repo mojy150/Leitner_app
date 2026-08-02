@@ -1,12 +1,4 @@
-from random import choice
-import pyttsx3
-import sqlite3
-
-conn = sqlite3.connect("Leitner_DB.db")
-cursor = conn.cursor()
-
-engine = pyttsx3.init()
-engine.setProperty('rate', 170)
+from variable import *
 
 def my_append(id_0,questionToday_list,temp): # append random word in questionToday_list
     while temp != 0:
