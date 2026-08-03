@@ -894,6 +894,27 @@ def Show_FlashCards(Table_name):
                 lbl.grid(row=row, column=col, sticky="nw", padx=10, pady=2)
                 row_labels.append(lbl)
 
+            edit_btn = CTkButton(
+                FlashCards_tab,
+                text="",
+                fg_color="transparent",
+                image=CTkImage(Image.open(f"./media/icon-edit-48x48.png"),size=(24,24)),
+                width=24,
+                height=24,
+            )
+
+            edit_btn.grid(row=row, column=6,)
+
+            delete_btn = CTkButton(
+                FlashCards_tab,
+                text="",
+                fg_color="transparent",
+                image=CTkImage(Image.open(f"./media/icon-delete-48x48.png"),size=(24,24)),
+                width=24,
+                height=24,
+            )
+
+            delete_btn.grid(row=row, column=7,)
             FlashCards_labels.append(row_labels)
 
         # فقط متن لیبل‌ها را عوض کن
