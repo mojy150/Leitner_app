@@ -894,13 +894,25 @@ def Show_FlashCards(Table_name):
                 lbl.grid(row=row, column=col, sticky="nw", padx=10, pady=2)
                 row_labels.append(lbl)
 
+            def edit_Flashcard(row):
+                for widget in FlashCards_tab.winfo_children():
+                    info = widget.grid_info()
+
+                    if info.get("row") == row :
+                        if info.get("column") == 1:
+                            en_text = widget.cget("text")
+                        if info.get("column") == 2:
+                            fr_text = widget.cget("text")
+                warning_app.warning_app1(window,en_text,fr_text,Table_name)
+
             edit_btn = CTkButton(
                 FlashCards_tab,
                 text="",
                 fg_color="transparent",
-                image=CTkImage(Image.open(f"./media/icon-edit-48x48.png"),size=(24,24)),
+                image=edit_icon,
                 width=24,
                 height=24,
+                command=lambda r=row: edit_Flashcard(r),
             )
 
             edit_btn.grid(row=row, column=6,)
@@ -909,7 +921,7 @@ def Show_FlashCards(Table_name):
                 FlashCards_tab,
                 text="",
                 fg_color="transparent",
-                image=CTkImage(Image.open(f"./media/icon-delete-48x48.png"),size=(24,24)),
+                image=delete_icon,
                 width=24,
                 height=24,
             )
