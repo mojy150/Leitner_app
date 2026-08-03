@@ -6,12 +6,14 @@ import warning_app
 window.grid_columnconfigure([0],weight=0)
 window.grid_columnconfigure([1],weight=4)
 window.grid_columnconfigure([2],weight=2)
+
 window.grid_rowconfigure([0],weight=1)
                                                                                                     # create left tab
 my_tabs = CTkTabview(window,)                                   
 my_tabs.add("Leitner")                                 
 my_tabs.add("Input Word")
 my_tabs.add("Status")
+my_tabs.add("FlashCards")
 my_tabs.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
                                                                                                     # create 2 frame in tab Leitner
 
@@ -858,6 +860,60 @@ Show_status_btn = CTkButton(
 
 Show_status_btn.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
 
+                                                                                                    # Tab FlashCards
+my_tabs.tab("FlashCards").grid_columnconfigure(0, weight=1)
+my_tabs.tab("FlashCards").grid_rowconfigure(0, weight=0)
+my_tabs.tab("FlashCards").grid_rowconfigure(1, weight=8)
+
+FlashCards_tab = CTkScrollableFrame(my_tabs.tab("FlashCards"))
+FlashCards_tab.grid(row=1, column=0,sticky='nsew')
+
+FlashCards_tab.grid_columnconfigure([0,1,2,3,4], weight=1)
+
+FlashCards_labels = []
+
+def Show_FlashCards(Table_name):
+
+    cursor.execute(f"SELECT * FROM {Table_name}")
+    FlashCards_data = cursor.fetchall()
+
+    for row, data in enumerate(FlashCards_data):
+
+        # اگر این ردیف قبلاً ساخته نشده باشد
+        if row >= len(FlashCards_labels):
+
+            row_labels = []
+
+            for col in range(5):
+                lbl = CTkLabel(
+                    FlashCards_tab,
+                    text="",
+                    font=fr_font,
+                )
+
+                lbl.grid(row=row, column=col, sticky="nw", padx=10, pady=2)
+                row_labels.append(lbl)
+
+            FlashCards_labels.append(row_labels)
+
+        # فقط متن لیبل‌ها را عوض کن
+        for col in range(5):
+            FlashCards_labels[row][col].configure(text=str(data[col]))
+
+    # اگر این بار تعداد رکوردها کمتر شده بود، لیبل‌های اضافی را مخفی کن
+    for row in range(len(FlashCards_data), len(FlashCards_labels)):
+        for lbl in FlashCards_labels[row]:
+            lbl.grid_remove()
+
+
+Show_FlashCards_btn = CTkButton(
+    my_tabs.tab("FlashCards"),
+    text="Show FlashCards",
+    font=en_font,
+    command=lambda: Show_FlashCards("FlashCards")
+)
+
+Show_FlashCards_btn.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
 
 
 window.after(0, lambda: window.state('zoomed'))
