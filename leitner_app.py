@@ -261,8 +261,8 @@ def leitner_func(): # question words
     global Answer
     global questionToday_list
     global list_another
-
-    for item in questionToday_list:
+    temp_list = questionToday_list.copy()
+    for item in temp_list:
         if item[4] == 'on':
             en_question = item[1]
             Flash_card_label.configure(text=en_question)
@@ -464,6 +464,7 @@ def check_btn_func():
         try:
             s = next(generator)
         except:
+            print("im quit!")
             Exit_Leitner_btn.invoke()
     else:
         messagebox.showwarning("هشدار","لطفا یک دکمه را انتخاب کنید")
