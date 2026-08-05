@@ -875,7 +875,7 @@ FlashCards_labels = []
 
 def Show_FlashCards(Table_name):
 
-    cursor.execute(f"SELECT * FROM {Table_name}")
+    cursor.execute(f"SELECT * FROM {Table_name} LIMIT 50")
     FlashCards_data = cursor.fetchall()
 
     for row, data in enumerate(FlashCards_data):
