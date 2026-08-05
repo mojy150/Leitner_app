@@ -865,8 +865,11 @@ Show_status_btn.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
 my_tabs.tab("FlashCards").grid_columnconfigure(0, weight=1)
 my_tabs.tab("FlashCards").grid_rowconfigure(0, weight=0)
 my_tabs.tab("FlashCards").grid_rowconfigure(1, weight=8)
+my_tabs.tab("FlashCards").grid_rowconfigure(2, weight=0)
 
-FlashCards_tab = CTkScrollableFrame(my_tabs.tab("FlashCards"))
+FlashCards_tab = CTkScrollableFrame(my_tabs.tab("FlashCards"),
+                                    border_width=2,
+                                    )
 FlashCards_tab.grid(row=1, column=0,sticky='nsew')
 
 FlashCards_tab.grid_columnconfigure([0,1,2,3,4], weight=1)
@@ -875,7 +878,9 @@ FlashCards_labels = []
 
 def Show_FlashCards(Table_name):
 
-    cursor.execute(f"SELECT * FROM {Table_name} LIMIT 50")
+    cursor.execute(f"SELECT * FROM {Table_name} LIMIT 50 OFFSET ?",
+                   (50*(FlashCards_page-1), # TODO
+                    ))
     FlashCards_data = cursor.fetchall()
 
     for row, data in enumerate(FlashCards_data):
@@ -889,6 +894,7 @@ def Show_FlashCards(Table_name):
                 lbl = CTkLabel(
                     FlashCards_tab,
                     text="",
+                    wraplength=200,
                     font=fr_font,
                 )
 
@@ -948,6 +954,48 @@ Show_FlashCards_btn = CTkButton(
 )
 
 Show_FlashCards_btn.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
+
+
+Right_Left_frame = CTkFrame(my_tabs.tab("FlashCards"),height=0)
+Right_Left_frame.grid(column=0,row=2)
+
+def left_side_func():
+    global FlashCards_page
+    if FlashCards_page>1:
+        FlashCards_page-=1
+        # tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
+    Show_FlashCards_btn.invoke()
+
+left_side_btn = CTkButton(Right_Left_frame,
+                        image=CTkImage(Image.open(f"./media/left_side.png"),size=(70,70)),
+                        text="",
+                        command=left_side_func)
+left_side_btn.grid(column=0,row=0,padx=10,pady=10)
+
+
+def right_side_func():
+    global FlashCards_page
+    cursor.execute(f"SELECT COUNT(*) FROM {Table_name}")
+    count = cursor.fetchone()[0]
+    try:
+        max_count = count/50
+    except:
+        max_count = 1 + count//50
+
+    if FlashCards_page<max_count:
+        FlashCards_page+=1
+    Show_FlashCards_btn.invoke()
+        # tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
+
+
+right_side_btn = CTkButton(Right_Left_frame,
+                        image=CTkImage(Image.open(f"./media/right_side.png"),size=(70,70)),
+                        text="",
+                        command=right_side_func)
+right_side_btn.grid(column=2,row=0,padx=10,pady=10)
+
+
+
 
 
 window.after(0, lambda: window.state('zoomed'))
