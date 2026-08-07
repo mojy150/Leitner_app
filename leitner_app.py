@@ -86,7 +86,7 @@ window.bind("<Escape>", show_settings)
                                                                                                     # setting Theme
 def theme_func():
     global Theme_text
-    if theme_switch.get() == "on":
+    if theme_switch.get() == "dark":
         set_appearance_mode("dark")
         theme_switch.configure(text="dark mode")
         settings_frame.configure(fg_color="#2B2B2B")
@@ -835,7 +835,7 @@ def Show_status():
     cursor.execute(f"SELECT * FROM {"Time"} WHERE id = {leitner.last_id("Time")}")
     Last_day = cursor.fetchone()
     Day_th , Time_spent = Last_day[0],Last_day[4]
-    text = f"Today is the {Day_th-1}th day and your time spent is {int(Time_spent)} seconds."
+    text = f"Today is the {Day_th-1}th day and your time spent is {int(Time_spent)//60}:{int(Time_spent)%60:02d}."
 
     lbl = CTkLabel(
         status_tab,
@@ -973,7 +973,7 @@ def Show_FlashCards(Table_name):
             FlashCards_labels[row][col].configure(text=str(data[col]))
 
     # اگر این بار تعداد رکوردها کمتر شده بود، لیبل‌های اضافی را مخفی کن
-    for row in range(len(FlashCards_data), len(FlashCards_labels)):
+    for row in range(len(FlashCards_data), len(FlashCards_labels)): # TODO برای زمانی که لیبل نداریم ایکون ها رو هم پاک کن
         for lbl in FlashCards_labels[row]:
             lbl.grid_remove()
 
