@@ -47,3 +47,13 @@ delete_icon = CTkImage(
     Image.open("./media/icon-delete-48x48.png"),
     size=(24,24)
 )
+
+right_side_icon = CTkImage(
+    Image.open(f"./media/right_side.png"),
+    size=(70,70)
+)
+
+left_side_icon = CTkImage(
+    Image.open(f"./media/left_side.png"),
+    size=(70,70)
+)

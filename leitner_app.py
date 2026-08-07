@@ -229,10 +229,10 @@ for row in Tutorial_data:
             global i
             if i>1:
                 i-=1
-                tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
+                tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.webp"),size=(960,540)))
 
         left_side_btn = CTkButton(tutorial_frame,
-                                image=CTkImage(Image.open(f"./media/left_side.png")),
+                                image=left_side_icon,
                                 text="",
                                 command=left_side_func)
         left_side_btn.grid(column=0,row=0,padx=10,pady=10)
@@ -240,7 +240,7 @@ for row in Tutorial_data:
 
         tutorial_label = CTkLabel(tutorial_frame,
                                 text="",
-                                image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
+                                image=CTkImage(Image.open(f"./media/{i}.webp"),size=(960,540)))
         tutorial_label.grid(column=1,row=0,padx=10,pady=10,)
 
 
@@ -248,11 +248,11 @@ for row in Tutorial_data:
             global i
             if i<8:
                 i+=1
-                tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
+                tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.webp"),size=(960,540)))
 
 
         right_side_btn = CTkButton(tutorial_frame,
-                                image=CTkImage(Image.open(f"./media/right_side.png")),
+                                image=right_side_icon,
                                 text="",
                                 command=right_side_func)
         right_side_btn.grid(column=2,row=0,padx=10,pady=10)
@@ -1001,7 +1001,7 @@ def left_page_func():
     Show_FlashCards_btn.invoke()
 
 left_side_btn = CTkButton(Right_Left_frame,
-                        image=CTkImage(Image.open(f"./media/left_side.png"),size=(70,70)),
+                        image= left_side_icon,
                         text="",
                         command=left_page_func)
 left_side_btn.grid(column=0,row=0,padx=10,pady=10)
@@ -1033,7 +1033,7 @@ def right_page_func():
 
 
 right_side_btn = CTkButton(Right_Left_frame,
-                        image=CTkImage(Image.open(f"./media/right_side.png"),size=(70,70)),
+                        image=right_side_icon,
                         text="",
                         command=right_page_func)
 right_side_btn.grid(column=2,row=0,padx=10,pady=10)
