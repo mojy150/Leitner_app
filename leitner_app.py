@@ -959,21 +959,31 @@ Show_FlashCards_btn.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
 Right_Left_frame = CTkFrame(my_tabs.tab("FlashCards"),height=0)
 Right_Left_frame.grid(column=0,row=2)
 
-def left_side_func():
+def left_page_func():
     global FlashCards_page
     if FlashCards_page>1:
         FlashCards_page-=1
+        page_number_input.delete(0, "end")
+        page_number_input.insert(0,FlashCards_page)
         # tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
     Show_FlashCards_btn.invoke()
 
 left_side_btn = CTkButton(Right_Left_frame,
                         image=CTkImage(Image.open(f"./media/left_side.png"),size=(70,70)),
                         text="",
-                        command=left_side_func)
+                        command=left_page_func)
 left_side_btn.grid(column=0,row=0,padx=10,pady=10)
 
+page_number_input = CTkEntry(Right_Left_frame,                          
+                      placeholder_text="page number: ",
+                      font=en_font,
+                      justify="center",)
 
-def right_side_func():
+page_number_input.grid(column=1,row=0,sticky="ns",padx=10,pady=10)
+
+page_number_input.insert(0,FlashCards_page)
+
+def right_page_func():
     global FlashCards_page
     cursor.execute(f"SELECT COUNT(*) FROM {Table_name}")
     count = cursor.fetchone()[0]
@@ -984,6 +994,9 @@ def right_side_func():
 
     if FlashCards_page<max_count:
         FlashCards_page+=1
+        page_number_input.delete(0, "end")
+        page_number_input.insert(0,FlashCards_page)
+
     Show_FlashCards_btn.invoke()
         # tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.png"),size=(960,540)))
 
@@ -991,7 +1004,7 @@ def right_side_func():
 right_side_btn = CTkButton(Right_Left_frame,
                         image=CTkImage(Image.open(f"./media/right_side.png"),size=(70,70)),
                         text="",
-                        command=right_side_func)
+                        command=right_page_func)
 right_side_btn.grid(column=2,row=0,padx=10,pady=10)
 
 
