@@ -1,7 +1,7 @@
 from variable import *
 
 
-def warning_app1(parent,en_text,fr_text,Table_name):
+def edit_app(parent,en_text,fr_text,Table_name):
     warning_app = CTkToplevel(parent)
     warning_app.title("Edit FlashCard")
     warning_app.geometry("300x400")

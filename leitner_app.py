@@ -732,7 +732,7 @@ def add_the_word():
             en_input.delete(0,END)
             fr_input.delete(0,END)
         else:
-            warning_app.warning_app1(window,check_question[1],check_question[2],"FlashCards")
+            warning_app.edit_app(window,check_question[1],check_question[2],"FlashCards")
             en_input.delete(0,END)
             fr_input.delete(0,END)
             # messagebox.showwarning("هشدار",f"این فلش کارت در دیتابیس وجود دارد! \n [{check_question[1]}] meant [{check_question[2]}]")
@@ -835,11 +835,11 @@ def Show_status():
     cursor.execute(f"SELECT * FROM {"Time"} WHERE id = {leitner.last_id("Time")}")
     Last_day = cursor.fetchone()
     Day_th , Time_spent = Last_day[0],Last_day[4]
-    text = f"Today is the {Day_th-1}th day and your time spent is {int(Time_spent)//60}:{int(Time_spent)%60:02d}."
+    status_today = f"Today is the {Day_th-1}th day and your time spent is {int(Time_spent)//60}:{int(Time_spent)%60:02d}."
 
     lbl = CTkLabel(
         status_tab,
-        text=text,
+        text=status_today,
         font=en_font,
     )
 
@@ -942,7 +942,10 @@ def Show_FlashCards(Table_name):
                             en_text = widget.cget("text")
                         if info.get("column") == 2:
                             fr_text = widget.cget("text")
-                warning_app.warning_app1(window,en_text,fr_text,Table_name)
+                try:
+                    warning_app.edit_app(window,en_text,fr_text,Table_name)
+                except:
+                    messagebox.showwarning("هشدار","این بخش در اپدیت های بعدی رفع میشود") # TODO
 
             edit_btn = CTkButton(
                 FlashCards_tab,
