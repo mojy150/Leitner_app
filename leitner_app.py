@@ -2,6 +2,23 @@ import leitner
 from variable import *
 import warning_app
 
+                                                                                                    # functions
+def count_of_Table(Table_name):
+    cursor.execute(f"SELECT COUNT(*) FROM {Table_name}")
+    count = cursor.fetchone()[0]
+    return count
+
+def max_of_page(Table_name):
+    count = count_of_Table(Table_name)
+    # try:
+    #     max_count = count/50
+    # except:
+    #     max_count = 1 + count//50
+    if count%50==0:
+        max_count = count/50
+    else:
+        max_count = 1 + count//50
+    return max_count
                                                                                                     # wight of row & column for main
 window.grid_columnconfigure([0],weight=0)
 window.grid_columnconfigure([1],weight=4)
@@ -877,6 +894,21 @@ FlashCards_tab.grid_columnconfigure([0,1,2,3,4], weight=1)
 FlashCards_labels = []
 
 def Show_FlashCards(Table_name):
+    global FlashCards_page
+    try:
+        page_number_temp = int(page_number_input.get())
+        if page_number_temp >= 1 and page_number_temp <= max_of_page(Table_name):
+            FlashCards_page = page_number_temp
+        elif page_number_temp > max_of_page(Table_name):
+            FlashCards_page = max_of_page(Table_name)
+        else:
+            FlashCards_page = 1
+        page_number_input.delete(0,"end")
+        page_number_input.insert(0,FlashCards_page)
+    except:
+        messagebox.showwarning("هشدار","لطفا عدد صحیح وارد کنید")
+        page_number_input.delete(0,"end")
+        page_number_input.insert(0,FlashCards_page)
 
     cursor.execute(f"SELECT * FROM {Table_name} LIMIT 50 OFFSET ?",
                    (50*(FlashCards_page-1), # TODO
@@ -974,25 +1006,24 @@ left_side_btn = CTkButton(Right_Left_frame,
                         command=left_page_func)
 left_side_btn.grid(column=0,row=0,padx=10,pady=10)
 
+def update_page(event):
+    Show_FlashCards_btn.invoke()
+
 page_number_input = CTkEntry(Right_Left_frame,                          
                       placeholder_text="page number: ",
                       font=en_font,
                       justify="center",)
 
 page_number_input.grid(column=1,row=0,sticky="ns",padx=10,pady=10)
+page_number_input.bind("<Return>", update_page)
 
 page_number_input.insert(0,FlashCards_page)
 
 def right_page_func():
     global FlashCards_page
-    cursor.execute(f"SELECT COUNT(*) FROM {Table_name}")
-    count = cursor.fetchone()[0]
-    try:
-        max_count = count/50
-    except:
-        max_count = 1 + count//50
+    max_page = max_of_page(Table_name)
 
-    if FlashCards_page<max_count:
+    if FlashCards_page<max_page:
         FlashCards_page+=1
         page_number_input.delete(0, "end")
         page_number_input.insert(0,FlashCards_page)
