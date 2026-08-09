@@ -958,6 +958,7 @@ def Show_FlashCards(Table_name):
             )
 
             edit_btn.grid(row=row, column=6,)
+            row_labels.append(edit_btn)
 
             delete_btn = CTkButton(
                 FlashCards_tab,
@@ -969,7 +970,13 @@ def Show_FlashCards(Table_name):
             )
 
             delete_btn.grid(row=row, column=7,)
+            row_labels.append(delete_btn)
             FlashCards_labels.append(row_labels)
+
+        else:
+            # ردیف قبلاً ساخته شده ولی ممکن است مخفی شده باشد
+            for widget in FlashCards_labels[row]:
+                widget.grid()
 
         # فقط متن لیبل‌ها را عوض کن
         for col in range(5):
