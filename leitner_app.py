@@ -3,18 +3,21 @@ from variable import *
 import warning_app
 
                                                                                                     # functions
-def count_of_Table(Table_name):
-    cursor.execute(f"SELECT COUNT(*) FROM {Table_name}")
-    count = cursor.fetchone()[0]
+def count_of_Table(Table_name,search_day_temp):
+    if search_day_temp != None:
+        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE day = ?",
+                        (
+                        search_day_temp,
+                        ))
+        count = cursor.fetchone()[0]
+    else:
+        cursor.execute(f"SELECT COUNT(*) FROM {Table_name}")
+        count = cursor.fetchone()[0]
     return count
 
-def max_of_page(Table_name):
-    count = count_of_Table(Table_name)
-    # try:
-    #     max_count = count/50
-    # except:
-    #     max_count = 1 + count//50
-    if count%50==0:
+def max_of_page(Table_name,search_day_temp):
+    count = count_of_Table(Table_name,search_day_temp)
+    if count%50==0 and count!=0:
         max_count = count/50
     else:
         max_count = 1 + count//50
@@ -898,14 +901,14 @@ Show_status_btn.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
 
                                                                                                     # Tab FlashCards
 my_tabs.tab("FlashCards").grid_columnconfigure(0, weight=1)
-my_tabs.tab("FlashCards").grid_rowconfigure(0, weight=0)
-my_tabs.tab("FlashCards").grid_rowconfigure(1, weight=8)
-my_tabs.tab("FlashCards").grid_rowconfigure(2, weight=0)
+my_tabs.tab("FlashCards").grid_rowconfigure([0,1], weight=0)
+my_tabs.tab("FlashCards").grid_rowconfigure(2, weight=8)
+my_tabs.tab("FlashCards").grid_rowconfigure(3, weight=0)
 
 FlashCards_tab = CTkScrollableFrame(my_tabs.tab("FlashCards"),
                                     border_width=2,
                                     )
-FlashCards_tab.grid(row=1, column=0,sticky='nsew')
+FlashCards_tab.grid(row=2, column=0,sticky='nsew')
 
 FlashCards_tab.grid_columnconfigure([0,1,2,3,4], weight=1)
 
@@ -913,12 +916,21 @@ FlashCards_labels = []
 
 def Show_FlashCards(Table_name):
     global FlashCards_page
+    global search_day_temp
+    search_day_temp = None
     try:
         page_number_temp = int(page_number_input.get())
-        if page_number_temp >= 1 and page_number_temp <= max_of_page(Table_name):
+        try:
+            if search_day_input.get() != "":
+                search_day_temp = int(search_day_input.get())
+        except:
+            messagebox.showwarning("هشدار","لطفا عدد صحیح وارد کنید")
+            search_day_input.delete(0,"end")
+
+        if page_number_temp >= 1 and page_number_temp <= max_of_page(Table_name,search_day_temp):
             FlashCards_page = page_number_temp
-        elif page_number_temp > max_of_page(Table_name):
-            FlashCards_page = max_of_page(Table_name)
+        elif page_number_temp > max_of_page(Table_name,search_day_temp):
+            FlashCards_page = max_of_page(Table_name,search_day_temp)
         else:
             FlashCards_page = 1
         page_number_input.delete(0,"end")
@@ -928,10 +940,17 @@ def Show_FlashCards(Table_name):
         page_number_input.delete(0,"end")
         page_number_input.insert(0,FlashCards_page)
 
-    cursor.execute(f"SELECT * FROM {Table_name} LIMIT 50 OFFSET ?",
-                   (50*(FlashCards_page-1), # TODO
-                    ))
-    FlashCards_data = cursor.fetchall()
+    if search_day_temp != None:
+        cursor.execute(f"SELECT * FROM {Table_name} WHERE Day = ? LIMIT 50 OFFSET ?",
+                        (search_day_temp,
+                        50*(FlashCards_page-1), # TODO
+                        ))
+        FlashCards_data = cursor.fetchall()
+    else:
+        cursor.execute(f"SELECT * FROM {Table_name} LIMIT 50 OFFSET ?",
+                        (50*(FlashCards_page-1), # TODO
+                        ))
+        FlashCards_data = cursor.fetchall()
 
     for row, data in enumerate(FlashCards_data):
 
@@ -951,6 +970,7 @@ def Show_FlashCards(Table_name):
                 lbl.grid(row=row, column=col, sticky="nw", padx=10, pady=2)
                 row_labels.append(lbl)
 
+                                                                                                    # Edit FlashCards
             def edit_Flashcard(row):
                 for widget in FlashCards_tab.winfo_children():
                     info = widget.grid_info()
@@ -977,6 +997,7 @@ def Show_FlashCards(Table_name):
             edit_btn.grid(row=row, column=6,)
             row_labels.append(edit_btn)
 
+                                                                                                    # Delete FlashCard
             def delete_Flashcard(row):
                 for widget in FlashCards_tab.winfo_children():
                     info = widget.grid_info()
@@ -1013,7 +1034,7 @@ def Show_FlashCards(Table_name):
             FlashCards_labels[row][col].configure(text=str(data[col]))
 
     # اگر این بار تعداد رکوردها کمتر شده بود، لیبل‌های اضافی را مخفی کن
-    for row in range(len(FlashCards_data), len(FlashCards_labels)): # TODO برای زمانی که لیبل نداریم ایکون ها رو هم پاک کن
+    for row in range(len(FlashCards_data), len(FlashCards_labels)):
         for lbl in FlashCards_labels[row]:
             lbl.grid_remove()
 
@@ -1027,9 +1048,26 @@ Show_FlashCards_btn = CTkButton(
 
 Show_FlashCards_btn.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
 
+                                                                                                    # Search FlashCard
+def update_page(event):
+    Show_FlashCards_btn.invoke()
+
+search_frame = CTkFrame(my_tabs.tab("FlashCards"))
+search_frame.grid(column=0,row=1)
+
+search_frame.grid_columnconfigure([0,1,2], weight=1)
+search_frame.grid_rowconfigure(0, weight=1)
+
+search_day_input = CTkEntry(search_frame,
+                    placeholder_text="day number: ",
+                    font=en_font,
+                    justify="center",
+                    )
+search_day_input.grid(sticky='nsew',column=2,row=0, pady=5)
+search_day_input.bind("<Return>", update_page)
 
 Right_Left_frame = CTkFrame(my_tabs.tab("FlashCards"),height=0)
-Right_Left_frame.grid(column=0,row=2)
+Right_Left_frame.grid(column=0,row=3)
 
 def left_page_func():
     global FlashCards_page
@@ -1046,9 +1084,6 @@ left_side_btn = CTkButton(Right_Left_frame,
                         command=left_page_func)
 left_side_btn.grid(column=0,row=0,padx=10,pady=10)
 
-def update_page(event):
-    Show_FlashCards_btn.invoke()
-
 page_number_input = CTkEntry(Right_Left_frame,                          
                       placeholder_text="page number: ",
                       font=en_font,
@@ -1061,7 +1096,7 @@ page_number_input.insert(0,FlashCards_page)
 
 def right_page_func():
     global FlashCards_page
-    max_page = max_of_page(Table_name)
+    max_page = max_of_page(Table_name,search_day_temp)
 
     if FlashCards_page<max_page:
         FlashCards_page+=1

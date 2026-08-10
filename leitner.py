@@ -68,7 +68,7 @@ def edit_database(Table_name,line0,line1,line2,line3,line4): # edit batabase for
     conn.commit()
 
 def show(Table_name):
-    show_list = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    show_list = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] # TODO # list for count column days of FlashCards
     cursor.execute(f"SELECT day FROM {Table_name}")
     Id_data = cursor.fetchall()
 
