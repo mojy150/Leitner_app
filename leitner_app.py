@@ -60,24 +60,31 @@ settings_frame = CTkFrame(
 num_setting = 0
 def show_settings(event=None):
     global num_setting
+
     if num_setting % 2 == 0:
+
+        x = settings_btn.winfo_x() + settings_btn.winfo_width()
+
         settings_frame.place(
-            relx=0,
-            rely=0,
-            relwidth=0.24,
+            x=x,
+            y=0,
+            relwidth=0.17,
             relheight=1,
             anchor="nw"
         )
-        num_setting +=1
+
+        num_setting += 1
+
     else:
         settings_frame.place_forget()
-        num_setting +=1
+        num_setting += 1
         save_setting_func()
 
 settings_btn = CTkButton(
     window,
     text="Settings",
     font=en_font,
+    width=0,
     command=show_settings
 )
 settings_btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
@@ -107,9 +114,9 @@ theme_switch = CTkSwitch(settings_frame,
 theme_switch.grid(
     row=0,
     column=0,
-    padx=20,
-    pady=20,
-    sticky="e"
+    padx=10,
+    pady=10,
+    sticky="ew"
 )
                                                                                                     # setting read data
 def read_setting():
@@ -153,7 +160,7 @@ font_size_label = CTkLabel(settings_frame,
                            font=CTkFont(size=15)
                         #    font=en_font,      #TODO
                            )
-font_size_label.grid(row=1,column=0,padx=35,sticky="e")
+font_size_label.grid(row=1,column=0,padx=5,sticky="ew")
 
 def set_font_size(value):
     global font_size
@@ -168,14 +175,14 @@ font_size_slider = CTkSlider(settings_frame,
                       variable=IntVar(value=font_size),     
                       command=set_font_size,
                       number_of_steps=11,width=130)                      # به چند بخش تقسیم بشه
-font_size_slider.grid(row=2,column=0,padx=10,pady=10,sticky="e")
+font_size_slider.grid(row=2,column=0,padx=10,pady=10,sticky="ew")
                                                                                                     # setting flashcard font size
 flashcard_font_size_label = CTkLabel(settings_frame,
                            text = "flashcard font size",
                            font=CTkFont(size=18)
                         #    font=en_font,      #TODO
                            )
-flashcard_font_size_label.grid(row=3,column=0,padx=35,sticky="e")
+flashcard_font_size_label.grid(row=3,column=0,padx=5,sticky="ew")
 
 def set_font_size(value):
     global flashcard_font_size
@@ -191,15 +198,16 @@ flashcard_font_size_slider = CTkSlider(settings_frame,
                       command=set_font_size,
                       number_of_steps=13,
                       width=130)                      # به چند بخش تقسیم بشه
-flashcard_font_size_slider.grid(row=4,column=0,padx=10,pady=10,sticky="e")
+flashcard_font_size_slider.grid(row=4,column=0,padx=10,pady=10,sticky="ew")
 
 settings_save_btn = CTkButton(
     settings_frame,
     text="Save Setting",
     font=en_font,
+    height=50,
     command=save_setting_func,
 )
-settings_save_btn.grid(padx=10,pady=10,sticky="se")
+settings_save_btn.grid(padx=10,pady=10,sticky="sew")
 
                                                                                                     # tutorial
 cursor.execute("SELECT * FROM Tutorial")
@@ -401,6 +409,8 @@ Flash_card_label = CTkLabel(Leitner_frame,
                 text="start the Leitner to show the flash card!",
                 font=flashcard_fr_font,
                 border_color="black",
+                width=330,
+                wraplength=330,
                 border_width=2,
                 corner_radius=10)
 Flash_card_label.grid(column=0,row=1,sticky='nsew',padx=10,pady=10) # TODO
