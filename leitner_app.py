@@ -960,10 +960,9 @@ def Show_FlashCards(Table_name):
                             en_text = widget.cget("text")
                         if info.get("column") == 2:
                             fr_text = widget.cget("text")
-                try:
-                    warning_app.edit_app(window,en_text,fr_text,Table_name)
-                except:
-                    messagebox.showwarning("هشدار","این بخش در اپدیت های بعدی رفع میشود") # TODO
+
+                warning_app.edit_app(window,en_text,fr_text,Table_name)
+                
 
             edit_btn = CTkButton(
                 FlashCards_tab,
@@ -978,6 +977,18 @@ def Show_FlashCards(Table_name):
             edit_btn.grid(row=row, column=6,)
             row_labels.append(edit_btn)
 
+            def delete_Flashcard(row):
+                for widget in FlashCards_tab.winfo_children():
+                    info = widget.grid_info()
+
+                    if info.get("row") == row :
+                        if info.get("column") == 1:
+                            en_text = widget.cget("text")
+                        if info.get("column") == 2:
+                            fr_text = widget.cget("text")
+                            
+                warning_app.delete_app(window,en_text,fr_text,Table_name)
+
             delete_btn = CTkButton(
                 FlashCards_tab,
                 text="",
@@ -985,6 +996,7 @@ def Show_FlashCards(Table_name):
                 image=delete_icon,
                 width=24,
                 height=24,
+                command=lambda r=row: delete_Flashcard(r),
             )
 
             delete_btn.grid(row=row, column=7,)
