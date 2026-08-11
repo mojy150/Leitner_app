@@ -38,6 +38,7 @@ flashcard_font_size = 18
 start_time = 0
 FlashCards_page = 1
 search_day_temp = None
+search_question_temp = ""
 
 edit_icon = CTkImage(
     Image.open("./media/icon-edit-48x48.png"),
