@@ -3,34 +3,69 @@ from variable import *
 import warning_app
 
                                                                                                     # functions
-def count_of_Table(Table_name,search_day_temp,search_question_temp):
-    if search_question_temp != "" and search_day_temp != None:
-        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE day = ? AND question = ?",
+def count_of_Table(Table_name,search_day_temp,search_question_temp,search_answer_temp):
+    if search_question_temp != "" and search_answer_temp != "" and search_day_temp != None:
+        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE day = ? AND question LIKE ? AND answer LIKE ?",
+                                (
+                                search_day_temp,
+                                search_question_temp,
+                                search_answer_temp,
+                                ))
+        count = cursor.fetchone()[0]
+
+    elif search_question_temp != "" and search_answer_temp != "":
+        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE question LIKE ? AND answer LIKE ?",
+                        (
+                        search_question_temp,
+                        search_answer_temp,
+                        ))
+        count = cursor.fetchone()[0]
+
+
+    elif search_question_temp != "" and search_day_temp != None:
+        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE day = ? AND question LIKE ?",
                                 (
                                 search_day_temp,
                                 search_question_temp,
                                 ))
         count = cursor.fetchone()[0]
 
+    elif search_answer_temp != "" and search_day_temp != None:
+        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE day = ? AND answer LIKE ?",
+                                (
+                                search_day_temp,
+                                search_answer_temp,
+                                ))
+        count = cursor.fetchone()[0]
+
     elif search_question_temp != "":
-        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE question = ?",
+        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE question LIKE ?",
                         (
-                        search_day_temp,
+                        search_question_temp,
                         ))
         count = cursor.fetchone()[0]
+
+    elif search_answer_temp != "":
+        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE answer LIKE ?",
+                        (
+                        search_answer_temp,
+                        ))
+        count = cursor.fetchone()[0]
+
     elif search_day_temp != None:
         cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE day = ?",
                         (
                         search_day_temp,
                         ))
         count = cursor.fetchone()[0]
+
     else:
         cursor.execute(f"SELECT COUNT(*) FROM {Table_name}")
         count = cursor.fetchone()[0]
     return count
 
-def max_of_page(Table_name,search_day_temp,search_question_temp):
-    count = count_of_Table(Table_name,search_day_temp,search_question_temp)
+def max_of_page(Table_name,search_day_temp,search_question_temp,search_answer_temp):
+    count = count_of_Table(Table_name,search_day_temp,search_question_temp,search_answer_temp)
     if count%50==0 and count!=0:
         max_count = count/50
     else:
@@ -932,12 +967,15 @@ def Show_FlashCards(Table_name):
     global FlashCards_page
     global search_day_temp
     global search_question_temp
+    global search_answer_input
     search_day_temp = None
     search_question_temp = ""
+    search_answer_temp = ""
 
     try:
         page_number_temp = int(page_number_input.get())
         search_question_temp = search_question_input.get().strip()
+        search_answer_temp = search_answer_input.get().strip()
         try:
             if search_day_input.get() != "":
                 search_day_temp = int(search_day_input.get())
@@ -945,10 +983,10 @@ def Show_FlashCards(Table_name):
             messagebox.showwarning("هشدار","لطفا عدد صحیح وارد کنید")
             search_day_input.delete(0,"end")
 
-        if page_number_temp >= 1 and page_number_temp <= max_of_page(Table_name,search_day_temp,search_question_temp):
+        if page_number_temp >= 1 and page_number_temp <= max_of_page(Table_name,search_day_temp,search_question_temp,search_answer_temp):
             FlashCards_page = page_number_temp
-        elif page_number_temp > max_of_page(Table_name,search_day_temp,search_question_temp):
-            FlashCards_page = max_of_page(Table_name,search_day_temp,search_question_temp)
+        elif page_number_temp > max_of_page(Table_name,search_day_temp,search_question_temp,search_answer_temp):
+            FlashCards_page = max_of_page(Table_name,search_day_temp,search_question_temp,search_answer_temp)
         else:
             FlashCards_page = 1
         page_number_input.delete(0,"end")
@@ -958,10 +996,38 @@ def Show_FlashCards(Table_name):
         page_number_input.delete(0,"end")
         page_number_input.insert(0,FlashCards_page)
 
-    if search_question_temp != "" and search_day_temp != None:
+    if search_question_temp != "" and search_day_temp != None and search_answer_temp != "":
+        cursor.execute(f"SELECT * FROM {Table_name} WHERE day = ? AND question LIKE ? AND answer LIKE ? LIMIT 50 OFFSET ?",
+                                (
+                                search_day_temp,
+                                "%"+search_question_temp+"%",
+                                "%"+search_answer_temp+"%",
+                                50*(FlashCards_page-1),
+                                ))
+        FlashCards_data = cursor.fetchall()
+
+    elif search_question_temp != "" and search_day_temp != None:
         cursor.execute(f"SELECT * FROM {Table_name} WHERE day = ? AND question LIKE ? LIMIT 50 OFFSET ?",
                                 (
                                 search_day_temp,
+                                "%"+search_question_temp+"%",
+                                50*(FlashCards_page-1),
+                                ))
+        FlashCards_data = cursor.fetchall()
+
+    elif search_answer_temp != "" and search_day_temp != None:
+        cursor.execute(f"SELECT * FROM {Table_name} WHERE day = ? AND answer LIKE ? LIMIT 50 OFFSET ?",
+                                (
+                                search_day_temp,
+                                "%"+search_answer_temp+"%",
+                                50*(FlashCards_page-1),
+                                ))
+        FlashCards_data = cursor.fetchall()
+
+    elif search_question_temp != "" and search_answer_temp != "":
+        cursor.execute(f"SELECT * FROM {Table_name} WHERE answer LIKE ? AND question LIKE ? LIMIT 50 OFFSET ?",
+                                (
+                                "%"+search_answer_temp+"%",
                                 "%"+search_question_temp+"%",
                                 50*(FlashCards_page-1),
                                 ))
@@ -971,6 +1037,14 @@ def Show_FlashCards(Table_name):
         cursor.execute(f"SELECT * FROM {Table_name} WHERE question LIKE ? LIMIT 50 OFFSET ?",
                         (
                         "%"+search_question_temp+"%",
+                        50*(FlashCards_page-1),
+                        ))
+        FlashCards_data = cursor.fetchall()
+
+    elif search_answer_temp != "":
+        cursor.execute(f"SELECT * FROM {Table_name} WHERE answer LIKE ? LIMIT 50 OFFSET ?",
+                        (
+                        "%"+search_answer_temp+"%",
                         50*(FlashCards_page-1),
                         ))
         FlashCards_data = cursor.fetchall()
@@ -1089,18 +1163,10 @@ def update_page(event):
     Show_FlashCards_btn.invoke()
 
 search_frame = CTkFrame(my_tabs.tab("FlashCards"))
-search_frame.grid(column=0,row=1)
+search_frame.grid(column=0,row=1,sticky='nsew')
 
 search_frame.grid_columnconfigure([0,1,2], weight=1)
 search_frame.grid_rowconfigure(0, weight=1)
-
-search_day_input = CTkEntry(search_frame,
-                    placeholder_text="day number: ",
-                    font=en_font,
-                    justify="center",
-                    )
-search_day_input.grid(sticky='nsew',column=2,row=0, pady=5)
-search_day_input.bind("<Return>", update_page)
 
 search_question_input = CTkEntry(search_frame,
                     placeholder_text="your question: ",
@@ -1109,6 +1175,24 @@ search_question_input = CTkEntry(search_frame,
                     )
 search_question_input.grid(sticky='nsew',column=0,row=0, pady=5)
 search_question_input.bind("<Return>", update_page)
+search_question_input.bind("<FocusIn>", focus_en)
+
+search_answer_input = CTkEntry(search_frame,
+                    placeholder_text="your answer: ",
+                    font=fr_font,
+                    justify="center",
+                    )
+search_answer_input.grid(sticky='nsew',column=1,row=0, pady=5)
+search_answer_input.bind("<Return>", update_page)
+search_answer_input.bind("<FocusIn>", focus_fr)
+
+search_day_input = CTkEntry(search_frame,
+                    placeholder_text="day number: ",
+                    font=en_font,
+                    justify="center",
+                    )
+search_day_input.grid(sticky='nsew',column=2,row=0, pady=5)
+search_day_input.bind("<Return>", update_page)
                                                                                                     # Right_Left_frame FlashCards
 Right_Left_frame = CTkFrame(my_tabs.tab("FlashCards"),height=0)
 Right_Left_frame.grid(column=0,row=3)
@@ -1139,7 +1223,7 @@ page_number_input.insert(0,FlashCards_page)
 
 def right_page_func():
     global FlashCards_page
-    max_page = max_of_page(Table_name,search_day_temp,search_question_temp)
+    max_page = max_of_page(Table_name,search_day_temp,search_question_temp,search_answer_temp)
 
     if FlashCards_page<max_page:
         FlashCards_page+=1
