@@ -60,7 +60,7 @@ def show_settings(event=None):
             x=x,
             y=0,
             relwidth=0.17,
-            relheight=1,
+            relheight=0.8,
             anchor="nw"
         )
 
@@ -252,10 +252,10 @@ def show_About_us(event=None):
 
         About_us_frame.place(
             x=x,
-            y=0,
+            rely=1.0,
             relwidth=0.17,
-            relheight=1,
-            anchor="nw"
+            relheight=0.5,
+            anchor="sw"
         )
 
         num_about_us += 1
@@ -275,10 +275,11 @@ About_us_btn = CTkButton(
 About_us_btn.grid(column=0,row=1,sticky='nsew',padx=10,pady=10)
 # window.bind("<Escape>", show_About_us)
 
-                                                                                                    # setting column & row
+                                                                                                    # About_us column & row
 About_us_frame.grid_columnconfigure(0, weight=1)
+About_us_frame.grid_rowconfigure([0,5], weight=1)
 
-                                                                                                    # setting Financial_support button
+                                                                                                    # About_us Financial_support button
 def Financial_support_func():
     webbrowser.open("https://daramet.com/mojy150")
 
@@ -290,6 +291,13 @@ Financial_support_btn = CTkButton(
     command=Financial_support_func
 )
 Financial_support_btn.grid(column=0,padx=10,pady=10,sticky="sew")
+
+
+                                                                                                    # About_us Version Label
+version_lbl = CTkLabel(About_us_frame,
+                       text="Version 2.4.0",
+                       )
+version_lbl.grid(column=0,padx=10,pady=10,sticky="sew")
 
                                                                                                     # tutorial
 cursor.execute("SELECT * FROM Tutorial")
