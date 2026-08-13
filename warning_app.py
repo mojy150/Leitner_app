@@ -1,4 +1,5 @@
 from variable import *
+from functions import *
 
 
 def edit_app(parent,en_text,fr_text,Table_name):
@@ -27,9 +28,6 @@ def edit_app(parent,en_text,fr_text,Table_name):
 
     en_input.insert(0, en_text)
     en_input.configure(state="disabled")
-
-    def focus_fr(event):
-        ctypes.windll.user32.ActivateKeyboardLayout(0x04290429, 0)
 
     def send_to_add_word_btn(event):
         add_word_btn.invoke()
@@ -111,19 +109,11 @@ def delete_app(parent,en_text,fr_text,Table_name):
     en_input.insert(0, en_text)
     en_input.configure(state="disabled")
 
-    def focus_fr(event):
-        ctypes.windll.user32.ActivateKeyboardLayout(0x04290429, 0)
-
-    # def send_to_add_word_btn(event):
-        # add_word_btn.invoke()
-
     fr_input = CTkEntry(delete_app,                          
                         placeholder_text=" :فارسی",
                         font=fr_font,
                         justify="center",)
     fr_input.grid(sticky='nsew',column=0,row=1,pady=10)
-    fr_input.bind("<FocusIn>", focus_fr)
-    # fr_input.bind("<Return>", send_to_add_word_btn)
 
     fr_input.insert(0, fr_text)
     fr_input.configure(state="disabled")

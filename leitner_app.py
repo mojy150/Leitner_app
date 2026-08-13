@@ -1,76 +1,8 @@
 import leitner
 from variable import *
 import warning_app
+from functions import *
 
-                                                                                                    # functions
-def count_of_Table(Table_name,search_day_temp,search_question_temp,search_answer_temp):
-    if search_question_temp != "" and search_answer_temp != "" and search_day_temp != None:
-        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE day = ? AND question LIKE ? AND answer LIKE ?",
-                                (
-                                search_day_temp,
-                                search_question_temp,
-                                search_answer_temp,
-                                ))
-        count = cursor.fetchone()[0]
-
-    elif search_question_temp != "" and search_answer_temp != "":
-        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE question LIKE ? AND answer LIKE ?",
-                        (
-                        search_question_temp,
-                        search_answer_temp,
-                        ))
-        count = cursor.fetchone()[0]
-
-
-    elif search_question_temp != "" and search_day_temp != None:
-        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE day = ? AND question LIKE ?",
-                                (
-                                search_day_temp,
-                                search_question_temp,
-                                ))
-        count = cursor.fetchone()[0]
-
-    elif search_answer_temp != "" and search_day_temp != None:
-        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE day = ? AND answer LIKE ?",
-                                (
-                                search_day_temp,
-                                search_answer_temp,
-                                ))
-        count = cursor.fetchone()[0]
-
-    elif search_question_temp != "":
-        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE question LIKE ?",
-                        (
-                        search_question_temp,
-                        ))
-        count = cursor.fetchone()[0]
-
-    elif search_answer_temp != "":
-        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE answer LIKE ?",
-                        (
-                        search_answer_temp,
-                        ))
-        count = cursor.fetchone()[0]
-
-    elif search_day_temp != None:
-        cursor.execute(f"SELECT COUNT(*) FROM {Table_name} WHERE day = ?",
-                        (
-                        search_day_temp,
-                        ))
-        count = cursor.fetchone()[0]
-
-    else:
-        cursor.execute(f"SELECT COUNT(*) FROM {Table_name}")
-        count = cursor.fetchone()[0]
-    return count
-
-def max_of_page(Table_name,search_day_temp,search_question_temp,search_answer_temp):
-    count = count_of_Table(Table_name,search_day_temp,search_question_temp,search_answer_temp)
-    if count%50==0 and count!=0:
-        max_count = count/50
-    else:
-        max_count = 1 + count//50
-    return max_count
                                                                                                     # wight of row & column for main
 window.grid_columnconfigure([0],weight=0)
 window.grid_columnconfigure([1],weight=4)
@@ -642,14 +574,6 @@ new_word_babel = CTkLabel(input_new_word,
                     font=en_font)
 new_word_babel.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
 
-def turn_on_numlock(event=None):
-    VK_NUMLOCK = 0x90
-
-                        # وضعیت فعلی Num Lock
-    if not ctypes.windll.user32.GetKeyState(VK_NUMLOCK) & 1:
-        ctypes.windll.user32.keybd_event(VK_NUMLOCK, 0, 0, 0)
-        ctypes.windll.user32.keybd_event(VK_NUMLOCK, 0, 2, 0)
-
 def send_number_new_word_btn(event):
     number_new_word_btn.invoke()
 
@@ -734,12 +658,6 @@ tab.grid_rowconfigure(3, weight=8)
 tab.grid_rowconfigure([4,5,6], weight=1)
 
 
-def focus_en(event):
-    ctypes.windll.user32.ActivateKeyboardLayout(0x04090409, 0)
-
-def focus_next(event):
-    event.widget.tk_focusNext().focus()
-
 en_input = CTkEntry(my_tabs.tab("Input Word"),                          
                       placeholder_text="english: ",
                       font=en_font,
@@ -747,9 +665,6 @@ en_input = CTkEntry(my_tabs.tab("Input Word"),
 en_input.grid(sticky='nsew',column=0,row=0, pady=10)
 en_input.bind("<FocusIn>", focus_en)
 en_input.bind("<Return>", focus_next)
-
-def focus_fr(event):
-    ctypes.windll.user32.ActivateKeyboardLayout(0x04290429, 0)
 
 def send_to_add_word_btn(event):
     add_word_btn.invoke()
@@ -809,8 +724,6 @@ add_word_btn = CTkButton(my_tabs.tab("Input Word"),
                          command=add_the_word)
 add_word_btn.grid(column=0,row=2,sticky='nsew',padx=10,pady=10)
 
-# def focus_next(event):
-#     event.widget.tk_focusNext().focus()
 
 Question_column_number_input = CTkEntry(my_tabs.tab("Input Word"),                          
                       placeholder_text="Question column number(2):",
@@ -969,6 +882,7 @@ def Show_FlashCards(Table_name):
     global search_day_temp
     global search_question_temp
     global search_answer_input
+    global max_count
     search_day_temp = None
     search_question_temp = ""
     search_answer_temp = ""
@@ -984,10 +898,12 @@ def Show_FlashCards(Table_name):
             messagebox.showwarning("هشدار","لطفا عدد صحیح وارد کنید")
             search_day_input.delete(0,"end")
 
-        if page_number_temp >= 1 and page_number_temp <= max_of_page(Table_name,search_day_temp,search_question_temp,search_answer_temp):
+        max_count = max_of_page(Table_name,search_day_temp,search_question_temp,search_answer_temp)
+
+        if page_number_temp >= 1 and page_number_temp <= max_count:
             FlashCards_page = page_number_temp
-        elif page_number_temp > max_of_page(Table_name,search_day_temp,search_question_temp,search_answer_temp):
-            FlashCards_page = max_of_page(Table_name,search_day_temp,search_question_temp,search_answer_temp)
+        elif page_number_temp > max_count:
+            FlashCards_page = max_count
         else:
             FlashCards_page = 1
         page_number_input.delete(0,"end")
@@ -1194,6 +1110,7 @@ search_day_input = CTkEntry(search_frame,
                     )
 search_day_input.grid(sticky='nsew',column=2,row=0, pady=5)
 search_day_input.bind("<Return>", update_page)
+search_day_input.bind("<FocusIn>", turn_on_numlock)
                                                                                                     # Right_Left_frame FlashCards
 Right_Left_frame = CTkFrame(my_tabs.tab("FlashCards"),height=0)
 Right_Left_frame.grid(column=0,row=3)
@@ -1224,9 +1141,11 @@ page_number_input.insert(0,FlashCards_page)
 
 def right_page_func():
     global FlashCards_page
-    max_page = max_of_page(Table_name,search_day_temp,search_question_temp,search_answer_temp)
+    global max_count
+    # max_page = max_of_page(Table_name,search_day_temp,search_question_temp,search_answer_temp)
 
-    if FlashCards_page<max_page:
+    # if FlashCards_page<max_page:
+    if FlashCards_page<max_count:
         FlashCards_page+=1
         page_number_input.delete(0, "end")
         page_number_input.insert(0,FlashCards_page)
