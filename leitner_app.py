@@ -93,7 +93,7 @@ theme_switch = CTkSwitch(settings_frame,
                         font=en_font,
                         onvalue="dark",
                         offvalue="light",
-                        variable=StringVar(value="on"),
+                        variable=StringVar(value="dark"),
                         command=theme_func)
 theme_switch.grid(
     row=0,
@@ -102,6 +102,32 @@ theme_switch.grid(
     pady=10,
     sticky="ew"
 )
+
+                                                                                                    # setting right frame on&off (log frame)
+def hidden_right_frame_func():
+    global Theme_text
+    if hidden_right_frame.get() == "log on":
+        myframe2.grid(column=2,row=0,sticky='nsew',padx=10,pady=10)
+        hidden_right_frame.configure(text="log on")
+    else:
+        myframe2.grid_remove()
+        hidden_right_frame.configure(text="log off")
+
+hidden_right_frame = CTkSwitch(settings_frame,
+                        text="log on",
+                        font=en_font,
+                        onvalue="log on",
+                        offvalue="log off",
+                        variable=StringVar(value="log on"),
+                        command=hidden_right_frame_func)
+hidden_right_frame.grid(
+    row=5,
+    column=0,
+    padx=10,
+    pady=10,
+    sticky="ew"
+)
+
                                                                                                     # setting read data
 def read_setting():
     global font_size
@@ -112,14 +138,10 @@ def read_setting():
         if row[0] == "theme":
             if row[1] == "dark":
                 theme_switch.select()
-                set_appearance_mode("dark")
-                theme_switch.configure(text="dark mode")
-                settings_frame.configure(fg_color="#2B2B2B")
+                theme_func()
             else:
                 theme_switch.deselect()
-                set_appearance_mode("light")
-                theme_switch.configure(text="light mode")
-                settings_frame.configure(fg_color="#F2F2F2")
+                theme_func()
         elif row[0] == "font_size":
             font_size = int(row[1])
             en_font.configure(size=font_size)
@@ -128,6 +150,13 @@ def read_setting():
             flashcard_font_size = int(row[1])
             flashcard_en_font.configure(size=flashcard_font_size)
             flashcard_fr_font.configure(size=flashcard_font_size)
+        elif row[0] == "log on_off":
+            if row[1] == "log on":
+                hidden_right_frame.select()
+                hidden_right_frame_func()
+            else:
+                hidden_right_frame.deselect()
+                hidden_right_frame_func()
 
 read_setting()
                                                                                                     # setting save data
@@ -136,6 +165,8 @@ def save_setting_func():
     cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(theme_switch.get(),"theme"))
     cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(font_size,"font_size"))
     cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(flashcard_font_size,"font_size_flashcard"))
+    cursor.execute(f"UPDATE Setting SET Data = ? WHERE Title = ?",(hidden_right_frame.get(),"log on_off"))
+
     conn.commit()
 
                                                                                                     # setting font size
@@ -184,6 +215,7 @@ flashcard_font_size_slider = CTkSlider(settings_frame,
                       width=130)                      # به چند بخش تقسیم بشه
 flashcard_font_size_slider.grid(row=4,column=0,padx=10,pady=10,sticky="ew")
 
+                                                                                                    # setting settings_save button
 settings_save_btn = CTkButton(
     settings_frame,
     text="Save Setting",
