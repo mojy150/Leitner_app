@@ -31,6 +31,7 @@ fr_question = ""
 Answer = "s"
 sure = "null"
 questionToday_list = list()
+temp_list = questionToday_list.copy()
 generator = None
 number_question = 0
 font_size = 15

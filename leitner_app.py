@@ -338,6 +338,7 @@ def leitner_func(): # question words
     global Answer
     global questionToday_list
     global list_another
+    global temp_list
     temp_list = questionToday_list.copy()
     for item in temp_list:
         if item[4] == 'on':
@@ -543,7 +544,6 @@ def check_btn_func():
         try:
             s = next(generator)
         except:
-            print("im quit!")
             Exit_Leitner_btn.invoke()
     else:
         messagebox.showwarning("هشدار","لطفا یک دکمه را انتخاب کنید")
@@ -559,6 +559,7 @@ def Exit_Leitner():
     global enable_click
     global start_time
     global Answer
+    global temp_list
     Answer = "s"
     Run_Leitner_btn.configure(state="normal")
     Exit_Leitner_btn.configure(state="disabled")
@@ -572,7 +573,7 @@ def Exit_Leitner():
     number_new_word_btn.configure(state="normal")
     check_btn.configure(state="disabled")
     
-    if len(questionToday_list) !=0:
+    if len(temp_list) !=0:
         cursor.execute("""
             SELECT * FROM Time
             ORDER BY id DESC
