@@ -9,7 +9,7 @@ window.grid_columnconfigure([1],weight=4)
 window.grid_columnconfigure([2],weight=2)
 
 window.grid_rowconfigure([0],weight=1)
-                                                                                                    # create left tab
+                                                                                                    # create center tab
 my_tabs = CTkTabview(window,)                                   
 my_tabs.add("Leitner")                                 
 my_tabs.add("Input Word")
@@ -32,6 +32,13 @@ myframe2 = CTkScrollableFrame(window)
 myframe2.grid(column=2,row=0,sticky='nsew',padx=10,pady=10)
 
 myframe2.grid_columnconfigure(0, weight=1)
+
+                                                                                                    # create right frame
+myframe1 = CTkFrame(window)
+myframe1.grid(column=0,row=0,sticky='nsew',)
+
+myframe1.grid_rowconfigure(0, weight=8)
+myframe1.grid_rowconfigure(1, weight=1)
 
                                                                                                     # setting
 settings_frame = CTkFrame(
@@ -65,14 +72,17 @@ def show_settings(event=None):
         save_setting_func()
 
 settings_btn = CTkButton(
-    window,
+    myframe1,
     text="Settings",
     font=en_font,
     width=0,
     command=show_settings
 )
 settings_btn.grid(column=0,row=0,sticky='nsew',padx=10,pady=10)
-window.bind("<Escape>", show_settings)
+myframe1.bind("<Escape>", show_settings)
+
+                                                                                                    # setting column & row
+settings_frame.grid_columnconfigure(0, weight=1)                        
 
                                                                                                     # setting Theme
 def theme_func():
@@ -86,7 +96,6 @@ def theme_func():
         theme_switch.configure(text="light mode")
         settings_frame.configure(fg_color="#F2F2F2")
 
-settings_frame.grid_columnconfigure(0, weight=1)
 
 theme_switch = CTkSwitch(settings_frame,
                         text="dark mode",
@@ -223,7 +232,64 @@ settings_save_btn = CTkButton(
     height=50,
     command=save_setting_func,
 )
-settings_save_btn.grid(padx=10,pady=10,sticky="sew")
+settings_save_btn.grid(column=0,padx=10,pady=10,sticky="sew")
+
+                                                                                                    # About Us
+About_us_frame = CTkFrame(
+    window,
+    corner_radius=15,
+    border_width=2,
+    fg_color="#2B2B2B"
+)
+
+num_about_us = 0
+def show_About_us(event=None):
+    global num_about_us
+
+    if num_about_us % 2 == 0:
+
+        x = About_us_btn.winfo_x() + About_us_btn.winfo_width()
+
+        About_us_frame.place(
+            x=x,
+            y=0,
+            relwidth=0.17,
+            relheight=1,
+            anchor="nw"
+        )
+
+        num_about_us += 1
+
+    else:
+        About_us_frame.place_forget()
+        num_about_us += 1
+        # save_setting_func()
+
+About_us_btn = CTkButton(
+    myframe1,
+    text="About_us",
+    font=en_font,
+    width=0,
+    command=show_About_us
+)
+About_us_btn.grid(column=0,row=1,sticky='nsew',padx=10,pady=10)
+# window.bind("<Escape>", show_About_us)
+
+                                                                                                    # setting column & row
+About_us_frame.grid_columnconfigure(0, weight=1)
+
+                                                                                                    # setting Financial_support button
+def Financial_support_func():
+    webbrowser.open("https://daramet.com/mojy150")
+
+Financial_support_btn = CTkButton(
+    About_us_frame,
+    text="Financial support",
+    font=en_font,
+    height=50,
+    command=Financial_support_func
+)
+Financial_support_btn.grid(column=0,padx=10,pady=10,sticky="sew")
 
                                                                                                     # tutorial
 cursor.execute("SELECT * FROM Tutorial")

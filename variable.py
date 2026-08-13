@@ -9,6 +9,7 @@ from PIL import Image
 import time
 import csv
 from random import choice
+import webbrowser
 
                                                                                                     # main
 window = CTk()
