@@ -321,7 +321,7 @@ def Run_tutorial(event=None):
     i = 1
 
     def left_side_func():
-        global i
+        nonlocal i
         if i>1:
             i-=1
             tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.webp"),size=(960,540)))
@@ -340,7 +340,7 @@ def Run_tutorial(event=None):
 
 
     def right_side_func():
-        global i
+        nonlocal i
         if i<8:
             i+=1
             tutorial_label.configure(image=CTkImage(Image.open(f"./media/{i}.webp"),size=(960,540)))
