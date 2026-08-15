@@ -43,6 +43,7 @@ search_day_temp = None
 search_question_temp = ""
 search_answer_temp = ""
 max_count = 0
+version_number = "Version 2.4.2"
 
 edit_icon = CTkImage(
     Image.open("./media/icon-edit-48x48.png"),

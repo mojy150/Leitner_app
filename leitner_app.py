@@ -292,10 +292,35 @@ Financial_support_btn = CTkButton(
 )
 Financial_support_btn.grid(column=0,padx=10,pady=10,sticky="sew")
 
+                                                                                                    # About_us Contact_us button
+def Contact_us_func():
+    webbrowser.open("https://github.com/mojy150")
+
+Contact_us_btn = CTkButton(
+    About_us_frame,
+    text="Contact us",
+    font=en_font,
+    height=50,
+    command=Contact_us_func
+)
+Contact_us_btn.grid(column=0,padx=10,pady=10,sticky="sew")
+
+                                                                                                    # About_us Feedback button
+def Feedback_func():
+    webbrowser.open("https://github.com/mojy150/Leitner_app/issues")
+
+Feedback_btn = CTkButton(
+    About_us_frame,
+    text="Feedback",
+    font=en_font,
+    height=50,
+    command=Feedback_func
+)
+Feedback_btn.grid(column=0,padx=10,pady=10,sticky="sew")
 
                                                                                                     # About_us Version Label
 version_lbl = CTkLabel(About_us_frame,
-                       text="Version 2.4.0",
+                       text=version_number,
                        )
 version_lbl.grid(column=0,padx=10,pady=10,sticky="sew")
 
