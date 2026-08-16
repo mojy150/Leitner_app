@@ -705,6 +705,12 @@ Exit_Leitner_btn = CTkButton(Leitner_frame,
 Exit_Leitner_btn.grid(column=0,row=5,sticky='nsew',padx=10,pady=10)
 
                                                                                                     # new word
+def hidden_new_word_frame():
+    cursor.execute(f"SELECT * FROM {Table_name} WHERE day = 0")
+    Day_Zero_data = cursor.fetchall()
+
+    if len(Day_Zero_data) == 0:
+        input_new_word.grid_remove()
 
 input_new_word.grid_columnconfigure(0, weight=1)
 
@@ -754,14 +760,7 @@ def get_number_new_word():
         selected_new_word.sort(key=lambda x: int(x[0]))
 
         for temp_list in selected_new_word:
-            cursor.execute(f"UPDATE {Table_name} SET question=?,answer=?,day=?,on_off=? WHERE id = ?",
-                           (temp_list[1],
-                            temp_list[2],
-                            temp_list[3],
-                            temp_list[4],
-                            temp_list[0])
-                            )
-            conn.commit()
+            leitner.edit_database(Table_name,temp_list[0],temp_list[1],temp_list[2],temp_list[3],temp_list[4])
 
         row = myframe2.grid_size()[1]
         number_new_word_lbl = CTkLabel(myframe2,
@@ -776,6 +775,7 @@ def get_number_new_word():
 
         myframe2.update_idletasks()
         myframe2._parent_canvas.yview_moveto(1.0)
+        hidden_new_word_frame()
         
 
     except:
@@ -795,6 +795,7 @@ number_new_word_btn = CTkButton(input_new_word,
                          command=get_number_new_word)
 number_new_word_btn.grid(column=0,row=2,sticky='nsew',padx=10,pady=10)
 
+hidden_new_word_frame()
                                                                                                     # tab Input Word
 tab = my_tabs.tab("Input Word")
 
