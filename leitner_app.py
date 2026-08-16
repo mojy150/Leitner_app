@@ -711,6 +711,8 @@ def hidden_new_word_frame():
 
     if len(Day_Zero_data) == 0:
         input_new_word.grid_remove()
+    else:
+        input_new_word.grid(column=1,row=0,sticky='nsew',padx=10,pady=10)
 
 input_new_word.grid_columnconfigure(0, weight=1)
 
@@ -898,6 +900,7 @@ Answer_column_number_input.bind("<Return>", send_to_add_file_btn)
 
 def add_file_to_database():
         global new_word
+        global Table_name
         if Question_column_number_input.get().strip() != "" and Answer_column_number_input.get().strip() != "":
             Question_column_number= Question_column_number_input.get().strip()
             Answer_column_number= Answer_column_number_input.get().strip()
@@ -907,7 +910,7 @@ def add_file_to_database():
                                                 )
             if file_csv != "":
                 try:
-                    Table_name = "FlashCards" # TODO
+                    # Table_name = "FlashCards" # TODO
                     # cursor.execute(f"""CREATE TABLE IF NOT EXISTS {Table_name}(
                     # Title TEXT,
                     # Data TEXT
@@ -917,27 +920,26 @@ def add_file_to_database():
                         reader = csv.reader(file)
                         try:
                             for row in reader:
-                                                                                                                                      # TODO 👇  👇
                                 row = [leitner.last_id(Table_name) +1,
                                        row[int(Question_column_number)-1],
                                        row[int(Answer_column_number)-1],
-                                       row[3],
-                                       row[4]] 
+                                       row[3], # TODO
+                                       row[4]] # TODO
                                 leitner.append_list_as_row(Table_name,row)
 
                             conn.commit()
 
                         except:
                             for row in reader:
-                                                                                                                                  # TODO 👇  👇
                                 row = [leitner.last_id(Table_name) +1,
                                        row[int(Question_column_number)-1],
-                                       row[int(Answer_column_number)-1]
-                                       ,0
-                                       ,"off"] 
+                                       row[int(Answer_column_number)-1],
+                                       0,      # TODO
+                                       "off"]  # TODO
                                 leitner.append_list_as_row(Table_name,row)
 
                             conn.commit()
+                        hidden_new_word_frame()
                 except:
                     messagebox.showwarning("هشدار","لطفا عدد صحیح وارد کنید")
             Question_column_number_input.delete(0,END)
