@@ -779,8 +779,14 @@ def get_number_new_word():
         
 
     except:
-        messagebox.showwarning("هشدار","لطفا عدد صحیح وارد کنید") # TODO
-        number_new_word_input.delete(0,END)
+        try:
+            number_new_word = number_new_word_input.get().strip()
+            number_new_word = int(number_new_word)
+            messagebox.showwarning("هشدار","هیچ کلمه ای وجود ندارد") # TODO
+
+        except:
+            messagebox.showwarning("هشدار","لطفا عدد صحیح وارد کنید") # TODO
+            number_new_word_input.delete(0,END)
 
 
 number_new_word_btn = CTkButton(input_new_word,
