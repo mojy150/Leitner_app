@@ -1061,6 +1061,7 @@ def Show_FlashCards(Table_name):
     global search_question_temp
     global search_answer_input
     global max_count
+    global count_Table_flashcards
     search_day_temp = None
     search_question_temp = ""
     search_answer_temp = ""
@@ -1076,7 +1077,10 @@ def Show_FlashCards(Table_name):
             messagebox.showwarning("هشدار","لطفا عدد صحیح وارد کنید")
             search_day_input.delete(0,"end")
 
-        max_count = max_of_page(Table_name,search_day_temp,search_question_temp,search_answer_temp)
+        count_Table_flashcards = count_of_Table(Table_name,search_day_temp,search_question_temp,search_answer_temp)
+        max_count = max_of_page(count_Table_flashcards)
+
+        total_search_results.configure(text=f"Number of search results: {count_Table_flashcards}")
 
         if page_number_temp >= 1 and page_number_temp <= max_count:
             FlashCards_page = page_number_temp
@@ -1290,8 +1294,25 @@ search_day_input.grid(sticky='nsew',column=2,row=0, pady=5)
 search_day_input.bind("<Return>", update_page)
 search_day_input.bind("<FocusIn>", turn_on_numlock)
                                                                                                     # Right_Left_frame FlashCards
-Right_Left_frame = CTkFrame(my_tabs.tab("FlashCards"),height=0)
-Right_Left_frame.grid(column=0,row=3)
+bottom_Flashcards_frame = CTkFrame(my_tabs.tab("FlashCards"))
+bottom_Flashcards_frame.grid(column=0, row=3, sticky="nsew", padx=10)
+
+bottom_Flashcards_frame.grid_columnconfigure([0,1,2],weight=1)
+
+bottom_left_Flashcards_frame = CTkFrame(bottom_Flashcards_frame,height=0,width=0,fg_color="transparent")
+bottom_left_Flashcards_frame.grid(column=0, row=0, sticky="nsew", padx=2)
+
+
+Right_Left_frame = CTkFrame(bottom_Flashcards_frame,height=0,width=0,fg_color="transparent")
+Right_Left_frame.grid(column=1,row=0,sticky="nsew",padx=2)
+
+total_search_results = CTkLabel(bottom_left_Flashcards_frame,
+                           text="",
+                           font=en_font,
+                           anchor="w",
+                           width=0
+                           )
+total_search_results.grid( padx=10, pady=10)
 
 def left_page_func():
     global FlashCards_page

@@ -80,8 +80,7 @@ def count_of_Table(Table_name,search_day_temp,search_question_temp,search_answer
         count = cursor.fetchone()[0]
     return count
 
-def max_of_page(Table_name,search_day_temp,search_question_temp,search_answer_temp):
-    count = count_of_Table(Table_name,search_day_temp,search_question_temp,search_answer_temp)
+def max_of_page(count):
     if count%50==0 and count!=0:
         max_count = count/50
     else:
