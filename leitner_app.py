@@ -971,30 +971,41 @@ def Show_status():
     cursor.execute(f"SELECT * FROM {"Time"} WHERE id = {leitner.last_id("Time")}")
     Last_day = cursor.fetchone()
     Day_th , Time_spent = Last_day[0],Last_day[4]
-    status_today = f"Today is the {Day_th-1}th day and your time spent is {int(Time_spent)//60}:{int(Time_spent)%60:02d}."
+    status_time_today = f"Today is the {Day_th-1}th day and your time spent is {int(Time_spent)//60}:{int(Time_spent)%60:02d}."
 
     lbl = CTkLabel(
         status_tab,
-        text=status_today,
+        text=status_time_today,
         font=en_font,
     )
 
     lbl.grid(row=1, column=0, sticky='nw', padx=10, pady=2)
 
-
     cursor.execute(f"SELECT COUNT(id) FROM {Table_name}")
     All_flashCards_number = cursor.fetchone()[0]
     cursor.execute(f"SELECT COUNT(id) FROM {Table_name} WHERE day > 30")
     mastered_flashCards_number = cursor.fetchone()[0]
-    status_today = f"You have mastered {mastered_flashCards_number} out of {All_flashCards_number} flashcards so far."
+    status_mastered_today = f"You have mastered {mastered_flashCards_number} out of {All_flashCards_number} flashcards so far."
 
     lbl = CTkLabel(
         status_tab,
-        text=status_today,
+        text=status_mastered_today,
         font=en_font,
     )
 
     lbl.grid(row=2, column=0, sticky='nw', padx=10, pady=2)
+
+    cursor.execute(f"SELECT COUNT(day) FROM {Table_name} WHERE day IN (1,3,7,15,30)")
+    review_today = cursor.fetchone()[0]
+    status_review_today = f"You have {review_today} flashcards to review today."
+
+    lbl = CTkLabel(
+        status_tab,
+        text=status_review_today,
+        font=en_font,
+    )
+
+    lbl.grid(row=3, column=0, sticky='nw', padx=10, pady=2)
 
     # حذف لیبل‌های قبلی
     for lbl in status_labels:
@@ -1004,7 +1015,7 @@ def Show_status():
 
     show_list = leitner.show("FlashCards")
 
-    row = 3
+    row = 4
     for i in range(len(show_list)):
         if show_list[i] != 0:
             text = "[%i] flashcards in the [%s]-day box" % (show_list[i], i)
