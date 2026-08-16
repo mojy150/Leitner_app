@@ -981,6 +981,21 @@ def Show_status():
 
     lbl.grid(row=1, column=0, sticky='nw', padx=10, pady=2)
 
+
+    cursor.execute(f"SELECT COUNT(id) FROM {Table_name}")
+    All_flashCards_number = cursor.fetchone()[0]
+    cursor.execute(f"SELECT COUNT(id) FROM {Table_name} WHERE day > 30")
+    mastered_flashCards_number = cursor.fetchone()[0]
+    status_today = f"You have mastered {mastered_flashCards_number} out of {All_flashCards_number} flashcards so far."
+
+    lbl = CTkLabel(
+        status_tab,
+        text=status_today,
+        font=en_font,
+    )
+
+    lbl.grid(row=2, column=0, sticky='nw', padx=10, pady=2)
+
     # حذف لیبل‌های قبلی
     for lbl in status_labels:
         lbl.destroy()
@@ -989,7 +1004,7 @@ def Show_status():
 
     show_list = leitner.show("FlashCards")
 
-    row = 2
+    row = 3
     for i in range(len(show_list)):
         if show_list[i] != 0:
             text = "[%i] flashcards in the [%s]-day box" % (show_list[i], i)
